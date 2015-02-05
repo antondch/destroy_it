@@ -4,9 +4,9 @@
 package home
 {
 import flash.display.BitmapData;
-import flash.display.Sprite;
 
 import isoCore.IsoStarlingSpriteObject;
+import isoCore.IsoUtils;
 
 import starling.display.Image;
 import starling.textures.Texture;
@@ -22,21 +22,10 @@ public class IsoHome extends IsoStarlingSpriteObject
     //todo: remove this trash.
     private function draw():void
     {
-        var rect:flash.display.Sprite = new flash.display.Sprite();
-        rect.graphics.clear();
-        rect.graphics.beginFill(0x00ff00);
-        rect.graphics.lineStyle(0, 0, 0.5);
-        rect. graphics.moveTo(-size, 0);
-        rect. graphics.lineTo(0, -size * 0.5);
-        rect. graphics.lineTo(size, 0);
-        rect.graphics.lineTo(0, size * 0.5);
-        rect.graphics.lineTo(-size, 0);
+        var bmp:BitmapData = IsoUtils.drawTile(100,300,0x00ff00,1,0x000000);
 
-        var bmd:flash.display.BitmapData = new flash.display.BitmapData(rect.width, rect.height, true);
-        bmd.draw(rect);
-
-        addChild( new starling.display.Image(Texture.fromBitmapData(bmd, false, false)));
-
+        var image:Image = new Image(Texture.fromBitmapData(bmp));
+        addChild(image);
     }
 }
 }

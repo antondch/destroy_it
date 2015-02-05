@@ -14,8 +14,10 @@ public class Game extends Sprite
     {
         var landscape = new Landscape();
         this.addChild(landscape);
-        var home:IsoHome = new IsoHome(100);
-        landscape.addChild(home);
+        var isoHome:IsoHome = new IsoHome(100);
+//        isoHome.isoX=isoHome.isoY=300;
+        landscape.x=landscape.y = 300;
+        landscape.add2Scene(isoHome);
     }
 }
 }

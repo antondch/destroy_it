@@ -12,18 +12,18 @@ public class IsoStarlingSpriteObject extends Sprite
 {
     private var _place:Point = new Point();
     protected var _isoPosition:IsoPoint;
-    protected var _size:Number;
+    protected var isoBounds:IsoPoint;
 
     public function IsoStarlingSpriteObject(size:Number)
     {
-        _size = size;
+//        _size = size;
         _isoPosition = new IsoPoint();
         updateScreenPosition();
     }
 
     protected function updateScreenPosition():void
     {
-        var screenPos:Point = IsoUtils.isoToScreen(_isoPosition);
+        var screenPos:Point = IsoUtils.isoToScreen(_isoPosition.x,_isoPosition.z,isoPosition.y);
         super.x = screenPos.x;
         super.y = screenPos.y;
     }
@@ -77,15 +77,15 @@ public class IsoStarlingSpriteObject extends Sprite
         return (_isoPosition.x + _isoPosition.z) * .866 - _isoPosition.y * .707;
     }
 
-    public function get size():Number
-    {
-        return _size;
-    }
+//    public function get size():Number
+//    {
+//        return _size;
+//    }
 
-    public function get isoBounds():Rectangle
-    {
-        return new Rectangle(isoX - size / 2, isoZ - size / 2, size, size);
-    }
+//    public function get isoBounds():Rectangle
+//    {
+//        return new Rectangle(isoX - size / 2, isoZ - size / 2, size, size);
+//    }
 
     public function get place():Point
     {
