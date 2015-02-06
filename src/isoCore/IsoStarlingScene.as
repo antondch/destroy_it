@@ -1,5 +1,5 @@
 /**
- * Created by Crazy Horse on 10.01.2015.
+ * Created by Crazy Horse on 4.01.2015.
  */
 package isoCore
 {
@@ -10,37 +10,36 @@ import starling.display.Sprite;
  */
 public class IsoStarlingScene extends Sprite
 {
-    private var _objects:Array;
+//    private var _objects:Array;
     private var _scene:Sprite;
 
     public function IsoStarlingScene()
     {
         _scene = new Sprite();
         addChild(_scene);
-
-        _objects = [];
+//        _objects = [];
     }
 
     public function add2Scene(child:IsoStarlingSprite):IsoStarlingSprite
     {
         _scene.addChild(child);
-        _objects.push(child);
-        sort();
+//        _objects.push(child);
+//        sort();
         return child;
     }
 
-    public function sort():void
-    {
-        _objects.sortOn("depth", Array.NUMERIC);
-        for (var i:int = 0; i < _objects.length; i++)
-        {
-            _scene.setChildIndex(_objects[i], i);
-        }
-    }
+//    public function sort():void
+//    {
+//        _objects.sortOn("depth", Array.NUMERIC);
+//        for (var i:int = 0; i < _objects.length; i++)
+//        {
+//            _scene.setChildIndex(_objects[i], i);
+//        }
+//    }
 
-    public function get objects():Array
-    {
-        return _objects;
-    }
+//    public function get objects():Array
+//    {
+//        return _objects;
+//    }
 }
 }

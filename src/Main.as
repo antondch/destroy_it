@@ -7,11 +7,13 @@ package
 import flash.display.Sprite;
 
 import starling.core.Starling;
+import starling.events.Event;
 
 [SWF(width = 1000,height=1000,frameRate=60)]
 public class Main extends Sprite
 {
     private var starling:Starling;
+    private var rootController:RootController;
 
     public function Main():void
     {
@@ -20,8 +22,14 @@ public class Main extends Sprite
 
     private function startStarling():void
     {
-        starling = new Starling(Game, stage);
+        starling = new Starling(RootView, stage);
+        starling.addEventListener(Event.ROOT_CREATED, createRootController);
         starling.start();
+    }
+
+    private function createRootController(event:Event):void
+    {
+        rootController = new RootController(starling.root)
     }
 }
 }

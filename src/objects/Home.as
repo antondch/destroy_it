@@ -1,7 +1,7 @@
 /**
  * Created by Crazy Horse on 05.02.2015.
  */
-package home
+package objects
 {
 import flash.display.BitmapData;
 
@@ -11,9 +11,9 @@ import isoCore.IsoUtils;
 import starling.display.Image;
 import starling.textures.Texture;
 
-public class IsoHome extends IsoStarlingSprite
+public class Home extends IsoStarlingSprite
 {
-    public function IsoHome(x:Number,y:Number,z:Number,width:Number,length:Number,height:Number)
+    public function Home(x:Number,y:Number,z:Number,width:Number,length:Number,height:Number)
     {
         super(x,y,z,width,length,height);
         draw();
