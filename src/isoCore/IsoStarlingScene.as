@@ -21,7 +21,7 @@ public class IsoStarlingScene extends Sprite
         _objects = [];
     }
 
-    public function add2Scene(child:IsoStarlingSpriteObject):IsoStarlingSpriteObject
+    public function add2Scene(child:IsoStarlingSprite):IsoStarlingSprite
     {
         _scene.addChild(child);
         _objects.push(child);

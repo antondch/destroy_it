@@ -1,7 +1,8 @@
 /**
  * Created by Crazy Horse on 05.02.2015.
  */
-package {
+package
+{
 import display.Landscape;
 
 import home.IsoHome;
@@ -14,9 +15,9 @@ public class Game extends Sprite
     {
         var landscape = new Landscape();
         this.addChild(landscape);
-        var isoHome:IsoHome = new IsoHome(100);
+        var isoHome:IsoHome = new IsoHome(0, 0, 0, 200, 300, 0);
 //        isoHome.isoX=isoHome.isoY=300;
-        landscape.x=landscape.y = 300;
+        landscape.x = landscape.y = 300;
         landscape.add2Scene(isoHome);
     }
 }
