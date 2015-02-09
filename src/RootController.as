@@ -3,16 +3,18 @@
  */
 package
 {
-import land.LandscapeView;
+import landscape.LandscapeController;
+import landscape.LandscapeView;
 
-import objects.Home;
+import mvc.IViewController;
 
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
 
-public class RootController
+public class RootController implements IViewController
 {
     private var view:DisplayObject;
+    private var landscapeController:LandscapeController;
 
     public function RootController(view:DisplayObject)
     {
@@ -23,12 +25,21 @@ public class RootController
     private function createLandscape():void
     {
         var landscape:LandscapeView = new LandscapeView();
-        landscape.x = landscape.y = 300;
-        DisplayObjectContainer(this.view).addChild(landscape);
-        var isoHome:Home = new Home(0, 0, 0, 200, 300, 0);
-//        isoHome.isoX=isoHome.isoY=300;
-        landscape.add2Scene(isoHome);
+        landscapeController = new LandscapeController(landscape);
+        landscapeController.showOnView(view as DisplayObjectContainer)
+    }
 
+    public function showOnView(rootView:DisplayObjectContainer):DisplayObject
+    {
+        return rootView.addChild(view);
+    }
+
+    public function removeView():void
+    {
+        if (view.parent)
+        {
+            view.parent.removeChild(view);
+        }
     }
 }
 }

@@ -11,9 +11,9 @@ import isoCore.IsoUtils;
 import starling.display.Image;
 import starling.textures.Texture;
 
-public class Home extends IsoStarlingSprite
+public class HomeView extends IsoStarlingSprite
 {
-    public function Home(x:Number,y:Number,z:Number,width:Number,length:Number,height:Number)
+    public function HomeView(x:Number,y:Number,z:Number,width:Number,length:Number,height:Number)
     {
         super(x,y,z,width,length,height);
         draw();
