@@ -9,7 +9,7 @@ import flash.geom.Rectangle;
 
 import starling.display.Quad;
 
-public class IsoStarlingQuad extends Quad
+public class IsoStarlingQuad extends Quad implements IIsoDisplayObject
 {
     private var _isoBounds:IsoBounds;
 
@@ -29,10 +29,15 @@ public class IsoStarlingQuad extends Quad
         super.y = screenPos.y;
     }
 
-//    public function get depth():Number
-//    {
-//        return (_isoPosition.x + _isoPosition.z) * .866 - _isoPosition.y * .707;
-//    }
+    public function move(isoX:Number, isoY:Number, isoZ:Number):void
+    {
+        isoBounds.isSilent = true;
+        isoBounds.origin.x = isoX;
+        isoBounds.origin.y = isoY;
+        isoBounds.origin.z = isoZ;
+        isoBounds.isSilent = false;
+        updateScreenPosition();
+    }
 
     public function get isoBounds():IsoBounds
     {

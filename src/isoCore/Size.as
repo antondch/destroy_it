@@ -10,11 +10,12 @@ public class Size
     private var _length:Number;
     private var _onUpdated:Function;
 
-    public function Size(width:Number,length:Number,height:Number, onUpdated:Function=null)
+    public function Size(width:Number, length:Number, height:Number, onUpdated:Function = null)
     {
         _width = width;
         _length = length;
         _height = height;
+        _onUpdated = onUpdated;
     }
 
     public function get width():Number
@@ -25,7 +26,10 @@ public class Size
     public function set width(value:Number):void
     {
         _width = value;
-        _onUpdated();
+        if (_onUpdated)
+        {
+            _onUpdated();
+        }
     }
 
     public function get height():Number
@@ -36,7 +40,10 @@ public class Size
     public function set height(value:Number):void
     {
         _height = value;
-        _onUpdated();
+        if (_onUpdated)
+        {
+            _onUpdated();
+        }
     }
 
     public function get length():Number
@@ -47,7 +54,10 @@ public class Size
     public function set length(value:Number):void
     {
         _length = value;
-        _onUpdated();
+        if (_onUpdated)
+        {
+            _onUpdated();
+        }
     }
 }
 }

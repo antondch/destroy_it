@@ -8,13 +8,14 @@ public class IsoPoint
     private var _x:Number;
     private var _y:Number;
     private var _z:Number;
-    private var onUpdated:Function;
+    private var _onUpdated:Function;
 
-    public function IsoPoint(x:Number = 0, y:Number = 0, z:Number = 0, onUpdated:Function=null)
+    public function IsoPoint(x:Number = 0, y:Number = 0, z:Number = 0, onUpdated:Function = null)
     {
         _x = x;
         _y = y;
         _z = z;
+        _onUpdated = onUpdated;
     }
 
     public function get x():Number
@@ -25,7 +26,10 @@ public class IsoPoint
     public function set x(value:Number):void
     {
         _x = value;
-        onUpdated();
+        if (_onUpdated)
+        {
+            _onUpdated();
+        }
     }
 
     public function get y():Number
@@ -36,7 +40,10 @@ public class IsoPoint
     public function set y(value:Number):void
     {
         _y = value;
-        onUpdated();
+        if (_onUpdated)
+        {
+            _onUpdated();
+        }
     }
 
     public function get z():Number
@@ -47,7 +54,10 @@ public class IsoPoint
     public function set z(value:Number):void
     {
         _z = value;
-        onUpdated();
+        if (_onUpdated)
+        {
+            _onUpdated();
+        }
     }
 }
 }
