@@ -27,6 +27,10 @@ public class RootController implements IViewController
     private function createLandscape(x:Number, y:Number, z:Number, width:Number, length:Number):void
     {
         var landscapeView:LandscapeView = new LandscapeView(x, y, z, width, length);
+        landscapeView.y=100;
+        landscapeView.x=600;
+
+
         landscapeController = new LandscapeController(landscapeView);
         landscapeController.showOnView(view as DisplayObjectContainer)
     }
