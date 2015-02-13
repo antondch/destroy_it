@@ -50,30 +50,34 @@ public class IsoUtils
         var isoX:Number = y + x * 0.5;
         var isoY:Number = 0;
         var isoZ:Number = y - x * 0.5;
+
         return new IsoPoint(isoX, isoY, isoZ);
     }
 
     public static function drawTile(width:Number, length:Number, color:uint, borderThickness:Number, borderColor:uint):BitmapData
     {
-
+        //In box ABCDEFGH:
         var pointA:Point = isoToScreen(0, 0, 0);
         var pointB:Point = isoToScreen(width, 0, 0);
         var pointC:Point = isoToScreen(width, 0, -length);
         var pointD:Point = isoToScreen(0, 0, -length);
+        //****************
         rect.graphics.clear();
         rect.graphics.beginFill(color);
-        rect.graphics.lineStyle(0, 0, borderThickness);
+        rect.graphics.lineStyle(borderThickness, borderColor);
         rect.graphics.moveTo(pointA.x, pointA.y);
         rect.graphics.lineTo(pointB.x, pointB.y);
         rect.graphics.lineTo(pointC.x, pointC.y);
         rect.graphics.lineTo(pointD.x, pointD.y);
         rect.graphics.lineTo(pointA.x, pointA.y);
+
         var bounds:Rectangle = rect.getBounds(rect);
         var matrix:Matrix = new Matrix();
         matrix.translate(-bounds.x, -bounds.y);
-        var result:BitmapData = new BitmapData(rect.width, rect.height, true,0x000000);
 
+        var result:BitmapData = new BitmapData(rect.width, rect.height, true, 0x000000);
         result.draw(rect, matrix);
+
         return result;
     }
 }

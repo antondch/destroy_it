@@ -15,6 +15,7 @@ public class IsoPoint
         _x = x;
         _y = y;
         _z = z;
+        _onUpdated = onUpdated;
     }
 
     public function get x():Number
