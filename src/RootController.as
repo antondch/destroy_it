@@ -3,6 +3,8 @@
  */
 package
 {
+import config.Config;
+
 import landscape.LandscapeController;
 import landscape.LandscapeView;
 
@@ -19,12 +21,14 @@ public class RootController implements IViewController
     public function RootController(view:DisplayObject)
     {
         this.view = view;
-        createLandscape();
+        createLandscape(Config.LANDSCAPE_WIDTH,Config.LANDSCAPE_LENGTH);
     }
 
-    private function createLandscape():void
+    private function createLandscape(width:int,height:int):void
     {
         var landscape:LandscapeView = new LandscapeView();
+        landscape.isoBounds.size.width = width;
+        landscape.isoBounds.size.height = height;
         landscapeController = new LandscapeController(landscape);
         landscapeController.showOnView(view as DisplayObjectContainer)
     }

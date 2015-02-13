@@ -9,7 +9,7 @@ import flash.geom.Point;
 import starling.display.MovieClip;
 import starling.textures.Texture;
 
-public class IsoStarlingMovieClip extends MovieClip
+public class IsoStarlingMovieClip extends MovieClip implements IIsoDisplayObject
 {
     protected var _isoBounds:IsoBounds;
 
@@ -28,10 +28,15 @@ public class IsoStarlingMovieClip extends MovieClip
         super.y = screenPos.y;
     }
 
-//    public function get depth():Number
-//    {
-//        return (_isoPosition.x + _isoPosition.z) * .866 - _isoPosition.y * .707;
-//    }
+    public function move(isoX:Number, isoY:Number, isoZ:Number):void
+    {
+        isoBounds.isSilent = true;
+        isoBounds.origin.x = isoX;
+        isoBounds.origin.y = isoY;
+        isoBounds.origin.z = isoZ;
+        isoBounds.isSilent = false;
+        updateScreenPosition();
+    }
 
     public function get isoBounds():IsoBounds
     {

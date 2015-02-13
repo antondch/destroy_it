@@ -13,7 +13,7 @@ import starling.textures.Texture;
 
 public class HomeView extends IsoStarlingSprite
 {
-    public function HomeView(x:Number,y:Number,z:Number,width:Number,length:Number,height:Number)
+    public function HomeView(x:Number,y:Number,z:Number,width:Number,length:Number,height:Number=0)
     {
         super(x,y,z,width,length,height);
         draw();

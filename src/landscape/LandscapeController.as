@@ -3,6 +3,8 @@
  */
 package landscape
 {
+import config.Config;
+
 import mvc.IViewController;
 
 import objects.HomeView;
@@ -17,13 +19,18 @@ public class LandscapeController implements IViewController
     public function LandscapeController(view:LandscapeView)
     {
         this.view = view;
-        createHomes();
+        createHomes(Config.HOMES_COUNT,Config.HOME_MIN_FACE_SIZE,Config.HOME_MAX_FACE_SIZE);
     }
 
-    private function createHomes():void
+    //todo: move it to prepare game class.
+    private function createHomes(count:int,minFaceSize:int,maxFaceSize:int):void
     {
-        var isoHome:HomeView = new HomeView(0, 0, 0, 200, 300, 0);
-        view.add2Scene(isoHome);
+        var row:int = 0;
+        for (var i:int = 0; i < count; i++)
+        {
+            var isoHome:HomeView = new HomeView(0, 0, 0, 200, 300, 0);
+            view.add2Scene(isoHome);
+        }
     }
 
     public function showOnView(rootView:DisplayObjectContainer):DisplayObject

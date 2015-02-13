@@ -8,7 +8,7 @@ import flash.geom.Point;
 
 import starling.display.Sprite;
 
-public class IsoStarlingSprite extends Sprite
+public class IsoStarlingSprite extends Sprite implements IIsoDisplayObject
 {
     private var _isoBounds:IsoBounds;
 
@@ -26,9 +26,14 @@ public class IsoStarlingSprite extends Sprite
         super.y = screenPos.y;
     }
 
-    public function get depth():Number
+    public function move(isoX:Number, isoY:Number, isoZ:Number):void
     {
-        return (isoBounds.origin.x + isoBounds.origin.z) * .866 - isoBounds.origin.y * .707;
+        isoBounds.isSilent = true;
+        isoBounds.origin.x = isoX;
+        isoBounds.origin.y = isoY;
+        isoBounds.origin.z = isoZ;
+        isoBounds.isSilent = false;
+        updateScreenPosition();
     }
 
     public function get isoBounds():IsoBounds
