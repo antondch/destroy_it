@@ -21,15 +21,13 @@ public class RootController implements IViewController
     public function RootController(view:DisplayObject)
     {
         this.view = view;
-        createLandscape(Config.LANDSCAPE_WIDTH,Config.LANDSCAPE_LENGTH);
+        createLandscape(Config.LANDSCAPE_START_POINT_X, Config.LANDSCAPE_START_POINT_Y, Config.LANDSCAPE_START_POINT_Z, Config.LANDSCAPE_WIDTH, Config.LANDSCAPE_LENGTH);
     }
 
-    private function createLandscape(width:int,height:int):void
+    private function createLandscape(x:Number, y:Number, z:Number, width:Number, length:Number):void
     {
-        var landscape:LandscapeView = new LandscapeView();
-        landscape.isoBounds.size.width = width;
-        landscape.isoBounds.size.height = height;
-        landscapeController = new LandscapeController(landscape);
+        var landscapeView:LandscapeView = new LandscapeView(x, y, z, width, length);
+        landscapeController = new LandscapeController(landscapeView);
         landscapeController.showOnView(view as DisplayObjectContainer)
     }
 

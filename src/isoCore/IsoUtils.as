@@ -55,6 +55,7 @@ public class IsoUtils
 
     public static function drawTile(width:Number, length:Number, color:uint, borderThickness:Number, borderColor:uint):BitmapData
     {
+
         var pointA:Point = isoToScreen(0, 0, 0);
         var pointB:Point = isoToScreen(width, 0, 0);
         var pointC:Point = isoToScreen(width, 0, -length);
@@ -70,7 +71,8 @@ public class IsoUtils
         var bounds:Rectangle = rect.getBounds(rect);
         var matrix:Matrix = new Matrix();
         matrix.translate(-bounds.x, -bounds.y);
-        var result:BitmapData = new BitmapData(rect.width, rect.height);
+        var result:BitmapData = new BitmapData(rect.width, rect.height, true,0x000000);
+
         result.draw(rect, matrix);
         return result;
     }

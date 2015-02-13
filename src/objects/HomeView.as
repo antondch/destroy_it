@@ -13,16 +13,16 @@ import starling.textures.Texture;
 
 public class HomeView extends IsoStarlingSprite
 {
-    public function HomeView(x:Number,y:Number,z:Number,width:Number,length:Number,height:Number=0)
+    public function HomeView(x:Number, y:Number, z:Number, widthInTiles:Number, lengthInTiles:Number, heightInTiles:Number)
     {
-        super(x,y,z,width,length,height);
+        super(x, y, z, widthInTiles, lengthInTiles, heightInTiles);
         draw();
     }
 
     //todo: remove this trash.
     private function draw():void
     {
-        var bmp:BitmapData = IsoUtils.drawTile(isoBounds.size.width,isoBounds.size.length,0x00ff00,1,0x000000);
+        var bmp:BitmapData = IsoUtils.drawTile(isoBounds.size.width, isoBounds.size.length, 0x00ff00, 1, 0x000000);
         var image:Image = new Image(Texture.fromBitmapData(bmp));
         addChild(image);
     }
