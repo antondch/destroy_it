@@ -3,7 +3,7 @@
  */
 package com.dch.destroyit.assets
 {
-import config.AssetsConfig;
+import com.dch.destroyit.config.AssetsConfig;
 
 import flash.display.Loader;
 import flash.events.Event;
@@ -27,7 +27,7 @@ public class AssetsService
     {
         var context:LoaderContext = new LoaderContext();
         context.applicationDomain = ApplicationDomain.currentDomain;
-        loader.load(new URLRequest(AssetsConfig.ROOT_ASSETS_PATH+AssetsConfig.SWF_ASSETS_PATH+AssetsConfig.HOME_SWF_NAME+AssetsConfig.SWF_EXTENSION),context);
+        loader.load(new URLRequest(AssetsConfig.ROOT_ASSETS_PATH + AssetsConfig.SWF_ASSETS_PATH + AssetsConfig.HOME_SWF_NAME + AssetsConfig.SWF_EXTENSION), context);
         loader.contentLoaderInfo.addEventListener(Event.COMPLETE, createAssetsFromSwf);
 //        assets.verbose = true;
 //        assets.enqueue(AssetsConfig.ROOT_ASSETS_PATH+AssetsConfig.SWF_ASSETS_PATH+AssetsConfig.HOME_SWF_NAME+AssetsConfig.SWF_EXTENSION);
@@ -40,8 +40,8 @@ public class AssetsService
 
     private function createAssetsFromSwf(event:Event):void
     {
-        var GroundClass:Class = loader.contentLoaderInfo.applicationDomain.getDefinition("ground1x1") as Class;
-        trace(this,"swf is loaded to loader");
+        var GroundClass:Class = loader.contentLoaderInfo.applicationDomain.getDefinition(Ground1x1NamesEnum.GROUND_1X1_NAME) as Class;
+        trace(this, "swf is loaded to loader");
     }
 
 //    public function get assets():AssetManager

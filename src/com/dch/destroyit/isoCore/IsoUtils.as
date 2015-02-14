@@ -30,6 +30,7 @@ public class IsoUtils
 //        return new Point(x, y);
 //    }
     private static const Y_CORRECT:Number = Math.cos(-Math.PI / 6) * Math.SQRT2;
+
     public static function isoToScreen(xpp:Number, ypp:Number, zpp:Number):Point
     {
         var screenX:Number = xpp - zpp;

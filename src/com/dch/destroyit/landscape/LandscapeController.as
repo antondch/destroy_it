@@ -3,15 +3,12 @@
  */
 package com.dch.destroyit.landscape
 {
-import config.Config;
+import com.dch.destroyit.config.LandscapeConfig;
+import com.dch.destroyit.isoCore.IsoPoint;
+import com.dch.destroyit.mvc.IViewController;
+import com.dch.destroyit.objects.HomeView;
 
 import flash.geom.Point;
-
-import isoCore.IsoPoint;
-
-import mvc.IViewController;
-
-import objects.HomeView;
 
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
@@ -30,7 +27,7 @@ public class LandscapeController implements IViewController
     {
         this.view = view;
         registerTouchEvents();
-        createHomes(Config.HOMES_COUNT, Config.TILE_SIZE, Config.HOME_SIDE_MIN_SIZE, Config.HOME_SIDE_MAX_SIZE, Config.HOME_SIDE_SIZE_DIFFERENCE, Config.FREE_DISTANCE_IN_TILES);
+        createHomes(LandscapeConfig.HOMES_COUNT, LandscapeConfig.TILE_SIZE, LandscapeConfig.HOME_SIDE_MIN_SIZE, LandscapeConfig.HOME_SIDE_MAX_SIZE, LandscapeConfig.HOME_SIDE_SIZE_DIFFERENCE, LandscapeConfig.FREE_DISTANCE_IN_TILES);
     }
 
     private function registerTouchEvents():void
@@ -63,7 +60,7 @@ public class LandscapeController implements IViewController
             }
             case TouchPhase.ENDED:
             {
-                if(_allowExplode)
+                if (_allowExplode)
                 {
                     trace(this, "BOOOM");
                 }

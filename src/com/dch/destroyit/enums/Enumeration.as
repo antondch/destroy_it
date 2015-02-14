@@ -3,8 +3,6 @@
  */
 package com.dch.destroyit.enums
 {
-import ru.dch.enums.*;
-
 import avmplus.getQualifiedClassName;
 
 import flash.utils.describeType;
@@ -21,19 +19,19 @@ public class Enumeration
     public function Enumeration()
     {
         testAbstract();
-        var clazz: Class= Object(this).constructor;
+        var clazz:Class = Object(this).constructor;
         elements.push(this);
-        var elementsLen:int =getElementsList(clazz).length;
-        var constNum: int = XMLList(describeType(clazz)).constant.length();
-        if(elementsLen>constNum)
+        var elementsLen:int = getElementsList(clazz).length;
+        var constNum:int = XMLList(describeType(clazz)).constant.length();
+        if (elementsLen > constNum)
         {
-            throw new EnumError(EnumError.INITIALISATION_ERROR_MESSAGE+": "+clazz,EnumError.INITIALISATION_ERROR_CODE);
+            throw new EnumError(EnumError.INITIALISATION_ERROR_MESSAGE + ": " + clazz, EnumError.INITIALISATION_ERROR_CODE);
         }
     }
 
     private function testAbstract():void
     {
-        var className : String = getQualifiedClassName(this);
+        var className:String = getQualifiedClassName(this);
         if (getDefinitionByName(className) == Enumeration)
         {
             throw new ArgumentError(
@@ -57,7 +55,7 @@ public class Enumeration
         var result:Enumeration = null;
         for each(var testingElement:Enumeration in currentTypeElements)
         {
-            if(testingElement._value === value)
+            if (testingElement._value === value)
             {
                 result = testingElement;
             }

@@ -3,7 +3,7 @@
  */
 package com.dch.destroyit.landscape
 {
-import isoCore.IsoStarlingScene;
+import com.dch.destroyit.isoCore.IsoStarlingScene;
 
 public class LandscapeView extends IsoStarlingScene
 {

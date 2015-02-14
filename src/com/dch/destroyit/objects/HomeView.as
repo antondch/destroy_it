@@ -3,10 +3,10 @@
  */
 package com.dch.destroyit.objects
 {
-import flash.display.BitmapData;
+import com.dch.destroyit.isoCore.IsoStarlingSprite;
+import com.dch.destroyit.isoCore.IsoUtils;
 
-import isoCore.IsoStarlingSprite;
-import isoCore.IsoUtils;
+import flash.display.BitmapData;
 
 import starling.display.Image;
 import starling.textures.Texture;

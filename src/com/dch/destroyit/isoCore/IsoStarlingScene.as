@@ -3,9 +3,6 @@
  */
 package com.dch.destroyit.isoCore
 {
-import flash.events.Event;
-import flash.geom.Point;
-
 import starling.display.Sprite;
 
 /**

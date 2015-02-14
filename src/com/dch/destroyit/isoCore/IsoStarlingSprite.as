@@ -22,7 +22,7 @@ public class IsoStarlingSprite extends Sprite implements IIsoDisplayObject
 
     protected function setPivot():void
     {
-        pivotX = IsoUtils.isoToScreen(isoBounds.size.length,0,0).x;
+        pivotX = IsoUtils.isoToScreen(isoBounds.size.length, 0, 0).x;
     }
 
     protected function updateScreenPosition(event:Event = null):void

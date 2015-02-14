@@ -3,7 +3,7 @@
  */
 package com.dch.destroyit.assets
 {
-import com.dch.enums.StringEnumeration;
+import com.dch.destroyit.enums.StringEnumeration;
 
 public class Crater1x1NamesEnum extends StringEnumeration
 {
