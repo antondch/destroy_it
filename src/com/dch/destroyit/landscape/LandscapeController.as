@@ -27,7 +27,7 @@ public class LandscapeController implements IViewController
     {
         this.view = view;
         registerTouchEvents();
-        createHomes(LandscapeConfig.HOMES_COUNT, LandscapeConfig.TILE_SIZE, LandscapeConfig.HOME_SIDE_MIN_SIZE, LandscapeConfig.HOME_SIDE_MAX_SIZE, LandscapeConfig.HOME_SIDE_SIZE_DIFFERENCE, LandscapeConfig.FREE_DISTANCE_IN_TILES);
+        createHomes(LandscapeConfig.HOMES_COUNT, LandscapeConfig.TILE_SIZE, LandscapeConfig.HOME_SIDE_MIN_SIZE_IN_TILES, LandscapeConfig.HOME_SIDE_MAX_SIZE_IN_TILES, LandscapeConfig.HOME_SIDE_SIZE_DIFFERENCE_IN_TILES, LandscapeConfig.FREE_DISTANCE_IN_TILES);
     }
 
     private function registerTouchEvents():void
