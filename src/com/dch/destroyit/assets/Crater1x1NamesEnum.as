@@ -7,7 +7,7 @@ import com.dch.destroyit.enums.StringEnumeration;
 
 public class Crater1x1NamesEnum extends StringEnumeration
 {
-    public static const CRATER_1X1_NAME:String = "garbage1x1_2";
+    public static const CRATER_1X1_NAME:Crater1x1NamesEnum = new Crater1x1NamesEnum("garbage1x1_2");
 
     public function Crater1x1NamesEnum(value:String):void
     {

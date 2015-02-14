@@ -10,12 +10,12 @@ public class StringEnumeration extends Enumeration
         this.value = value;
     }
 
-    protected function get value():String
+    public function get value():String
     {
         return _value;
     }
 
-    protected function set value(value:String):void
+    public function set value(value:String):void
     {
         _value = value;
     }

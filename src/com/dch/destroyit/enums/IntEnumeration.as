@@ -10,12 +10,12 @@ public class IntEnumeration extends Enumeration
         this.value = value;
     }
 
-    protected function get value():int
+    public function get value():int
     {
         return _value;
     }
 
-    protected function set value(value:int):void
+    public function set value(value:int):void
     {
         _value = value;
     }
