@@ -5,6 +5,9 @@ package config
 {
 public class Config
 {
+
+
+
     public static const TILE_SIZE:int = 50;
     public static const HOMES_COUNT:int = 100;
 

@@ -6,6 +6,8 @@ package
 
 import flash.display.Sprite;
 
+import services.AssetsService;
+
 import starling.core.Starling;
 import starling.events.Event;
 
@@ -14,6 +16,7 @@ public class Main extends Sprite
 {
     private var starling:Starling;
     private var rootController:RootController;
+    private var assetsService:AssetsService;
 
     public function Main():void
     {
@@ -23,8 +26,14 @@ public class Main extends Sprite
     private function startStarling():void
     {
         starling = new Starling(RootView, stage);
-        starling.addEventListener(Event.ROOT_CREATED, createRootController);
-        starling.start();
+        starling.addEventListener(Event.ROOT_CREATED, createAssets);
+//        starling.start();
+    }
+
+    private function createAssets(event:Event):void
+    {
+        assetsService = new AssetsService();
+        assetsService.loadAssets();
     }
 
     private function createRootController(event:Event):void
