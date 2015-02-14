@@ -81,13 +81,8 @@ public class LandscapeModel extends EventDispatcher
                 rowLengthInTiles = 0;
             }
 
-            //create empty home matrix
-//            var home:Vector.<Vector.<uint>> = new Vector.<Vector.<uint>>(widthInTiles, true);
+            //create empty home
             var home:Home = new Home(currentHomeX,currentHomeZ,widthInTiles,lengthInTiles);
-//            for (var j = 0; j < widthInTiles; j++)
-//            {
-//                home[j] = new Vector.<uint>(lengthInTiles, true);
-//            }
 
             //fill home matrix
             for (var row:int = 0; row < widthInTiles; row++)
