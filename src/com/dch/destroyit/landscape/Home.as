@@ -3,6 +3,9 @@
  */
 package com.dch.destroyit.landscape
 {
+/**
+ * Home model with position on scene, size and matrix of decay types.
+ */
 public class Home
 {
     private var _matrix:Vector.<Vector.<uint>>;
