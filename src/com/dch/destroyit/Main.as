@@ -4,6 +4,7 @@
 package com.dch.destroyit
 {
 import com.dch.destroyit.assets.AssetsService;
+import com.dch.destroyit.landscape.LandscapeModel;
 
 import flash.display.Sprite;
 
@@ -26,7 +27,13 @@ public class Main extends Sprite
     {
         starling = new Starling(RootView, stage);
         starling.addEventListener(Event.ROOT_CREATED, createAssets);
-//        starling.start();
+        createLandscapeModel();
+        starling.start();
+    }
+
+    private function createLandscapeModel():void
+    {
+        var landscapeModel:LandscapeModel = new LandscapeModel();
     }
 
     private function createAssets(event:Event):void
