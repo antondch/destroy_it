@@ -11,7 +11,7 @@ import flash.events.EventDispatcher;
 
 public class LandscapeModel extends EventDispatcher
 {
-    private var homes:Vector.<Vector.<Vector.<uint>>> = new Vector.<Vector.<Vector.<uint>>>(LandscapeConfig.HOMES_COUNT, true);
+    private var homes:Vector.<Home> = new Vector.<Home>(LandscapeConfig.HOMES_COUNT, true);
 
     public function LandscapeModel()
     {
@@ -81,12 +81,8 @@ public class LandscapeModel extends EventDispatcher
                 rowLengthInTiles = 0;
             }
 
-            //create empty home matrix
-            var home:Vector.<Vector.<uint>> = new Vector.<Vector.<uint>>(widthInTiles, true);
-            for (var j = 0; j < widthInTiles; j++)
-            {
-                home[j] = new Vector.<uint>(lengthInTiles, true);
-            }
+            //create empty home
+            var home:Home = new Home(currentHomeX,currentHomeZ,widthInTiles,lengthInTiles);
 
             //fill home matrix
             for (var row:int = 0; row < widthInTiles; row++)
@@ -94,7 +90,7 @@ public class LandscapeModel extends EventDispatcher
                 for (var column:int = 0; column < lengthInTiles; column++)
                 {
                     //cell is empty?
-                    if (home[row][column] != CeilTypes.EMPTY)
+                    if (home.matrix[row][column] != CeilTypes.EMPTY)
                     {
                         continue;
                     }
@@ -105,24 +101,24 @@ public class LandscapeModel extends EventDispatcher
                         //roll dice 0-99 and take cell from filled chances vector
                         var notEmptyCeilIndex:int = Math.round(Math.random() * 99);
                         var ceilType:uint = ceilTypesCache[notEmptyCeilIndex];
-                        home[row][column]=ceilType;
+                        home.matrix[row][column]=ceilType;
                         //is 2x2?
                         if(ceilType&CeilTypes.SIZE_2X2_MASC)
                         {
-                            home[row+1][column] = ceilType+CeilTypes.CEIL_AREA_MASC;
-                            home[row][column+1] = ceilType+CeilTypes.CEIL_AREA_MASC;
-                            home[row+1][column+1] = ceilType+CeilTypes.CEIL_AREA_MASC;
+                            home.matrix[row+1][column] = ceilType+CeilTypes.CEIL_AREA_MASC;
+                            home.matrix[row][column+1] = ceilType+CeilTypes.CEIL_AREA_MASC;
+                            home.matrix[row+1][column+1] = ceilType+CeilTypes.CEIL_AREA_MASC;
                         }
                     }else //not border
                     {
                         //roll dice 0-99 and take cell from filled chances vector
                         var emptyCeilIndex:int = Math.round(Math.random() * 99);
                         var ceilType:uint = borderCeilTypesCache[emptyCeilIndex];
-                        home[row][column]=ceilType;
+                        home.matrix[row][column]=ceilType;
                     }
                     }
                 }
-
+                currentHomeX = home.width + home.x + freeDistance;
                 homes[i] = home;
             }
 
