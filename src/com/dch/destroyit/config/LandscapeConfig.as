@@ -7,7 +7,7 @@ public class LandscapeConfig
 {
 
 
-    public static const TILE_SIZE:int = 15;
+    public static const TILE_SIZE:int = 80;
     public static const BUILDINGS_COUNT:int = 100;
 
 

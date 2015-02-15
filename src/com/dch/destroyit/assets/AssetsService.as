@@ -31,7 +31,7 @@ import starling.utils.AssetManager;
 public class AssetsService extends EventDispatcher
 {
     private var loader:Loader = new Loader();
-    private static const TEXTURES_POSTFIX:String = "00000";
+    public static const TEXTURES_POSTFIX:String = "_00000";
     private var onComplete:Function;
     private var _isComplete:Boolean = false;
     private static var _sharedAssets:AssetsService;
@@ -45,6 +45,7 @@ public class AssetsService extends EventDispatcher
         {
             throw new Error("This is a singleton! Use AssetsService.sharedAssets");
         }
+        _sharedAssets = this;
     }
 
     public static function get sharedAssets():AssetsService

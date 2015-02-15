@@ -24,6 +24,7 @@ public class Main extends Sprite
     private function startStarling():void
     {
         starling = new Starling(RootView, stage);
+        starling.showStats = true;
         starling.addEventListener(Event.ROOT_CREATED, createAssets);
         starling.start();
     }

@@ -3,6 +3,7 @@
  */
 package com.dch.destroyit.landscape
 {
+import com.dch.destroyit.assets.AssetsService;
 import com.dch.destroyit.isoCore.IsoStarlingSprite;
 import com.dch.destroyit.isoCore.IsoUtils;
 
@@ -11,9 +12,12 @@ import flash.display.Sprite;
 import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.geom.Rectangle;
+import flash.utils.Dictionary;
 
 import starling.display.Image;
+import starling.display.QuadBatch;
 import starling.textures.Texture;
+import starling.textures.TextureAtlas;
 import starling.utils.AssetManager;
 
 public class BuildingView extends IsoStarlingSprite
@@ -24,11 +28,17 @@ public class BuildingView extends IsoStarlingSprite
     private var cleanBuildingImage:Image;
     private var assetsManager:AssetManager;
     public static const CLEAN_TEXTURE_PREFIX:String = "cleanBuilding_";
+    public static const GROUND_TEXTURE_PREFIX:String = "ground";
     private var tileSize:Number;
+    private var groundTypeName:String;
+    public static const QUAD_BATCHES:Dictionary = new Dictionary(true);
+    private var atlasName:String;
 
-    public function BuildingView(x:Number, y:Number, z:Number, width:Number, length:Number, height:Number, tileSize:Number, color:uint, borderThickness:Number, borderColor:uint, assetManager:AssetManager)
+    public function BuildingView(x:Number, y:Number, z:Number, width:Number, length:Number, height:Number, tileSize:Number, color:uint, borderThickness:Number, borderColor:uint, groundTypeName:String, assetManager:AssetManager,atlasName:String)
     {
         super(x, y, z, width, length, height);
+        this.atlasName = atlasName;
+        this.groundTypeName = groundTypeName;
         this.tileSize = tileSize;
         this.assetsManager = assetManager;
         this.color = color;
@@ -39,15 +49,45 @@ public class BuildingView extends IsoStarlingSprite
 
     private function draw():void
     {
-        var cleanTextureName:String = CLEAN_TEXTURE_PREFIX + String(isoBounds.size.width / tileSize) + "x" + String(isoBounds.size.length / tileSize);
+        var widthInTiles:int = isoBounds.size.width / tileSize;
+        var lengthInTiles:int = isoBounds.size.length / tileSize;
+
+        //get clean texture
+        var cleanTextureName:String = CLEAN_TEXTURE_PREFIX + String(widthInTiles) + "x" + String(lengthInTiles);
         var cleanTexture:Texture = assetsManager.getTexture(cleanTextureName);
         if (!cleanTexture)
         {
             cleanTexture = drawTile(isoBounds.size.width, isoBounds.size.length, color, borderThickness, borderColor);
-            assetsManager.addTexture(cleanTextureName,cleanTexture);
+            assetsManager.addTexture(cleanTextureName, cleanTexture);
         }
         cleanBuildingImage = new Image(cleanTexture);
-        addChild(cleanBuildingImage);
+//        addChild(cleanBuildingImage);
+
+        //get ground texture
+        var groundTextureName:String = GROUND_TEXTURE_PREFIX + String(widthInTiles) + "x" + String(lengthInTiles);
+        var atlas:TextureAtlas = assetsManager.getTextureAtlas(atlasName);
+        var groundTexture:Texture = atlas.getTexture(groundTextureName);
+
+        if (!groundTexture)
+        {
+            var ground1x1:Texture = assetsManager.getTexture(groundTypeName+AssetsService.TEXTURES_POSTFIX);
+            var ground1x1PivotX:Number = IsoUtils.isoToScreen(ground1x1.width, 0, 0).x;
+            var groundQuadBatch:QuadBatch = new QuadBatch();
+            for (var column:int = 0; column < lengthInTiles; column++)
+            {
+                for (var row:int = 0; row < lengthInTiles; row++)
+                {
+                    var groundTile:Image = new Image(ground1x1);
+                    groundTile.pivotX = ground1x1PivotX;
+                    var groundTilePos:Point = IsoUtils.isoToScreen(row*tileSize,0,column*tileSize);
+                    groundTile.x= groundTilePos.x;
+                    groundTile.y= groundTilePos.y;
+                    addChild(groundTile);
+                }
+            }
+//            groundQuadBatch.reset();
+//            addChild(groundQuadBatch);
+        }
     }
 
     public static function drawTile(width:Number, length:Number, color:uint, borderThickness:Number, borderColor:uint):Texture
