@@ -22,21 +22,24 @@ public class AssetsService extends EventDispatcher
 {
     private var loader:Loader = new Loader();
     private var atlas:TextureAtlas;
-    private static const TEXTURES_POSTFIX:String="00000";
-    public static const ASSETS_PREPARED:String = "assets_prepared";
+    private static const TEXTURES_POSTFIX:String = "00000";
+    private var onComplete:Function;
+    private var _isComplete:Boolean = false;
+
+
 
     public function AssetsService()
     {
 
     }
 
-    public function loadAssets():void
+    public function loadAssets(onComplete:Function = null):void
     {
+        this.onComplete = onComplete;
         var context:LoaderContext = new LoaderContext();
         context.applicationDomain = ApplicationDomain.currentDomain;
         loader.load(new URLRequest(AssetsConfig.ROOT_ASSETS_PATH + AssetsConfig.SWF_ASSETS_PATH + AssetsConfig.BUILDING_SWF_NAME + AssetsConfig.SWF_EXTENSION), context);
         loader.contentLoaderInfo.addEventListener(Event.COMPLETE, createAssetsFromSwf);
-
     }
 
     private function createAssetsFromSwf(event:Event):void
@@ -61,12 +64,11 @@ public class AssetsService extends EventDispatcher
             var Garbage1x1NamesClass:Class = loader.contentLoaderInfo.applicationDomain.getDefinition(clazz2.value) as Class;
             staticDisplayClasses.push(Garbage1x1NamesClass);
         }
-       for each(var clazz3:Ground1x1NamesEnum in Enumeration.getElementsList(Ground1x1NamesEnum))
+        for each(var clazz3:Ground1x1NamesEnum in Enumeration.getElementsList(Ground1x1NamesEnum))
         {
             var Ground1x1NamesClass:Class = loader.contentLoaderInfo.applicationDomain.getDefinition(clazz3.value) as Class;
             staticDisplayClasses.push(Ground1x1NamesClass);
         }
-
 
 
         //********************************************************************
@@ -84,7 +86,11 @@ public class AssetsService extends EventDispatcher
 
         atlas = DynamicAtlas.fromClassVector(staticDisplayClasses);
 
-        dispatchEvent(new Event(ASSETS_PREPARED));
+        _isComplete = true;
+        if(onComplete)
+        {
+            onComplete();
+        }
     }
 
     public function getTexture(name:String):Texture
@@ -95,6 +101,11 @@ public class AssetsService extends EventDispatcher
     public function getMCTextures(perfix:String):Vector.<Texture>
     {
         return atlas.getTextures(perfix);
+    }
+
+    public function get isComplete():Boolean
+    {
+        return _isComplete;
     }
 }
 }

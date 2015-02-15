@@ -13,14 +13,8 @@ public class LandscapeModel extends EventDispatcher
 {
     private var buildings:Vector.<Building> = new Vector.<Building>(LandscapeConfig.BUILDINGS_COUNT, true);
 
-    public function LandscapeModel()
-    {
-        prepareLandscape(LandscapeConfig.BUILDINGS_COUNT, LandscapeConfig.LANDSCAPE_WIDTH_IN_TILES, LandscapeConfig.LANDSCAPE_LENGTH_IN_TILES, LandscapeConfig.BUILDING_SIDE_MIN_SIZE_IN_TILES,
-                LandscapeConfig.BUILDING_SIDE_MAX_SIZE_IN_TILES, LandscapeConfig.BUILDING_SIDE_SIZE_DIFFERENCE_IN_TILES, LandscapeConfig.FREE_DISTANCE_IN_TILES);
-    }
 
-    //FIXME: move it to external class.
-    public function prepareLandscape(buildingsCount:int, landscapeWidth:Number, landscapeLength:Number, minFaceSize:Number, maxFaceSize:Number, maxSideDifference:int, freeDistance:Number):void
+    public function generateBuildings(buildingsCount:int, landscapeWidth:Number, landscapeLength:Number, minFaceSize:Number, maxFaceSize:Number, maxSideDifference:int, freeDistance:Number):void
     {
         //fill not border types in percent
         var ceilTypesCache:Vector.<uint> = new Vector.<uint>();
@@ -83,7 +77,7 @@ public class LandscapeModel extends EventDispatcher
             }
 
             //create empty building
-            var building:Building = new Building(currentBuildingX,currentBuildingZ,widthInTiles,lengthInTiles);
+            var building:Building = new Building(currentBuildingX, currentBuildingZ, widthInTiles, lengthInTiles);
 
             //fill building matrix
             for (var row:int = 0; row < widthInTiles; row++)
@@ -102,29 +96,27 @@ public class LandscapeModel extends EventDispatcher
                         //roll dice 0-99 and take cell from filled chances vector
                         var notEmptyCeilIndex:int = Math.round(Math.random() * 99);
                         var ceilType:uint = ceilTypesCache[notEmptyCeilIndex];
-                        building.matrix[row][column]=ceilType;
+                        building.matrix[row][column] = ceilType;
                         //is 2x2?
-                        if(ceilType&CeilTypes.SIZE_2X2_MASC)
+                        if (ceilType & CeilTypes.SIZE_2X2_MASC)
                         {
-                            building.matrix[row+1][column] = ceilType+CeilTypes.CEIL_AREA_MASC;
-                            building.matrix[row][column+1] = ceilType+CeilTypes.CEIL_AREA_MASC;
-                            building.matrix[row+1][column+1] = ceilType+CeilTypes.CEIL_AREA_MASC;
+                            building.matrix[row + 1][column] = ceilType + CeilTypes.CEIL_AREA_MASC;
+                            building.matrix[row][column + 1] = ceilType + CeilTypes.CEIL_AREA_MASC;
+                            building.matrix[row + 1][column + 1] = ceilType + CeilTypes.CEIL_AREA_MASC;
                         }
-                    }else //not border
+                    } else //not border
                     {
                         //roll dice 0-99 and take cell from filled chances vector
                         var emptyCeilIndex:int = Math.round(Math.random() * 99);
                         var ceilType:uint = borderCeilTypesCache[emptyCeilIndex];
-                        building.matrix[row][column]=ceilType;
-                    }
+                        building.matrix[row][column] = ceilType;
                     }
                 }
-                currentBuildingX = building.width + building.x + freeDistance;
-                buildings[i] = building;
             }
-
-
-            trace(this, "buildings generated");
+            currentBuildingX = building.width + building.x + freeDistance;
+            buildings[i] = building;
         }
+        trace(this, "buildings generated");
     }
+}
 }

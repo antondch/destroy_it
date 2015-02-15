@@ -22,12 +22,22 @@ public class LandscapeController implements IViewController
     private var _isPanning:Boolean = false;
     private var _allowExplode:Boolean = true;
     private var mousePanBeginPoint:Point = new Point(0, 0);
+    private var landscapeModel:LandscapeModel;
 
     public function LandscapeController(view:LandscapeView)
     {
         this.view = view;
         registerTouchEvents();
-        createBuildings(LandscapeConfig.BUILDINGS_COUNT, LandscapeConfig.TILE_SIZE, LandscapeConfig.BUILDING_SIDE_MIN_SIZE_IN_TILES, LandscapeConfig.BUILDING_SIDE_MAX_SIZE_IN_TILES, LandscapeConfig.BUILDING_SIDE_SIZE_DIFFERENCE_IN_TILES, LandscapeConfig.FREE_DISTANCE_IN_TILES);
+        createLandscapeModel(LandscapeConfig.BUILDINGS_COUNT, LandscapeConfig.LANDSCAPE_WIDTH_IN_TILES, LandscapeConfig.LANDSCAPE_LENGTH_IN_TILES, LandscapeConfig.BUILDING_SIDE_MIN_SIZE_IN_TILES,
+                LandscapeConfig.BUILDING_SIDE_MAX_SIZE_IN_TILES, LandscapeConfig.BUILDING_SIDE_SIZE_DIFFERENCE_IN_TILES, LandscapeConfig.FREE_DISTANCE_IN_TILES);
+        createBuildings(LandscapeConfig.BUILDINGS_COUNT, LandscapeConfig.TILE_SIZE, LandscapeConfig.BUILDING_SIDE_MIN_SIZE_IN_TILES, LandscapeConfig.BUILDING_SIDE_MAX_SIZE_IN_TILES,
+                LandscapeConfig.BUILDING_SIDE_SIZE_DIFFERENCE_IN_TILES, LandscapeConfig.FREE_DISTANCE_IN_TILES);
+    }
+
+    private function createLandscapeModel(buildingsCount:int, landscapeWidth:Number, landscapeLength:Number, minFaceSize:Number, maxFaceSize:Number, maxSideDifference:int, freeDistance:Number):void
+    {
+        landscapeModel = new LandscapeModel();
+        landscapeModel.generateBuildings(buildingsCount, landscapeWidth, landscapeLength, minFaceSize, maxFaceSize, maxSideDifference, freeDistance);
     }
 
     private function registerTouchEvents():void

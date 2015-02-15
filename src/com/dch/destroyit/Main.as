@@ -27,14 +27,13 @@ public class Main extends Sprite
         starling.start();
     }
 
-    private function createAssets(event:Event = null):void
+    private function createAssets(event:Event):void
     {
         var assetsService:AssetsService = new AssetsService();
-        assetsService.addEventListener(AssetsService.ASSETS_PREPARED, createRootController);
-        assetsService.loadAssets();
+        assetsService.loadAssets(createRootController);
     }
 
-    private function createRootController(event:Event):void
+    private function createRootController():void
     {
         var rootController:RootController = new RootController(starling.root);
     }
