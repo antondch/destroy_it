@@ -19,6 +19,7 @@ public class LandscapeModel extends EventDispatcher
                 LandscapeConfig.HOME_SIDE_MAX_SIZE_IN_TILES, LandscapeConfig.HOME_SIDE_SIZE_DIFFERENCE_IN_TILES, LandscapeConfig.FREE_DISTANCE_IN_TILES);
     }
 
+    //FIXME: move it to external class.
     public function prepareLandscape(homesCount:int, landscapeWidth:Number, landscapeLength:Number, minFaceSize:Number, maxFaceSize:Number, maxSideDifference:int, freeDistance:Number):void
     {
         //fill not border types in percent
