@@ -6,7 +6,7 @@ package com.dch.destroyit.landscape
 import com.dch.destroyit.config.LandscapeConfig;
 import com.dch.destroyit.isoCore.IsoPoint;
 import com.dch.destroyit.mvc.IViewController;
-import com.dch.destroyit.objects.HomeView;
+import com.dch.destroyit.objects.BuildingView;
 
 import flash.geom.Point;
 
@@ -27,7 +27,7 @@ public class LandscapeController implements IViewController
     {
         this.view = view;
         registerTouchEvents();
-        createHomes(LandscapeConfig.HOMES_COUNT, LandscapeConfig.TILE_SIZE, LandscapeConfig.HOME_SIDE_MIN_SIZE_IN_TILES, LandscapeConfig.HOME_SIDE_MAX_SIZE_IN_TILES, LandscapeConfig.HOME_SIDE_SIZE_DIFFERENCE_IN_TILES, LandscapeConfig.FREE_DISTANCE_IN_TILES);
+        createBuildings(LandscapeConfig.BUILDINGS_COUNT, LandscapeConfig.TILE_SIZE, LandscapeConfig.BUILDING_SIDE_MIN_SIZE_IN_TILES, LandscapeConfig.BUILDING_SIDE_MAX_SIZE_IN_TILES, LandscapeConfig.BUILDING_SIDE_SIZE_DIFFERENCE_IN_TILES, LandscapeConfig.FREE_DISTANCE_IN_TILES);
     }
 
     private function registerTouchEvents():void
@@ -72,12 +72,12 @@ public class LandscapeController implements IViewController
     }
 
     //todo: move it to prepare game class.
-    private function createHomes(count:int, tileSize:Number, minFaceSize:Number, maxFaceSize:Number, maxSideDifference:int, freeDistanceInTiles:Number):void
+    private function createBuildings(count:int, tileSize:Number, minFaceSize:Number, maxFaceSize:Number, maxSideDifference:int, freeDistanceInTiles:Number):void
     {
 //        var row:int = 0;
-        var currentHomePoint:IsoPoint = new IsoPoint();
-        var homeLength:Number = 0.0;
-        var homeWidth:Number = 0.0;
+        var currentBuildingPoint:IsoPoint = new IsoPoint();
+        var buildingLength:Number = 0.0;
+        var buildingWidth:Number = 0.0;
         var widthInTiles:int = 0;
         var lengthInTiles:int = 0;
         var rowLengthInTiles:int = 0;
@@ -94,18 +94,18 @@ public class LandscapeController implements IViewController
             {
                 rowLengthInTiles = lengthInTiles;
             }
-            homeWidth = widthInTiles * tileSize;
-            homeLength = lengthInTiles * tileSize;
+            buildingWidth = widthInTiles * tileSize;
+            buildingLength = lengthInTiles * tileSize;
 
-            if (currentHomePoint.x + homeWidth > view.isoBounds.size.width)
+            if (currentBuildingPoint.x + buildingWidth > view.isoBounds.size.width)
             {
-                currentHomePoint.x = 0;
-                currentHomePoint.z += rowLengthInTiles * tileSize + freeDistance;
+                currentBuildingPoint.x = 0;
+                currentBuildingPoint.z += rowLengthInTiles * tileSize + freeDistance;
                 rowLengthInTiles = 0;
             }
-            var isoHome:HomeView = new HomeView(currentHomePoint.x, 0, currentHomePoint.z, homeWidth, homeLength, 0);
-            currentHomePoint.x = isoHome.isoBounds.size.width + isoHome.isoBounds.origin.x + freeDistance;
-            view.add2Scene(isoHome);
+            var isoBuilding:BuildingView = new BuildingView(currentBuildingPoint.x, 0, currentBuildingPoint.z, buildingWidth, buildingLength, 0);
+            currentBuildingPoint.x = isoBuilding.isoBounds.size.width + isoBuilding.isoBounds.origin.x + freeDistance;
+            view.add2Scene(isoBuilding);
         }
     }
 

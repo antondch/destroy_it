@@ -11,7 +11,7 @@ import starling.display.Sprite;
 public class IsoStarlingScene extends Sprite //implements IIsoDisplayObject
 {
     private var _isoBounds:IsoBounds;
-    private var homes:Array = [];
+    private var buildings:Array = [];
 
     public function IsoStarlingScene(isoX:Number, isoY:Number, isoZ:Number, isoWidth:Number, isoLength:Number)
     {
@@ -41,7 +41,7 @@ public class IsoStarlingScene extends Sprite //implements IIsoDisplayObject
     public function add2Scene(child:IsoStarlingSprite):IsoStarlingSprite
     {
         addChild(child);
-        homes.push(child);
+        buildings.push(child);
         return child;
     }
 

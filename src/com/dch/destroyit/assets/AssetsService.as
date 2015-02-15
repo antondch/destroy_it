@@ -34,7 +34,7 @@ public class AssetsService extends EventDispatcher
     {
         var context:LoaderContext = new LoaderContext();
         context.applicationDomain = ApplicationDomain.currentDomain;
-        loader.load(new URLRequest(AssetsConfig.ROOT_ASSETS_PATH + AssetsConfig.SWF_ASSETS_PATH + AssetsConfig.HOME_SWF_NAME + AssetsConfig.SWF_EXTENSION), context);
+        loader.load(new URLRequest(AssetsConfig.ROOT_ASSETS_PATH + AssetsConfig.SWF_ASSETS_PATH + AssetsConfig.BUILDING_SWF_NAME + AssetsConfig.SWF_EXTENSION), context);
         loader.contentLoaderInfo.addEventListener(Event.COMPLETE, createAssetsFromSwf);
 
     }

@@ -11,9 +11,9 @@ import flash.display.BitmapData;
 import starling.display.Image;
 import starling.textures.Texture;
 
-public class HomeView extends IsoStarlingSprite
+public class BuildingView extends IsoStarlingSprite
 {
-    public function HomeView(x:Number, y:Number, z:Number, width:Number, length:Number, height:Number)
+    public function BuildingView(x:Number, y:Number, z:Number, width:Number, length:Number, height:Number)
     {
         super(x, y, z, width, length, height);
         draw();
