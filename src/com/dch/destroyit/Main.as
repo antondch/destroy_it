@@ -4,6 +4,7 @@
 package com.dch.destroyit
 {
 import com.dch.destroyit.assets.AssetsService;
+import com.dch.destroyit.config.AssetsConfig;
 
 import flash.display.Sprite;
 
@@ -30,7 +31,7 @@ public class Main extends Sprite
     private function createAssets(event:Event):void
     {
         var assetsService:AssetsService = new AssetsService();
-        assetsService.loadAssets(createRootController);
+        assetsService.loadAssets(AssetsConfig.ROOT_ASSETS_PATH, AssetsConfig.SWF_ASSETS_PATH, AssetsConfig.BUILDING_SWF_NAME, AssetsConfig.SWF_EXTENSION, createRootController);
     }
 
     private function createRootController():void

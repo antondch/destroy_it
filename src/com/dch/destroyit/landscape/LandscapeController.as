@@ -92,29 +92,29 @@ public class LandscapeController implements IViewController
         var lengthInTiles:int = 0;
         var rowLengthInTiles:int = 0;
         var freeDistance:Number = freeDistanceInTiles * tileSize;
-        for (var i:int = 0; i < count; i++)
+        for each(var building:Building in landscapeModel.buildings)
         {
-            widthInTiles = Math.round(Math.random() * (maxFaceSize - minFaceSize) + minFaceSize);
-            lengthInTiles = Math.round(Math.random() * (maxFaceSize - minFaceSize) + minFaceSize);
-            while (Math.abs(widthInTiles - lengthInTiles) > maxSideDifference)
-            {
-                lengthInTiles = Math.round(Math.random() * (maxFaceSize - minFaceSize) + minFaceSize);
-            }
-            if (lengthInTiles > rowLengthInTiles)
-            {
-                rowLengthInTiles = lengthInTiles;
-            }
-            buildingWidth = widthInTiles * tileSize;
-            buildingLength = lengthInTiles * tileSize;
+//            widthInTiles = Math.round(Math.random() * (maxFaceSize - minFaceSize) + minFaceSize);
+//            lengthInTiles = Math.round(Math.random() * (maxFaceSize - minFaceSize) + minFaceSize);
+//            while (Math.abs(widthInTiles - lengthInTiles) > maxSideDifference)
+//            {
+//                lengthInTiles = Math.round(Math.random() * (maxFaceSize - minFaceSize) + minFaceSize);
+//            }
+//            if (lengthInTiles > rowLengthInTiles)
+//            {
+//                rowLengthInTiles = lengthInTiles;
+//            }
+            buildingWidth = building.width * tileSize;
+            buildingLength = building.length * tileSize;
 
-            if (currentBuildingPoint.x + buildingWidth > view.isoBounds.size.width)
-            {
-                currentBuildingPoint.x = 0;
-                currentBuildingPoint.z += rowLengthInTiles * tileSize + freeDistance;
-                rowLengthInTiles = 0;
-            }
-            var isoBuilding:BuildingView = new BuildingView(currentBuildingPoint.x, 0, currentBuildingPoint.z, buildingWidth, buildingLength, 0);
-            currentBuildingPoint.x = isoBuilding.isoBounds.size.width + isoBuilding.isoBounds.origin.x + freeDistance;
+//            if (currentBuildingPoint.x + buildingWidth > view.isoBounds.size.width)
+//            {
+//                currentBuildingPoint.x = 0;
+//                currentBuildingPoint.z += rowLengthInTiles * tileSize + freeDistance;
+//                rowLengthInTiles = 0;
+//            }
+            var isoBuilding:BuildingView = new BuildingView(building.x*tileSize, 0, building.z*tileSize, buildingWidth, buildingLength, 0);
+//            currentBuildingPoint.x = isoBuilding.isoBounds.size.width + isoBuilding.isoBounds.origin.x + freeDistance;
             view.add2Scene(isoBuilding);
         }
     }

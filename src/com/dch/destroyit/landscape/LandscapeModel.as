@@ -11,7 +11,7 @@ import flash.events.EventDispatcher;
 
 public class LandscapeModel extends EventDispatcher
 {
-    private var buildings:Vector.<Building> = new Vector.<Building>(LandscapeConfig.BUILDINGS_COUNT, true);
+    private var _buildings:Vector.<Building> = new Vector.<Building>(LandscapeConfig.BUILDINGS_COUNT, true);
 
 
     public function generateBuildings(buildingsCount:int, landscapeWidth:Number, landscapeLength:Number, minFaceSize:Number, maxFaceSize:Number, maxSideDifference:int, freeDistance:Number):void
@@ -114,9 +114,14 @@ public class LandscapeModel extends EventDispatcher
                 }
             }
             currentBuildingX = building.width + building.x + freeDistance;
-            buildings[i] = building;
+            _buildings[i] = building;
         }
         trace(this, "buildings generated");
+    }
+
+    public function get buildings():Vector.<Building>
+    {
+        return _buildings;
     }
 }
 }
