@@ -11,16 +11,10 @@ import flash.events.EventDispatcher;
 
 public class LandscapeModel extends EventDispatcher
 {
-    private var homes:Vector.<Home> = new Vector.<Home>(LandscapeConfig.HOMES_COUNT, true);
+    private var _buildings:Vector.<Building> = new Vector.<Building>(LandscapeConfig.BUILDINGS_COUNT, true);
 
-    public function LandscapeModel()
-    {
-        prepareLandscape(LandscapeConfig.HOMES_COUNT, LandscapeConfig.LANDSCAPE_WIDTH_IN_TILES, LandscapeConfig.LANDSCAPE_LENGTH_IN_TILES, LandscapeConfig.HOME_SIDE_MIN_SIZE_IN_TILES,
-                LandscapeConfig.HOME_SIDE_MAX_SIZE_IN_TILES, LandscapeConfig.HOME_SIDE_SIZE_DIFFERENCE_IN_TILES, LandscapeConfig.FREE_DISTANCE_IN_TILES);
-    }
 
-    //FIXME: move it to external class.
-    public function prepareLandscape(homesCount:int, landscapeWidth:Number, landscapeLength:Number, minFaceSize:Number, maxFaceSize:Number, maxSideDifference:int, freeDistance:Number):void
+    public function generateBuildings(buildingsCount:int, landscapeWidth:Number, landscapeLength:Number, minFaceSize:Number, maxFaceSize:Number, maxSideDifference:int, freeDistance:Number):void
     {
         //fill not border types in percent
         var ceilTypesCache:Vector.<uint> = new Vector.<uint>();
@@ -60,11 +54,11 @@ public class LandscapeModel extends EventDispatcher
         var widthInTiles:int = 0;
         var lengthInTiles:int = 0;
         var rowLengthInTiles:int = 0;
-        var currentHomeX:int = 0;
-        var currentHomeZ:int = 0;
-        for (var i:int = 0; i < homesCount; i++)
+        var currentBuildingX:int = 0;
+        var currentBuildingZ:int = 0;
+        for (var i:int = 0; i < buildingsCount; i++)
         {
-            //generate home width & length
+            //generate building width & length
             widthInTiles = Math.round(Math.random() * (maxFaceSize - minFaceSize) + minFaceSize);
             lengthInTiles = Math.round(Math.random() * (maxFaceSize - minFaceSize) + minFaceSize);
             while (Math.abs(widthInTiles - lengthInTiles) > maxSideDifference)
@@ -75,23 +69,23 @@ public class LandscapeModel extends EventDispatcher
             {
                 rowLengthInTiles = lengthInTiles;
             }
-            if (currentHomeX + widthInTiles > landscapeWidth)
+            if (currentBuildingX + widthInTiles > landscapeWidth)
             {
-                currentHomeX = 0;
-                currentHomeZ += rowLengthInTiles + freeDistance;
+                currentBuildingX = 0;
+                currentBuildingZ += rowLengthInTiles + freeDistance;
                 rowLengthInTiles = 0;
             }
 
-            //create empty home
-            var home:Home = new Home(currentHomeX,currentHomeZ,widthInTiles,lengthInTiles);
+            //create empty building
+            var building:Building = new Building(currentBuildingX, currentBuildingZ, widthInTiles, lengthInTiles);
 
-            //fill home matrix
+            //fill building matrix
             for (var row:int = 0; row < widthInTiles; row++)
             {
                 for (var column:int = 0; column < lengthInTiles; column++)
                 {
                     //cell is empty?
-                    if (home.matrix[row][column] != CeilTypes.EMPTY)
+                    if (building.matrix[row][column] != CeilTypes.EMPTY)
                     {
                         continue;
                     }
@@ -102,29 +96,32 @@ public class LandscapeModel extends EventDispatcher
                         //roll dice 0-99 and take cell from filled chances vector
                         var notEmptyCeilIndex:int = Math.round(Math.random() * 99);
                         var ceilType:uint = ceilTypesCache[notEmptyCeilIndex];
-                        home.matrix[row][column]=ceilType;
+                        building.matrix[row][column] = ceilType;
                         //is 2x2?
-                        if(ceilType&CeilTypes.SIZE_2X2_MASC)
+                        if (ceilType & CeilTypes.SIZE_2X2_MASC)
                         {
-                            home.matrix[row+1][column] = ceilType+CeilTypes.CEIL_AREA_MASC;
-                            home.matrix[row][column+1] = ceilType+CeilTypes.CEIL_AREA_MASC;
-                            home.matrix[row+1][column+1] = ceilType+CeilTypes.CEIL_AREA_MASC;
+                            building.matrix[row + 1][column] = ceilType + CeilTypes.CEIL_AREA_MASC;
+                            building.matrix[row][column + 1] = ceilType + CeilTypes.CEIL_AREA_MASC;
+                            building.matrix[row + 1][column + 1] = ceilType + CeilTypes.CEIL_AREA_MASC;
                         }
-                    }else //not border
+                    } else //not border
                     {
                         //roll dice 0-99 and take cell from filled chances vector
                         var emptyCeilIndex:int = Math.round(Math.random() * 99);
                         var ceilType:uint = borderCeilTypesCache[emptyCeilIndex];
-                        home.matrix[row][column]=ceilType;
-                    }
+                        building.matrix[row][column] = ceilType;
                     }
                 }
-                currentHomeX = home.width + home.x + freeDistance;
-                homes[i] = home;
             }
-
-
-            trace(this, "homes generated");
+            currentBuildingX = building.width + building.x + freeDistance;
+            _buildings[i] = building;
         }
+        trace(this, "buildings generated");
     }
+
+    public function get buildings():Vector.<Building>
+    {
+        return _buildings;
+    }
+}
 }

@@ -4,7 +4,7 @@
 package com.dch.destroyit
 {
 import com.dch.destroyit.assets.AssetsService;
-import com.dch.destroyit.landscape.LandscapeModel;
+import com.dch.destroyit.config.AssetsConfig;
 
 import flash.display.Sprite;
 
@@ -15,8 +15,6 @@ import starling.events.Event;
 public class Main extends Sprite
 {
     private var starling:Starling;
-    private var rootController:RootController;
-    private var assetsService:AssetsService;
 
     public function Main():void
     {
@@ -27,24 +25,18 @@ public class Main extends Sprite
     {
         starling = new Starling(RootView, stage);
         starling.addEventListener(Event.ROOT_CREATED, createAssets);
-        createLandscapeModel();
         starling.start();
-    }
-
-    private function createLandscapeModel():void
-    {
-        var landscapeModel:LandscapeModel = new LandscapeModel();
     }
 
     private function createAssets(event:Event):void
     {
-        assetsService = new AssetsService();
-        assetsService.loadAssets();
+        var assetsService:AssetsService = new AssetsService();
+        assetsService.loadAssets(AssetsConfig.ROOT_ASSETS_PATH, AssetsConfig.SWF_ASSETS_PATH, AssetsConfig.BUILDING_SWF_NAME, AssetsConfig.SWF_EXTENSION, createRootController);
     }
 
-    private function createRootController(event:Event):void
+    private function createRootController():void
     {
-        rootController = new RootController(starling.root)
+        var rootController:RootController = new RootController(starling.root);
     }
 }
 }

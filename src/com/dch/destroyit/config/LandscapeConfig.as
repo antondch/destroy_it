@@ -8,7 +8,7 @@ public class LandscapeConfig
 
 
     public static const TILE_SIZE:int = 50;
-    public static const HOMES_COUNT:int = 100;
+    public static const BUILDINGS_COUNT:int = 100;
 
 
     public static const LANDSCAPE_WIDTH_IN_TILES:int = 90;
@@ -19,8 +19,8 @@ public class LandscapeConfig
     public static const LANDSCAPE_START_POINT_Z:Number = 300;
 
     public static const FREE_DISTANCE_IN_TILES:int = 1;
-    public static const HOME_SIDE_MAX_SIZE_IN_TILES:int = 8;
-    public static const HOME_SIDE_MIN_SIZE_IN_TILES:int = 2;
-    public static const HOME_SIDE_SIZE_DIFFERENCE_IN_TILES:int = 2;
+    public static const BUILDING_SIDE_MAX_SIZE_IN_TILES:int = 8;
+    public static const BUILDING_SIDE_MIN_SIZE_IN_TILES:int = 2;
+    public static const BUILDING_SIDE_SIZE_DIFFERENCE_IN_TILES:int = 2;
 }
 }

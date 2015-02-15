@@ -3,7 +3,6 @@
  */
 package com.dch.destroyit.assets
 {
-import com.dch.destroyit.config.AssetsConfig;
 import com.dch.destroyit.enums.Enumeration;
 import com.emibap.textureAtlas.DynamicAtlas;
 
@@ -14,29 +13,58 @@ import flash.net.URLRequest;
 import flash.system.ApplicationDomain;
 import flash.system.LoaderContext;
 
-import starling.textures.Texture;
-
 import starling.textures.TextureAtlas;
+import starling.utils.AssetManager;
 
+/**
+ * Singleton service class load assets and grant access to assetsManager.
+ * For load assets use loadAssets().
+ * For get texture from atlas use getTexture() & getTextures().
+ * For add texture to atlas use addTexture().
+ * @see loadAssets(rootPath:String,swfPath:String,swfName:String,swfExtension:String,onComplete:Function = null):void.
+ * @see get assetsManager():AssetsManager.
+ * @see starling.utils.AssetManager.
+ * @see get sharedAssets():AssetsService.
+ */
 public class AssetsService extends EventDispatcher
 {
     private var loader:Loader = new Loader();
     private var atlas:TextureAtlas;
-    private static const TEXTURES_POSTFIX:String="00000";
-    public static const ASSETS_PREPARED:String = "assets_prepared";
+    private static const TEXTURES_POSTFIX:String = "00000";
+    private var onComplete:Function;
+    private var _isComplete:Boolean = false;
+    private static var _sharedAssets:AssetsService;
+    private var _assetsManager:AssetManager = new AssetManager();
+    private var swfName:String;
+
+
 
     public function AssetsService()
     {
-
+        if(_sharedAssets)
+        {
+            throw new Error("This is a singleton! Use AssetsService.sharedAssets");
+        }
     }
 
-    public function loadAssets():void
+    public static function get sharedAssets():AssetsService
     {
+        if(!_sharedAssets)
+        {
+            _sharedAssets = new AssetsService();
+        }
+        return _sharedAssets;
+    }
+
+
+    public function loadAssets(rootPath:String,swfPath:String,swfName:String,swfExtension:String,onComplete:Function = null):void
+    {
+        this.swfName = swfName;
+        this.onComplete = onComplete;
         var context:LoaderContext = new LoaderContext();
         context.applicationDomain = ApplicationDomain.currentDomain;
-        loader.load(new URLRequest(AssetsConfig.ROOT_ASSETS_PATH + AssetsConfig.SWF_ASSETS_PATH + AssetsConfig.HOME_SWF_NAME + AssetsConfig.SWF_EXTENSION), context);
+        loader.load(new URLRequest(rootPath+swfPath+swfName+swfExtension), context);
         loader.contentLoaderInfo.addEventListener(Event.COMPLETE, createAssetsFromSwf);
-
     }
 
     private function createAssetsFromSwf(event:Event):void
@@ -61,12 +89,11 @@ public class AssetsService extends EventDispatcher
             var Garbage1x1NamesClass:Class = loader.contentLoaderInfo.applicationDomain.getDefinition(clazz2.value) as Class;
             staticDisplayClasses.push(Garbage1x1NamesClass);
         }
-       for each(var clazz3:Ground1x1NamesEnum in Enumeration.getElementsList(Ground1x1NamesEnum))
+        for each(var clazz3:Ground1x1NamesEnum in Enumeration.getElementsList(Ground1x1NamesEnum))
         {
             var Ground1x1NamesClass:Class = loader.contentLoaderInfo.applicationDomain.getDefinition(clazz3.value) as Class;
             staticDisplayClasses.push(Ground1x1NamesClass);
         }
-
 
 
         //********************************************************************
@@ -83,18 +110,18 @@ public class AssetsService extends EventDispatcher
         }
 
         atlas = DynamicAtlas.fromClassVector(staticDisplayClasses);
+        _assetsManager.addTextureAtlas(swfName,atlas);
 
-        dispatchEvent(new Event(ASSETS_PREPARED));
+        _isComplete = true;
+        if(onComplete)
+        {
+            onComplete();
+        }
     }
 
-    public function getTexture(name:String):Texture
+    public function get assetsManager():AssetManager
     {
-        return atlas.getTexture(name);
-    }
-
-    public function getMCTextures(perfix:String):Vector.<Texture>
-    {
-        return atlas.getTextures(perfix);
+        return _assetsManager;
     }
 }
 }
