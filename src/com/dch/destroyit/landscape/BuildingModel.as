@@ -6,7 +6,7 @@ package com.dch.destroyit.landscape
 /**
  * Buildings model with position on scene, size and matrix of decay types.
  */
-public class Building
+public class BuildingModel
 {
     private var _matrix:Vector.<Vector.<uint>>;
     private var _width:int;
@@ -14,7 +14,7 @@ public class Building
     private var _x:int;
     private var _z:int;
 
-    public function Building(x:int, z:int, width:int, length:int):void
+    public function BuildingModel(x:int, z:int, width:int, length:int):void
     {
         _x = x;
         _z = z;

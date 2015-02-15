@@ -9,11 +9,13 @@ import com.emibap.textureAtlas.DynamicAtlas;
 import flash.display.Loader;
 import flash.events.Event;
 import flash.events.EventDispatcher;
+import flash.geom.Point;
 import flash.net.URLRequest;
 import flash.system.ApplicationDomain;
 import flash.system.LoaderContext;
 
 import starling.textures.TextureAtlas;
+
 import starling.utils.AssetManager;
 
 /**
@@ -29,7 +31,6 @@ import starling.utils.AssetManager;
 public class AssetsService extends EventDispatcher
 {
     private var loader:Loader = new Loader();
-    private var atlas:TextureAtlas;
     private static const TEXTURES_POSTFIX:String = "00000";
     private var onComplete:Function;
     private var _isComplete:Boolean = false;
@@ -38,10 +39,9 @@ public class AssetsService extends EventDispatcher
     private var swfName:String;
 
 
-
     public function AssetsService()
     {
-        if(_sharedAssets)
+        if (_sharedAssets)
         {
             throw new Error("This is a singleton! Use AssetsService.sharedAssets");
         }
@@ -49,7 +49,7 @@ public class AssetsService extends EventDispatcher
 
     public static function get sharedAssets():AssetsService
     {
-        if(!_sharedAssets)
+        if (!_sharedAssets)
         {
             _sharedAssets = new AssetsService();
         }
@@ -57,13 +57,13 @@ public class AssetsService extends EventDispatcher
     }
 
 
-    public function loadAssets(rootPath:String,swfPath:String,swfName:String,swfExtension:String,onComplete:Function = null):void
+    public function loadAssets(rootPath:String, swfPath:String, swfName:String, swfExtension:String, onComplete:Function = null):void
     {
         this.swfName = swfName;
         this.onComplete = onComplete;
         var context:LoaderContext = new LoaderContext();
         context.applicationDomain = ApplicationDomain.currentDomain;
-        loader.load(new URLRequest(rootPath+swfPath+swfName+swfExtension), context);
+        loader.load(new URLRequest(rootPath + swfPath + swfName + swfExtension), context);
         loader.contentLoaderInfo.addEventListener(Event.COMPLETE, createAssetsFromSwf);
     }
 
@@ -109,11 +109,11 @@ public class AssetsService extends EventDispatcher
             staticDisplayClasses.push(Explode2x2NamesClass);
         }
 
-        atlas = DynamicAtlas.fromClassVector(staticDisplayClasses);
-        _assetsManager.addTextureAtlas(swfName,atlas);
+        var atlas:TextureAtlas = DynamicAtlas.fromClassVector(staticDisplayClasses);
+        _assetsManager.addTextureAtlas(swfName, atlas);
 
         _isComplete = true;
-        if(onComplete)
+        if (onComplete)
         {
             onComplete();
         }

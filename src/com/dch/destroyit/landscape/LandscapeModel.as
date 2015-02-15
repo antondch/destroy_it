@@ -5,17 +5,22 @@ package com.dch.destroyit.landscape
 {
 import com.dch.destroyit.config.CeilTypes;
 import com.dch.destroyit.config.CeilTypesCreatingChance;
-import com.dch.destroyit.config.LandscapeConfig;
 
 import flash.events.EventDispatcher;
+import flash.geom.Point;
+import flash.utils.Dictionary;
 
 public class LandscapeModel extends EventDispatcher
 {
-    private var _buildings:Vector.<Building> = new Vector.<Building>(LandscapeConfig.BUILDINGS_COUNT, true);
+    private var _buildings:Vector.<BuildingModel>;
+    private var _sizes:Dictionary;
 
 
-    public function generateBuildings(buildingsCount:int, landscapeWidth:Number, landscapeLength:Number, minFaceSize:Number, maxFaceSize:Number, maxSideDifference:int, freeDistance:Number):void
+    public function generateBuildings(buildingsCount:int, landscapeWidth:Number, landscapeLength:Number, minFaceSize:Number, maxFaceSize:Number, maxSideDifference:int, freeDistance:Number, count:int):void
     {
+        _buildings = new Vector.<BuildingModel>(count, true);
+        _sizes = new Dictionary();
+
         //fill not border types in percent
         var ceilTypesCache:Vector.<uint> = new Vector.<uint>();
         for (var i:int = 0; i < CeilTypesCreatingChance.EMPTY; i++)
@@ -76,8 +81,15 @@ public class LandscapeModel extends EventDispatcher
                 rowLengthInTiles = 0;
             }
 
+            //cache building size
+            var key:String = String(widthInTiles) + "x" + String(lengthInTiles);
+            if (!_sizes[key])
+            {
+                _sizes[key] = new Point(widthInTiles, lengthInTiles);
+            }
+
             //create empty building
-            var building:Building = new Building(currentBuildingX, currentBuildingZ, widthInTiles, lengthInTiles);
+            var building:BuildingModel = new BuildingModel(currentBuildingX, currentBuildingZ, widthInTiles, lengthInTiles);
 
             //fill building matrix
             for (var row:int = 0; row < widthInTiles; row++)
@@ -119,9 +131,14 @@ public class LandscapeModel extends EventDispatcher
         trace(this, "buildings generated");
     }
 
-    public function get buildings():Vector.<Building>
+    public function get buildings():Vector.<BuildingModel>
     {
         return _buildings;
+    }
+
+    public function get sizes():Dictionary
+    {
+        return _sizes;
     }
 }
 }

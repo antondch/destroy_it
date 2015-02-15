@@ -12,7 +12,8 @@ package com.emibap.textureAtlas
 	import flash.text.Font;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
-	import flash.utils.getQualifiedClassName;
+import flash.utils.Dictionary;
+import flash.utils.getQualifiedClassName;
 
 	import starling.text.BitmapFont;
 	import starling.textures.Texture;
@@ -283,6 +284,17 @@ package com.emibap.textureAtlas
             for each (var assetClass:Class in assets) {
                 var assetInstance:DisplayObject = new assetClass();
                 assetInstance.name = getQualifiedClassName(assetClass);
+                container.addChild(assetInstance);
+            }
+            return fromMovieClipContainer(container, scaleFactor, margin, preserveColor, checkBounds);
+        }
+
+        static public function fromDictionaryWithNamesInKeys(assets:Dictionary, scaleFactor:Number = 1, margin:uint=0, preserveColor:Boolean = true, checkBounds:Boolean=false):TextureAtlas
+        {
+            var container:MovieClip = new MovieClip();
+            for (var key:* in assets) {
+                var assetInstance:DisplayObject = assets[key];
+                assetInstance.name = key as String;
                 container.addChild(assetInstance);
             }
             return fromMovieClipContainer(container, scaleFactor, margin, preserveColor, checkBounds);
