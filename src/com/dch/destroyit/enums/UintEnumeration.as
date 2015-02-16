@@ -15,7 +15,7 @@ public class UintEnumeration extends Enumeration
         return _value;
     }
 
-    public function set value(uint:*):void
+    public function set value(value:*):void
     {
         _value = value;
     }

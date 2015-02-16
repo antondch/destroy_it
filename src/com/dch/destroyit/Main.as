@@ -5,6 +5,7 @@ package com.dch.destroyit
 {
 import com.dch.destroyit.assets.AssetsService;
 import com.dch.destroyit.config.AssetsConfig;
+import com.dch.destroyit.isoCore.IsoUtils;
 
 import flash.display.Sprite;
 
@@ -27,7 +28,7 @@ public class Main extends Sprite
         starling.showStats = true;
         starling.addEventListener(Event.ROOT_CREATED, createAssets);
         starling.start();
-    }
+     }
 
     private function createAssets(event:Event):void
     {

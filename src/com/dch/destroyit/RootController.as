@@ -19,7 +19,7 @@ public class RootController implements IViewController
     public function RootController(view:DisplayObject)
     {
         this.view = view;
-        createLandscape(LandscapeConfig.LANDSCAPE_START_POINT_X, LandscapeConfig.LANDSCAPE_START_POINT_Y, LandscapeConfig.LANDSCAPE_START_POINT_Z, LandscapeConfig.LANDSCAPE_WIDTH_IN_TILES, LandscapeConfig.LANDSCAPE_LENGTH_IN_TILES);
+        createLandscape(LandscapeConfig.LANDSCAPE_START_POINT_X, LandscapeConfig.LANDSCAPE_START_POINT_Y, LandscapeConfig.LANDSCAPE_START_POINT_Z, LandscapeConfig.LANDSCAPE_WIDTH_IN_CEIL, LandscapeConfig.LANDSCAPE_LENGTH_IN_CEIL);
     }
 
     private function createLandscape(x:Number, y:Number, z:Number, width:Number, length:Number):void

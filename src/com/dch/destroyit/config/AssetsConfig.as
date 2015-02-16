@@ -9,6 +9,7 @@ public class AssetsConfig
     public static const SWF_ASSETS_PATH:String = "swf/";
     public static const BUILDING_SWF_NAME:String = "explosion_assets";
     public static const SWF_EXTENSION:String = ".swf";
+    public static const TILES_ATLAS_NAME:String = "tilesAtlas";
 
 }
 }

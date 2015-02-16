@@ -5,6 +5,7 @@ package com.dch.destroyit.landscape
 {
 import com.dch.destroyit.assets.AssetsService;
 import com.dch.destroyit.assets.Ground1x1NamesEnum;
+import com.dch.destroyit.assets.TilesColorEnum;
 import com.dch.destroyit.config.AssetsConfig;
 import com.dch.destroyit.config.LandscapeConfig;
 import com.dch.destroyit.mvc.IViewController;
@@ -29,9 +30,9 @@ public class LandscapeController implements IViewController
     {
         this.view = view;
         registerTouchEvents();
-        createLandscapeModel(LandscapeConfig.BUILDINGS_COUNT, LandscapeConfig.LANDSCAPE_WIDTH_IN_TILES, LandscapeConfig.LANDSCAPE_LENGTH_IN_TILES, LandscapeConfig.BUILDING_SIDE_MIN_SIZE_IN_TILES,
-                LandscapeConfig.BUILDING_SIDE_MAX_SIZE_IN_TILES, LandscapeConfig.BUILDING_SIDE_SIZE_DIFFERENCE_IN_TILES, LandscapeConfig.FREE_DISTANCE_IN_TILES);
-        createBuildings(LandscapeConfig.TILE_SIZE);
+        createLandscapeModel(LandscapeConfig.BUILDINGS_COUNT, LandscapeConfig.LANDSCAPE_WIDTH_IN_CEIL, LandscapeConfig.LANDSCAPE_LENGTH_IN_CEIL, LandscapeConfig.BUILDING_SIDE_MIN_SIZE_IN_CEIL,
+                LandscapeConfig.BUILDING_SIDE_MAX_SIZE_IN_CEIL, LandscapeConfig.BUILDING_SIDE_SIZE_DIFFERENCE_IN_CEIL, LandscapeConfig.FREE_DISTANCE_IN_CEIL);
+        createBuildings(LandscapeConfig.CEIL_SIZE);
     }
 
     private function createLandscapeModel(buildingsCount:int, landscapeWidth:Number, landscapeLength:Number, minFaceSize:Number, maxFaceSize:Number, maxSideDifference:int, freeDistance:Number):void
@@ -86,8 +87,7 @@ public class LandscapeController implements IViewController
         for each(var building:BuildingModel in landscapeModel.buildings)
         {
             var isoBuilding:BuildingView = new BuildingView(building.x * tileSize, 0, building.z * tileSize, building.width * tileSize, building.length * tileSize, 0,
-                    LandscapeConfig.TILE_SIZE,LandscapeConfig.BUILDING_INNER_COLOR,LandscapeConfig.BUILDING_BORDER_THICKNESS,LandscapeConfig.BUILDING_BORDER_COLOR,
-                    Ground1x1NamesEnum.GROUND_1X1_NAME.value,AssetsService.sharedAssets.assetsManager,AssetsConfig.BUILDING_SWF_NAME);
+                    LandscapeConfig.CEIL_SIZE, Ground1x1NamesEnum.GROUND_1X1_NAME.value,AssetsService.sharedAssets.assetsManager,AssetsConfig.BUILDING_SWF_NAME);
             var buildingController:BuildingController = new BuildingController(building, isoBuilding);
             view.add2Scene(isoBuilding);
         }

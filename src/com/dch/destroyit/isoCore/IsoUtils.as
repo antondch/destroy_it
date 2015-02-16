@@ -14,8 +14,8 @@ public class IsoUtils
 //    private static const cosTheta:Number = Math.cos(theta);
 //    private static const sinAlpha:Number = Math.sin(alpha);
 //    private static const cosAlpha:Number = Math.cos(alpha);
-
-
+//
+//
 //    public static function isoToScreen(xpp:Number, ypp:Number, zpp:Number):Point
 //    {
 //        var yp:Number = ypp;
@@ -31,7 +31,7 @@ public class IsoUtils
     public static function isoToScreen(xpp:Number, ypp:Number, zpp:Number):Point
     {
         var screenX:Number = xpp - zpp;
-        var screenY:Number = ypp * Y_CORRECT + (xpp + zpp) * 0.5;
+        var screenY:Number = ypp * Y_CORRECT + (xpp + zpp) * 0.6;
         return new Point(screenX, screenY);
     }
 
