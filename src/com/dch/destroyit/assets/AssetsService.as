@@ -13,32 +13,39 @@ import flash.display.Loader;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.EventDispatcher;
+import flash.events.IOErrorEvent;
 import flash.geom.Point;
 import flash.net.URLRequest;
 import flash.system.ApplicationDomain;
 import flash.system.LoaderContext;
 import flash.utils.Dictionary;
 
+import starling.textures.Texture;
+
 import starling.textures.TextureAtlas;
 import starling.utils.AssetManager;
 
 /**
- * Singleton service class load assets and prepare texture atlases, and grant access to assetsManager.
- * For load assets use loadAssets().
- * For add texture to atlas use addTexture().
+ * Singleton service class load assets and prepare texture atlases, and grant access to textures.
+ * For load assets and prepare textures use loadAssets().
+ * For get texture  use getTexture(name:String):Texture.
+ * For get texture  use getTextures(prefix:String):Vector.<Texture>.
  * @see loadAssets(rootPath:String,swfPath:String,swfName:String,swfExtension:String,onComplete:Function = null):void.
- * @see starling.utils.AssetManager.
+ * @see getTexture(name:String):Texture.
+ * @see getTextures(prefix:String):Vector.<Texture>.
  * @see get sharedAssets():AssetsService.
  */
 public class AssetsService extends EventDispatcher
 {
     private var loader:Loader = new Loader();
-    public static const TEXTURES_POSTFIX:String = "_00000";
+    private static const TEXTURES_POSTFIX:String = "_00000";
     private var onComplete:Function;
     private var _isComplete:Boolean = false;
     private static var _sharedAssets:AssetsService;
     private var _assetsManager:AssetManager = new AssetManager();
     private var swfName:String;
+    private static const TEXTURES:Dictionary = new Dictionary(true);
+    private static const ATLASES:Dictionary = new Dictionary(true);
 
 
     public function AssetsService()
@@ -68,115 +75,41 @@ public class AssetsService extends EventDispatcher
         context.applicationDomain = ApplicationDomain.currentDomain;
         loader.load(new URLRequest(rootPath + swfPath + swfName + swfExtension), context);
         loader.contentLoaderInfo.addEventListener(Event.COMPLETE, generateAtlas);
+        loader.addEventListener(IOErrorEvent.IO_ERROR, loader_ioErrorHandler);
     }
 
-    private function drawCleanHomeTile(width:Number, length:Number, color:uint, borderThickness:Number, borderColor:uint, tilePosition:TilePositionsEnum):Sprite
+    private function drawCleanTile(size:Number, color:uint):Sprite
     {
         var rect:Sprite = new Sprite();
         //In box ABCDEFGH:
         var pointA:Point = IsoUtils.isoToScreen(0, 0, 0);
-        var pointB:Point = IsoUtils.isoToScreen(width, 0, 0);
-        var pointC:Point = IsoUtils.isoToScreen(width, 0, length);
-        var pointD:Point = IsoUtils.isoToScreen(0, 0, length);
+        var pointB:Point = IsoUtils.isoToScreen(size, 0, 0);
+        var pointC:Point = IsoUtils.isoToScreen(size, 0, size);
+        var pointD:Point = IsoUtils.isoToScreen(0, 0, size);
         //****************
 
-        switch (tilePosition)
-        {
-            case TilePositionsEnum.INNER:
-            {
                 rect.graphics.clear();
                 rect.graphics.beginFill(color);
-                rect.graphics.lineStyle(0);
+                rect.graphics.lineStyle(0,0x000000,0);
                 rect.graphics.moveTo(pointA.x, pointA.y);
                 rect.graphics.lineTo(pointB.x, pointB.y);
                 rect.graphics.lineTo(pointC.x, pointC.y);
                 rect.graphics.lineTo(pointD.x, pointD.y);
                 rect.graphics.lineTo(pointA.x, pointA.y);
-                break;
-            }
-            case TilePositionsEnum.TOP_LEFT:
-            {
-                rect.graphics.clear();
-                rect.graphics.beginFill(color);
-                rect.graphics.lineStyle(borderThickness, borderColor);
-                rect.graphics.moveTo(pointA.x, pointA.y);
-                rect.graphics.lineTo(pointB.x, pointB.y);
-                rect.graphics.lineStyle(0);
-                rect.graphics.lineTo(pointC.x, pointC.y);
-                rect.graphics.lineTo(pointD.x, pointD.y);
-                rect.graphics.lineStyle(borderThickness, borderColor);
-                rect.graphics.lineTo(pointA.x, pointA.y);
-                break;
-            }
-            case TilePositionsEnum.TOP:
-            {
-                rect.graphics.clear();
-                rect.graphics.beginFill(color);
-                rect.graphics.lineStyle(borderThickness, borderColor);
-                rect.graphics.moveTo(pointA.x, pointA.y);
-                rect.graphics.lineTo(pointB.x, pointB.y);
-                rect.graphics.lineStyle(0);
-                rect.graphics.lineTo(pointC.x, pointC.y);
-                rect.graphics.lineTo(pointD.x, pointD.y);
-                rect.graphics.lineTo(pointA.x, pointA.y);
-                break;
-            }
-            case TilePositionsEnum.TOP_RIGHT:
-            {
-                rect.graphics.clear();
-                rect.graphics.beginFill(color);
-                rect.graphics.lineStyle(borderThickness, borderColor);
-                rect.graphics.moveTo(pointA.x, pointA.y);
-                rect.graphics.lineTo(pointB.x, pointB.y);
-                rect.graphics.lineTo(pointC.x, pointC.y);
-                rect.graphics.lineStyle(0);
-                rect.graphics.lineTo(pointD.x, pointD.y);
-                rect.graphics.lineTo(pointA.x, pointA.y);
-                break;
-            }
-            case TilePositionsEnum.BOTTOM_RIGHT:
-            {
-                rect.graphics.clear();
-                rect.graphics.beginFill(color);
-                rect.graphics.lineStyle(0);
-                rect.graphics.moveTo(pointA.x, pointA.y);
-                rect.graphics.lineTo(pointB.x, pointB.y);
-                rect.graphics.lineStyle(borderThickness, borderColor);
-                rect.graphics.lineTo(pointC.x, pointC.y);
-                rect.graphics.lineTo(pointD.x, pointD.y);
-                rect.graphics.lineStyle(0);
-                rect.graphics.lineTo(pointA.x, pointA.y);
-                break;
-            }
-            case TilePositionsEnum.BOTTOM:
-            {
-                rect.graphics.clear();
-                rect.graphics.beginFill(color);
-                rect.graphics.lineStyle(0);
-                rect.graphics.moveTo(pointA.x, pointA.y);
-                rect.graphics.lineTo(pointB.x, pointB.y);
-                rect.graphics.lineTo(pointC.x, pointC.y);
-                rect.graphics.lineStyle(borderThickness, borderColor);
-                rect.graphics.lineTo(pointD.x, pointD.y);
-                rect.graphics.lineStyle(0);
-                rect.graphics.lineTo(pointA.x, pointA.y);
-                break;
-            }
-            case TilePositionsEnum.BOTTOM_LEFT:
-            {
-                rect.graphics.clear();
-                rect.graphics.beginFill(color);
-                rect.graphics.lineStyle(0);
-                rect.graphics.moveTo(pointA.x, pointA.y);
-                rect.graphics.lineTo(pointB.x, pointB.y);
-                rect.graphics.lineTo(pointC.x, pointC.y);
-                rect.graphics.lineStyle(borderThickness, borderColor);
-                rect.graphics.lineTo(pointD.x, pointD.y);
-                rect.graphics.lineTo(pointA.x, pointA.y);
-                break;
-            }
-        }
         return rect;
+    }
+
+    private function drawLine(thickness:Number, color:uint, from:Point,to:Point):Sprite
+    {
+        var pointA:Point = IsoUtils.isoToScreen(from.x, 0, from.y);
+        var pointB:Point = IsoUtils.isoToScreen(to.x, 0, to.y);
+        var line:Sprite = new Sprite();
+                line.graphics.clear();
+                line.graphics.beginFill(color);
+                line.graphics.lineStyle(thickness,color);
+                line.graphics.moveTo(pointA.x, pointA.y);
+                line.graphics.lineTo(pointB.x, pointB.y);
+        return line;
     }
 
     private function generateAtlas(event:Event):void
@@ -210,25 +143,28 @@ public class AssetsService extends EventDispatcher
 
         //*************************************************************************
         //Create tiles texture atlas:
-        var tilesColor:Vector.<Enumeration>= Enumeration.getElementsList(TilesColorEnum);
-        var tilesPositions:Vector.<Enumeration> = Enumeration.getElementsList(TilePositionsEnum);
+        var tilesColor:Vector.<Enumeration> = Enumeration.getElementsList(TilesColorEnum);
         var tilesDictionary:Dictionary = new Dictionary(true);
         for each (var color:TilesColorEnum in tilesColor)
         {
-            for each(var tilePos:TilePositionsEnum in tilesPositions)
-            {
                 //FIXME: remove external dependence
-                var tile:Sprite = drawCleanHomeTile(LandscapeConfig.CEIL_SIZE,LandscapeConfig.CEIL_SIZE,color.value,LandscapeConfig.BUILDING_BORDER_THICKNESS,LandscapeConfig.BUILDING_BORDER_COLOR,tilePos);
-                var key:String = TileTypesEnum.CLEAR_TYLE.value+"_"+color.value+"_"+tilePos.value;
-                tilesDictionary[key]=tile;
-            }
+                var tile:Sprite = drawCleanTile(LandscapeConfig.CEIL_SIZE, color.value);
+                var key:String = TileTypesEnum.CLEAR.value + "_" + color.value;
+                tilesDictionary[key] = tile;
         }
+        //create tile lines:
+        var horizontalLineKey:String = LineTypes.HORIZONTAL;
+        tilesDictionary[horizontalLineKey]= drawLine(LandscapeConfig.BUILDING_BORDER_THICKNESS,LandscapeConfig.BUILDING_BORDER_COLOR,new Point(0,0), new Point(LandscapeConfig.CEIL_SIZE,0));
+
+        var verticalLineKey:String = LineTypes.VERTICAL;
+        tilesDictionary[verticalLineKey]= drawLine(LandscapeConfig.BUILDING_BORDER_THICKNESS,LandscapeConfig.BUILDING_BORDER_COLOR,new Point(0,0),new Point(0,LandscapeConfig.CEIL_SIZE));
+
 
         var atlas:TextureAtlas = DynamicAtlas.fromClassVector(staticDisplayClasses);
         var tilesAtlas:TextureAtlas = DynamicAtlas.fromDictionaryWithNamesInKeys(tilesDictionary);
-        _assetsManager.addTextureAtlas(swfName, atlas);
-        //FIXME: remove external dependence
-        _assetsManager.addTextureAtlas(AssetsConfig.TILES_ATLAS_NAME, tilesAtlas);
+
+        ATLASES[swfName] = atlas;
+        ATLASES[AssetsConfig.TILES_ATLAS_NAME] = tilesAtlas;
 
         _isComplete = true;
         if (onComplete)
@@ -237,9 +173,28 @@ public class AssetsService extends EventDispatcher
         }
     }
 
-    public function get assetsManager():AssetManager
+    public function getTexture(name:String):Texture
     {
-        return _assetsManager;
+        name+=TEXTURES_POSTFIX;
+        var texture:Texture = TEXTURES[name];
+        if (!texture)
+        {
+            for each(var atlas:TextureAtlas in ATLASES)
+            {
+                texture = atlas.getTexture(name);
+                if(texture)
+                {
+                    TEXTURES[name]=texture;
+                    break;
+                }
+            }
+        }
+        return texture;
+    }
+
+    private function loader_ioErrorHandler(event:IOErrorEvent):void
+    {
+        trace(this, "error loading assets");
     }
 }
 }

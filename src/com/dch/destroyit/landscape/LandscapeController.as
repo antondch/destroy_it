@@ -87,7 +87,7 @@ public class LandscapeController implements IViewController
         for each(var building:BuildingModel in landscapeModel.buildings)
         {
             var isoBuilding:BuildingView = new BuildingView(building.x * tileSize, 0, building.z * tileSize, building.width * tileSize, building.length * tileSize, 0,
-                    LandscapeConfig.CEIL_SIZE, Ground1x1NamesEnum.GROUND_1X1_NAME.value,AssetsService.sharedAssets.assetsManager,AssetsConfig.BUILDING_SWF_NAME);
+                    LandscapeConfig.CEIL_SIZE, Ground1x1NamesEnum.GROUND_1X1_NAME.value);
             var buildingController:BuildingController = new BuildingController(building, isoBuilding);
             view.add2Scene(isoBuilding);
         }

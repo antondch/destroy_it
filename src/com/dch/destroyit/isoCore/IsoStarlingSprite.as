@@ -16,11 +16,11 @@ public class IsoStarlingSprite extends Sprite implements IIsoDisplayObject
     {
         _isoBounds = new IsoBounds(isoX, isoY, isoZ, isoWidth, isoLength, isoHeight);
         _isoBounds.addEventListener(IsoBounds.UPDATED, updateScreenPosition);
-        setPivot();
+        setPivotToOrigin();
         updateScreenPosition();
     }
 
-    protected function setPivot():void
+    protected function setPivotToOrigin():void
     {
         pivotX = IsoUtils.isoToScreen(isoBounds.size.length, 0, 0).x;
     }
@@ -28,7 +28,7 @@ public class IsoStarlingSprite extends Sprite implements IIsoDisplayObject
     protected function updateScreenPosition(event:Event = null):void
     {
         var screenPos:Point = IsoUtils.isoToScreen(_isoBounds.origin.x, _isoBounds.origin.y, _isoBounds.origin.z);
-        setPivot();
+        setPivotToOrigin();
         super.x = screenPos.x;
         super.y = screenPos.y;
     }

@@ -5,21 +5,26 @@ package com.dch.destroyit.isoCore
 {
 import flash.events.Event;
 import flash.geom.Point;
-import flash.geom.Rectangle;
 
-import starling.display.Quad;
+import starling.display.Image;
+import starling.textures.Texture;
 
-public class IsoStarlingQuad extends Quad implements IIsoDisplayObject
+public class IsoStarlingImage extends Image implements IIsoDisplayObject
 {
     private var _isoBounds:IsoBounds;
 
-    public function IsoStarlingQuad(color:uint, premultipliedAlpha:Number, isoX:Number, isoY:Number, isoZ:Number, isoWidth:Number, isoLength:Number, isoHeight:Number)
+    public function IsoStarlingImage(texture:Texture, isoX:Number, isoY:Number, isoZ:Number, isoWidth:Number, isoLength:Number, isoHeight:Number)
     {
         _isoBounds = new IsoBounds(isoX, isoY, isoZ, isoWidth, isoLength, isoHeight);
         _isoBounds.addEventListener(IsoBounds.UPDATED, updateScreenPosition);
-        var screenBounds:Rectangle = IsoUtils.getScreenBounds(isoX, isoY, isoZ, isoWidth, isoLength, isoHeight);
-        super(screenBounds.width, screenBounds.height, color, premultipliedAlpha);
+        super(texture);
+        setPivotToOrigin();
         updateScreenPosition();
+    }
+
+    protected function setPivotToOrigin():void
+    {
+        pivotX = IsoUtils.isoToScreen(isoBounds.size.length, 0, 0).x;
     }
 
     protected function updateScreenPosition(event:Event = null):void

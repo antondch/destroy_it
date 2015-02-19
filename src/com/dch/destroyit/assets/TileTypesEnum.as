@@ -7,7 +7,7 @@ import com.dch.destroyit.enums.StringEnumeration;
 
 public class TileTypesEnum extends StringEnumeration
 {
-    public static const CLEAR_TYLE:TileTypesEnum = new TileTypesEnum("clear_tile");
+    public static const CLEAR:TileTypesEnum = new TileTypesEnum("clear_tile");
 
     public function TileTypesEnum(value:String):void
     {

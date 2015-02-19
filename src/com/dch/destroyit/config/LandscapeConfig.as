@@ -3,6 +3,8 @@
  */
 package com.dch.destroyit.config
 {
+import com.dch.destroyit.assets.Color;
+
 public class LandscapeConfig
 {
 
@@ -23,9 +25,8 @@ public class LandscapeConfig
     public static const BUILDING_SIDE_MIN_SIZE_IN_CEIL:int = 1;
     public static const BUILDING_SIDE_SIZE_DIFFERENCE_IN_CEIL:int = 2;
 
-    public static const BUILDING_BORDER_COLOR:uint = 0x000000;
+    public static const BUILDING_BORDER_COLOR:uint = Color.BLACK;
     public static const BUILDING_BORDER_THICKNESS:Number = 2.0;
-//    public static const BUILDING_INNER_COLOR:uint = 0x00ff00;
-    public static const BUILDING_INNER_COLOR:uint = 0x852C2C;
+    public static const BUILDING_INNER_COLOR:uint = Color.GREEN;
 }
 }
