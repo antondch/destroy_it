@@ -4,6 +4,7 @@
 package com.dch.destroyit.landscape
 {
 import com.dch.destroyit.assets.AssetsService;
+import com.dch.destroyit.assets.LineTypes;
 import com.dch.destroyit.assets.TileTypesEnum;
 import com.dch.destroyit.config.LandscapeConfig;
 import com.dch.destroyit.isoCore.IsoStarlingSprite;
@@ -11,9 +12,8 @@ import com.dch.destroyit.isoCore.IsoStarlingSprite;
 import flash.utils.Dictionary;
 
 import starling.display.Image;
+import starling.display.QuadBatch;
 import starling.textures.Texture;
-import starling.textures.TextureAtlas;
-import starling.utils.AssetManager;
 
 public class BuildingView extends IsoStarlingSprite
 {
@@ -25,12 +25,16 @@ public class BuildingView extends IsoStarlingSprite
 //    public static const GROUND_TEXTURE_PREFIX:String = "ground";
     private var tileSize:Number;
     private var groundTypeName:String;
+    private var model:BuildingModel;
     public static const GROUND_QUAD_BATCHES:Dictionary = new Dictionary(true);
-    public static const CLEAN_BUILDINGS_TEXTURES:Dictionary = new Dictionary(true);
+    public static const GREEN_QUAD_BATCHES:Dictionary = new Dictionary(true);
+    //images ONLY FOR REUSE IN QUAD BATCHES!!! --->
+    public static const IMAGES:Dictionary = new Dictionary(true);
 
-    public function BuildingView(x:Number, y:Number, z:Number, width:Number, length:Number, height:Number, tileSize:Number, groundTypeName:String)
+    public function BuildingView(model:BuildingModel, tileSize:Number, groundTypeName:String)
     {
-        super(x, y, z, width, length, height);
+        this.model = model;
+        super(model.x*tileSize, 0,model.z*tileSize, model.width*tileSize, model.length*tileSize, 0);
         this.groundTypeName = groundTypeName;
         this.tileSize = tileSize;
         this.color = color;
@@ -43,16 +47,40 @@ public class BuildingView extends IsoStarlingSprite
     {
         var widthInTiles:int = isoBounds.size.width / tileSize;
         var lengthInTiles:int = isoBounds.size.length / tileSize;
+        var buildingSizeKey:String = widthInTiles + "x" + lengthInTiles;
 
-        //get clean texture
-        var cleanTextureName:String = TileTypesEnum.CLEAR.value + "_" + LandscapeConfig.BUILDING_INNER_COLOR;
-        var cleanTexture:Texture = CLEAN_BUILDINGS_TEXTURES[cleanTextureName];
-        if (!cleanTexture)
+        //get green building quadBatch
+        var greenQuadBatch:QuadBatch = GREEN_QUAD_BATCHES[buildingSizeKey];
+        if(!greenQuadBatch)
+
+        //get images for batch
+        var greenTileTextureName:String = TileTypesEnum.CLEAR.value + "_" + LandscapeConfig.BUILDING_INNER_COLOR;
+        var greenTileTexture:Texture = IMAGES[greenTileTextureName];
+        if (!greenTileTexture)
         {
-            cleanTexture = AssetsService.sharedAssets.getTexture(cleanTextureName);
-            CLEAN_BUILDINGS_TEXTURES[cleanTextureName]= cleanTexture;
+            greenTileTexture = AssetsService.sharedAssets.getTexture(greenTileTextureName);
+            IMAGES[greenTileTextureName]= greenTileTexture;
         }
-        cleanBuildingImage = new Image(cleanTexture);
+        var verticalLineTexture = IMAGES[LineTypes.VERTICAL];
+        if(!verticalLineTexture)
+        {
+            verticalLineTexture = AssetsService.sharedAssets.getTexture(LineTypes.VERTICAL);
+            IMAGES[LineTypes.VERTICAL] = verticalLineTexture;
+        }
+        var horizontalLineTexture = IMAGES[LineTypes.HORIZONTAL];
+        if(!horizontalLineTexture)
+        {
+            horizontalLineTexture = AssetsService.sharedAssets.getTexture(LineTypes.HORIZONTAL);
+            IMAGES[LineTypes.HORIZONTAL] = horizontalLineTexture;
+        }
+        for(var row:int=0;row<model.width;row++)
+        {
+            for(var column:int=0;column<model.length;column++)
+            {
+
+            }
+        }
+        cleanBuildingImage = new Image(greenTileTexture);
         addChild(cleanBuildingImage);
 
         //get ground texture

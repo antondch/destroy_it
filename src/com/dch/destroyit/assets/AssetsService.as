@@ -42,7 +42,6 @@ public class AssetsService extends EventDispatcher
     private var onComplete:Function;
     private var _isComplete:Boolean = false;
     private static var _sharedAssets:AssetsService;
-    private var _assetsManager:AssetManager = new AssetManager();
     private var swfName:String;
     private static const TEXTURES:Dictionary = new Dictionary(true);
     private static const ATLASES:Dictionary = new Dictionary(true);
