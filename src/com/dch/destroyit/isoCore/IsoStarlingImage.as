@@ -13,9 +13,9 @@ public class IsoStarlingImage extends Image implements IIsoDisplayObject
 {
     private var _isoBounds:IsoBounds;
 
-    public function IsoStarlingImage(texture:Texture, isoX:Number, isoY:Number, isoZ:Number, isoWidth:Number, isoLength:Number, isoHeight:Number)
+    public function IsoStarlingImage(texture:Texture, isoX:Number, isoY:Number, isoZ:Number, isoWidth:Number, isoLength:Number)
     {
-        _isoBounds = new IsoBounds(isoX, isoY, isoZ, isoWidth, isoLength, isoHeight);
+        _isoBounds = new IsoBounds(isoX, isoY, isoZ, isoWidth, isoLength, 0);
         _isoBounds.addEventListener(IsoBounds.UPDATED, updateScreenPosition);
         super(texture);
         setPivotToOrigin();

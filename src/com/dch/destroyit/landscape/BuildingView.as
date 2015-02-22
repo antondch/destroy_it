@@ -7,9 +7,15 @@ import com.dch.destroyit.assets.AssetsService;
 import com.dch.destroyit.assets.LineTypes;
 import com.dch.destroyit.assets.TileTypesEnum;
 import com.dch.destroyit.config.LandscapeConfig;
+import com.dch.destroyit.isoCore.IsoStarlingImage;
+import com.dch.destroyit.isoCore.IsoStarlingImage;
 import com.dch.destroyit.isoCore.IsoStarlingSprite;
 
 import flash.utils.Dictionary;
+
+import starling.display.Image;
+
+import starling.display.Image;
 
 import starling.display.Image;
 import starling.display.QuadBatch;
@@ -23,7 +29,7 @@ public class BuildingView extends IsoStarlingSprite
     private var cleanBuildingImage:Image;
 //    public static const CLEAN_TEXTURE_PREFIX:String = "cleanBuilding_";
 //    public static const GROUND_TEXTURE_PREFIX:String = "ground";
-    private var tileSize:Number;
+    private var cellSize:Number;
     private var groundTypeName:String;
     private var model:BuildingModel;
     public static const GROUND_QUAD_BATCHES:Dictionary = new Dictionary(true);
@@ -36,7 +42,7 @@ public class BuildingView extends IsoStarlingSprite
         this.model = model;
         super(model.x*tileSize, 0,model.z*tileSize, model.width*tileSize, model.length*tileSize, 0);
         this.groundTypeName = groundTypeName;
-        this.tileSize = tileSize;
+        this.cellSize = tileSize;
         this.color = color;
         this.borderColor = borderColor;
         this.borderThickness = borderThickness;
@@ -45,43 +51,49 @@ public class BuildingView extends IsoStarlingSprite
 
     private function draw():void
     {
-        var widthInTiles:int = isoBounds.size.width / tileSize;
-        var lengthInTiles:int = isoBounds.size.length / tileSize;
+        var widthInTiles:int = isoBounds.size.width / cellSize;
+        var lengthInTiles:int = isoBounds.size.length / cellSize;
         var buildingSizeKey:String = widthInTiles + "x" + lengthInTiles;
 
         //get green building quadBatch
         var greenQuadBatch:QuadBatch = GREEN_QUAD_BATCHES[buildingSizeKey];
         if(!greenQuadBatch)
+        {
+            greenQuadBatch = new QuadBatch();
+            GREEN_QUAD_BATCHES[buildingSizeKey] = greenQuadBatch;
 
-        //get images for batch
-        var greenTileTextureName:String = TileTypesEnum.CLEAR.value + "_" + LandscapeConfig.BUILDING_INNER_COLOR;
-        var greenTileTexture:Texture = IMAGES[greenTileTextureName];
-        if (!greenTileTexture)
-        {
-            greenTileTexture = AssetsService.sharedAssets.getTexture(greenTileTextureName);
-            IMAGES[greenTileTextureName]= greenTileTexture;
-        }
-        var verticalLineTexture = IMAGES[LineTypes.VERTICAL];
-        if(!verticalLineTexture)
-        {
-            verticalLineTexture = AssetsService.sharedAssets.getTexture(LineTypes.VERTICAL);
-            IMAGES[LineTypes.VERTICAL] = verticalLineTexture;
-        }
-        var horizontalLineTexture = IMAGES[LineTypes.HORIZONTAL];
-        if(!horizontalLineTexture)
-        {
-            horizontalLineTexture = AssetsService.sharedAssets.getTexture(LineTypes.HORIZONTAL);
-            IMAGES[LineTypes.HORIZONTAL] = horizontalLineTexture;
-        }
-        for(var row:int=0;row<model.width;row++)
-        {
-            for(var column:int=0;column<model.length;column++)
+
+            //get images for batch
+            var greenTileImageName:String = TileTypesEnum.CLEAR.value + "_" + LandscapeConfig.BUILDING_INNER_COLOR;
+            var greenTileImage:IsoStarlingImage = IMAGES[greenTileImageName];
+            if (!greenTileImage)
             {
-
+                greenTileImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(greenTileImageName),0,0,0,cellSize,cellSize);
+                IMAGES[greenTileImageName] = greenTileImage;
+            }
+            var verticalLineImage:IsoStarlingImage = IMAGES[LineTypes.VERTICAL];
+            if (!verticalLineImage)
+            {
+                verticalLineImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.VERTICAL),0,0,0,0,cellSize);
+                IMAGES[LineTypes.VERTICAL] = verticalLineImage;
+            }
+            var horizontalLineImage:IsoStarlingImage = IMAGES[LineTypes.HORIZONTAL];
+            if (!horizontalLineImage)
+            {
+                horizontalLineImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.HORIZONTAL),0,0,0,cellSize,0);
+                IMAGES[LineTypes.HORIZONTAL] = horizontalLineImage;
+            }
+            for (var row:int = 0; row < model.width; row++)
+            {
+                for (var column:int = 0; column < model.length; column++)
+                {
+                    greenQuadBatch.addImage(greenTileImage);
+                }
             }
         }
-        cleanBuildingImage = new Image(greenTileTexture);
-        addChild(cleanBuildingImage);
+        var currentGreenBatch:QuadBatch = new QuadBatch();
+        currentGreenBatch.addQuadBatch(greenQuadBatch);
+        addChild(currentGreenBatch);
 
         //get ground texture
 //        var groundTextureName:String = GROUND_TEXTURE_PREFIX + String(widthInTiles) + "x" + String(lengthInTiles);
