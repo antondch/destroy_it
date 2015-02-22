@@ -21,8 +21,8 @@ public class LandscapeConfig
     public static const LANDSCAPE_START_POINT_Z:Number = 300;
 
     public static const FREE_DISTANCE_IN_CEIL:int = 1;
-    public static const BUILDING_SIDE_MAX_SIZE_IN_CEIL:int = 4;
-    public static const BUILDING_SIDE_MIN_SIZE_IN_CEIL:int = 4;
+    public static const BUILDING_SIDE_MAX_SIZE_IN_CEIL:int = 1;
+    public static const BUILDING_SIDE_MIN_SIZE_IN_CEIL:int = 8;
     public static const BUILDING_SIDE_SIZE_DIFFERENCE_IN_CEIL:int = 2;
 
     public static const BUILDING_BORDER_COLOR:uint = Color.BLACK;

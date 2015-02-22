@@ -41,27 +41,27 @@ public class BuildingView extends IsoStarlingSprite
             {
                 for (var column:int = 0; column < lengthInTiles; column++)
                 {
-                    if(row==0)
+                    if(column==0)
                     {
-                        var horizontalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.HORIZONTAL),column*cellSize,0,0,cellSize,0);
+                        var horizontalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.HORIZONTAL),row*cellSize,0,0,cellSize,0);
                         addChild(horizontalLineImage);
                     }
 
                     var greenTileImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(greenTileImageName),row*cellSize+LandscapeConfig.BUILDING_BORDER_THICKNESS/2,0,column*cellSize+LandscapeConfig.BUILDING_BORDER_THICKNESS/2,cellSize,cellSize);
                     addChild(greenTileImage);
-                    if(row==widthInTiles-1)
-                    {
-                        var horizontalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.HORIZONTAL),column*cellSize,0,cellSize*lengthInTiles,cellSize,0);
-                        addChild(horizontalLineImage);
-                    }
-                    if(column==0)
-                    {
-                        var verticalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.VERTICAL),0,0,row*cellSize,0,cellSize);
-                        addChild(verticalLineImage);
-                    }
                     if(column==lengthInTiles-1)
                     {
-                        var verticalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.VERTICAL),widthInTiles*cellSize,0,row*cellSize,0,cellSize);
+                        var horizontalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.HORIZONTAL),row*cellSize,0,cellSize*lengthInTiles,cellSize,0);
+                        addChild(horizontalLineImage);
+                    }
+                    if(row==0)
+                    {
+                        var verticalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.VERTICAL),0,0,column*cellSize,0,cellSize);
+                        addChild(verticalLineImage);
+                    }
+                    if(row==widthInTiles-1)
+                    {
+                        var verticalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.VERTICAL),widthInTiles*cellSize,0,column*cellSize,0,cellSize);
                         addChild(verticalLineImage);
                     }
 
