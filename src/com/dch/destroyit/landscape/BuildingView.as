@@ -57,7 +57,7 @@ public class BuildingView extends IsoStarlingSprite
 
         //get green building quadBatch
         var greenQuadBatch:QuadBatch = GREEN_QUAD_BATCHES[buildingSizeKey];
-        if(!greenQuadBatch)
+        if(1)//!greenQuadBatch)
         {
             greenQuadBatch = new QuadBatch();
             GREEN_QUAD_BATCHES[buildingSizeKey] = greenQuadBatch;
@@ -65,35 +65,41 @@ public class BuildingView extends IsoStarlingSprite
 
             //get images for batch
             var greenTileImageName:String = TileTypesEnum.CLEAR.value + "_" + LandscapeConfig.BUILDING_INNER_COLOR;
-            var greenTileImage:IsoStarlingImage = IMAGES[greenTileImageName];
-            if (!greenTileImage)
-            {
-                greenTileImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(greenTileImageName),0,0,0,cellSize,cellSize);
-                IMAGES[greenTileImageName] = greenTileImage;
-            }
-            var verticalLineImage:IsoStarlingImage = IMAGES[LineTypes.VERTICAL];
-            if (!verticalLineImage)
-            {
-                verticalLineImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.VERTICAL),0,0,0,0,cellSize);
-                IMAGES[LineTypes.VERTICAL] = verticalLineImage;
-            }
-            var horizontalLineImage:IsoStarlingImage = IMAGES[LineTypes.HORIZONTAL];
-            if (!horizontalLineImage)
-            {
-                horizontalLineImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.HORIZONTAL),0,0,0,cellSize,0);
-                IMAGES[LineTypes.HORIZONTAL] = horizontalLineImage;
-            }
+//            var greenTileImage:IsoStarlingImage// = IMAGES[greenTileImageName];
+//            if (!greenTileImage)
+//            {
+//                greenTileImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(greenTileImageName),0,0,0,cellSize,cellSize);
+//                IMAGES[greenTileImageName] = greenTileImage;
+//            }
+//            var verticalLineImage:IsoStarlingImage = IMAGES[LineTypes.VERTICAL];
+//            if (!verticalLineImage)
+//            {
+//                verticalLineImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.VERTICAL),0,0,0,0,cellSize);
+//                IMAGES[LineTypes.VERTICAL] = verticalLineImage;
+//            }
+//            var horizontalLineImage:IsoStarlingImage = IMAGES[LineTypes.HORIZONTAL];
+//            if (!horizontalLineImage)
+//            {
+//                horizontalLineImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.HORIZONTAL),0,0,0,cellSize,0);
+//                IMAGES[LineTypes.HORIZONTAL] = horizontalLineImage;
+//            }
             for (var row:int = 0; row < model.width; row++)
             {
                 for (var column:int = 0; column < model.length; column++)
                 {
-                    greenQuadBatch.addImage(greenTileImage);
+                    var greenTileImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(greenTileImageName),row*cellSize,0,column*cellSize,cellSize,cellSize);
+                    addChild(greenTileImage);
+
                 }
             }
+
+//            greenTileImage.isoBounds.origin.x = cellSize*model.x;
+//            greenTileImage.isoBounds.origin.z = cellSize*model.z;
         }
-        var currentGreenBatch:QuadBatch = new QuadBatch();
-        currentGreenBatch.addQuadBatch(greenQuadBatch);
-        addChild(currentGreenBatch);
+
+//        var currentGreenBatch:QuadBatch = greenQuadBatch.clone();
+//        currentGreenBatch.addQuadBatch(greenQuadBatch);
+//        addChild(currentGreenBatch);
 
         //get ground texture
 //        var groundTextureName:String = GROUND_TEXTURE_PREFIX + String(widthInTiles) + "x" + String(lengthInTiles);
