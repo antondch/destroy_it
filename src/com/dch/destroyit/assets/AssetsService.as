@@ -138,18 +138,20 @@ public class AssetsService extends EventDispatcher
             var Ground1x1NamesClass:Class = loader.contentLoaderInfo.applicationDomain.getDefinition(clazz3.value) as Class;
             staticDictionary[clazz3.value] = new Ground1x1NamesClass();
         }
-        var mcClasses:Vector.<Class> = new Vector.<Class>();
-//        for each(var clazz4:Explode1x1NamesEnum in Enumeration.getElementsList(Explode1x1NamesEnum))
-//        {
-//            var Explode1x1NamesClass:Class = loader.contentLoaderInfo.applicationDomain.getDefinition(clazz4.value) as Class;
-//            mcClasses.push(Explode1x1NamesClass);
-//        }
+        var mc1x1Classes:Vector.<Class> = new Vector.<Class>();
+        var mc2x2Classes:Vector.<Class> = new Vector.<Class>();
+        for each(var clazz4:Explode1x1NamesEnum in Enumeration.getElementsList(Explode1x1NamesEnum))
+        {
+            var Explode1x1NamesClass:Class = loader.contentLoaderInfo.applicationDomain.getDefinition(clazz4.value) as Class;
+            mc1x1Classes.push(Explode1x1NamesClass);
+        }
         for each(var clazz5:Explode2x2NamesEnum in Enumeration.getElementsList(Explode2x2NamesEnum))
         {
             var Explode2x2NamesClass:Class = loader.contentLoaderInfo.applicationDomain.getDefinition(clazz5.value) as Class;
-            mcClasses.push(Explode2x2NamesClass);
+            mc2x2Classes.push(Explode2x2NamesClass);
         }
-        ATLASES["mc2x2"] = DynamicAtlas.fromClassVector(mcClasses);
+        ATLASES["mc1x1"] = DynamicAtlas.fromClassVector(mc1x1Classes);
+        ATLASES["mc2x2"] = DynamicAtlas.fromClassVector(mc2x2Classes);
 
         //*************************************************************************
         //Create tiles texture atlas:

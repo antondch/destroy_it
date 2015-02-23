@@ -6,6 +6,7 @@ package com.dch.destroyit.landscape
 import com.dch.destroyit.assets.AssetsService;
 import com.dch.destroyit.assets.Crater1x1NamesEnum;
 import com.dch.destroyit.assets.Crater2x2NamesEnum;
+import com.dch.destroyit.assets.Explode1x1NamesEnum;
 import com.dch.destroyit.assets.Explode2x2NamesEnum;
 import com.dch.destroyit.assets.LineTypes;
 import com.dch.destroyit.assets.TileTypesEnum;
@@ -16,14 +17,8 @@ import com.dch.destroyit.isoCore.IsoStarlingMovieClip;
 import com.dch.destroyit.isoCore.IsoStarlingSprite;
 
 import starling.core.Starling;
-
-import starling.core.Starling;
 import starling.display.Image;
 import starling.display.MovieClip;
-import starling.display.MovieClip;
-
-import starling.display.MovieClip;
-
 import starling.display.Sprite;
 import starling.events.Event;
 import starling.textures.Texture;
@@ -93,16 +88,24 @@ public class BuildingView extends IsoStarlingSprite
                         var garbageImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(Crater1x1NamesEnum.CRATER_1X1_NAME.value),row*cellSize-14,0,column*cellSize,cellSize,cellSize);
                         garbageImage.visible = false;
                         addChild(garbageImage);
+
+                        var textures:Vector.<Texture> = AssetsService.sharedAssets.getTextures(Explode1x1NamesEnum.DUST_1X1_NAME.value);
+                        var explode1x1MC:IsoStarlingMovieClip = new IsoStarlingMovieClip(textures,31,row*cellSize,0,column*cellSize,cellSize,cellSize);
+                        explode1x1MC.pivotX=explode1x1MC.width/2-15;
+                        explode1x1MC.pivotY=explode1x1MC.height/2+2;
+                        explode1x1MC.stop();
+                        explode1x1MC.visible = false;
+                        addChild(explode1x1MC);
+                        explodes.push({explode:explode1x1MC,garbage:garbageImage});
                     }
 
                         if(model.matrix[row][column]==CeilTypes.EXPLODE_2X2)
                     {
 
-                        trace(this,"x:"+row,"y:"+column);
                         var garbageImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(Crater2x2NamesEnum.CRATER_2X2_NAME.value),row*cellSize-cellSize/2,0,column*cellSize,2*cellSize,2*cellSize);
                         garbageImage.visible = false;
                         addChild(garbageImage);
-                        
+
                         var textures:Vector.<Texture> = AssetsService.sharedAssets.getTextures(Explode2x2NamesEnum.DUST_2X2_NAME.value);
                         var explode2x2MC:IsoStarlingMovieClip = new IsoStarlingMovieClip(textures,31,row*cellSize,0,column*cellSize,2*cellSize,2*cellSize);
                         explode2x2MC.pivotX=explode2x2MC.width/2-cellSize/4;
