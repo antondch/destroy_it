@@ -3,6 +3,8 @@
  */
 package com.dch.destroyit
 {
+import com.dch.destroyit.assets.Color;
+import com.dch.destroyit.assets.TilesColorEnum;
 import com.dch.destroyit.config.LandscapeConfig;
 import com.dch.destroyit.landscape.LandscapeController;
 import com.dch.destroyit.landscape.StaticLayer;
@@ -24,7 +26,7 @@ public class RootController implements IViewController
 
     private function createLandscape(x:Number, y:Number, z:Number, width:Number, length:Number):void
     {
-        var landscapeView:StaticLayer = new StaticLayer(x, y, z, width, length);
+        var landscapeView:StaticLayer = new StaticLayer(x, y, z, width, length, TilesColorEnum.DARK_GREEN);
         landscapeView.y = 100;
         landscapeView.x = 600;
 

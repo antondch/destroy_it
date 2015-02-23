@@ -7,6 +7,7 @@ public class Color
 {
     public static const BLACK:uint = 0x000000;
     public static const GREEN:uint = 0x5B751A;
+    public static const DARK_GREEN:uint = 0x385215;
     public static const RED:uint = 0x852C2C;
 }
 }
