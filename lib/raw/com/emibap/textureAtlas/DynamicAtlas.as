@@ -301,7 +301,8 @@ public class DynamicAtlas
         }
 
         var item:TextureItem = new TextureItem(_bData, name, label, realBounds.x, realBounds.y, realBounds.width, realBounds.height);
-
+        item.pivotX = item.graphic.width / 2;
+//        item.pivotY = item.frameHeight;
         _items.push(item);
         _canvas.addChild(item);
 
@@ -323,7 +324,7 @@ public class DynamicAtlas
      * @param    checkBounds:Boolean - A Flag used to scan the clip prior the rasterization in order to get the bounds of the entire MovieClip. By default is false because it adds overhead to the process.
      * @return  TextureAtlas - The dynamically generated Texture Atlas.
      */
-    static public function fromClassVector(assets:Vector.<Class>, scaleFactor:Number = 1, margin:uint = 0, preserveColor:Boolean = true, checkBounds:Boolean = false):TextureAtlas
+    static public function fromClassVector(assets:Vector.<Class>, scaleFactor:Number = 1, margin:uint = 0, preserveColor:Boolean = true, checkBounds:Boolean = true):TextureAtlas
     {
         var container:MovieClip = new MovieClip();
         for each (var assetClass:Class in assets)
@@ -335,7 +336,7 @@ public class DynamicAtlas
         return fromMovieClipContainer(container, scaleFactor, margin, preserveColor, checkBounds);
     }
 
-    static public function fromDictionaryWithNamesInKeys(assets:Dictionary, scaleFactor:Number = 1, margin:uint = 0, preserveColor:Boolean = true, checkBounds:Boolean = false):TextureAtlas
+    static public function fromDictionaryWithNamesInKeys(assets:Dictionary, scaleFactor:Number = 1, margin:uint = 0, preserveColor:Boolean = true, checkBounds:Boolean = true):TextureAtlas
     {
         var container:MovieClip = new MovieClip();
         for (var key:* in assets)
@@ -365,7 +366,7 @@ public class DynamicAtlas
      * @param    checkBounds:Boolean - A Flag used to scan the clip prior the rasterization in order to get the bounds of the entire MovieClip. By default is false because it adds overhead to the process.
      * @return  TextureAtlas - The dynamically generated Texture Atlas.
      */
-    static public function fromMovieClipContainer(swf:Sprite, scaleFactor:Number = 1, margin:uint = 0, preserveColor:Boolean = true, checkBounds:Boolean = false):TextureAtlas
+    static public function fromMovieClipContainer(swf:Sprite, scaleFactor:Number = 1, margin:uint = 0, preserveColor:Boolean = true, checkBounds:Boolean = true):TextureAtlas
     {
         var parseFrame:Boolean = false;
         var selected:DisplayObject;
@@ -392,15 +393,15 @@ public class DynamicAtlas
 
         _items = [];
 
-		if (!_canvas)
-		{
-			_canvas = new Sprite();
-		}
+        if (!_canvas)
+        {
+            _canvas = new Sprite();
+        }
 
-		if (swf is MovieClip)
-		{
-			MovieClip(swf).gotoAndStop(1);
-		}
+        if (swf is MovieClip)
+        {
+            MovieClip(swf).gotoAndStop(1);
+        }
 
         for (var i:uint = 0; i < children; i++)
         {
@@ -440,34 +441,37 @@ public class DynamicAtlas
             }
 
             // Not all children will be MCs. Some could be sprites
-			if (selected is MovieClip)
-			{
-				selectedTotalFrames = MovieClip(selected).totalFrames;
-				// Gets the frame bounds by performing a frame-by-frame check
-				if (checkBounds)
-				{
-					MovieClip(selected).gotoAndStop(0);
-					frameBounds = getRealBounds(selected);
-					m = 1;
-					while (++m <= selectedTotalFrames)
-					{
-						MovieClip(selected).gotoAndStop(m);
-						frameBounds = frameBounds.union(getRealBounds(selected));
-					}
-				}
-			}
-			else
-			{
-				selectedTotalFrames = 1;
-			}
+            if (selected is MovieClip)
+            {
+                selectedTotalFrames = MovieClip(selected).totalFrames;
+                // Gets the frame bounds by performing a frame-by-frame check
+                if (checkBounds)
+                {
+                    MovieClip(selected).gotoAndStop(0);
+                    frameBounds = getRealBounds(selected);
+                    m = 1;
+                    while (++m <= selectedTotalFrames)
+                    {
+                        MovieClip(selected).gotoAndStop(m);
+                        if (MovieClip(selected).width && MovieClip(selected).width)
+                        {
+                            frameBounds = frameBounds.union(getRealBounds(selected));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                selectedTotalFrames = 1;
+            }
             m = 0;
             // Draw every frame (if MC - else will just be one)
             while (++m <= selectedTotalFrames)
             {
-				if (selected is MovieClip)
-				{
-					MovieClip(selected).gotoAndStop(m);
-				}
+                if (selected is MovieClip)
+                {
+                    MovieClip(selected).gotoAndStop(m);
+                }
                 drawItem(selected, selected.name + "_" + appendIntToString(m - 1, 5), selected.name, selectedColorTransform, frameBounds);
             }
         }
@@ -499,13 +503,15 @@ public class DynamicAtlas
             subText.@height = itm.height;
             subText.@frameX = itm.frameX;
             subText.@frameY = itm.frameY;
+            subText.@pivotX = itm.pivotX;
+            subText.@pivotY = itm.pivotY;
             subText.@frameWidth = itm.frameWidth;
             subText.@frameHeight = itm.frameHeight;
 
-			if (itm.frameName != "")
-			{
-				subText.@frameLabel = itm.frameName;
-			}
+            if (itm.frameName != "")
+            {
+                subText.@frameLabel = itm.frameName;
+            }
             xml.appendChild(subText);
         }
         texture = Texture.fromBitmapData(canvasData);
@@ -552,10 +558,10 @@ public class DynamicAtlas
         tf.defaultTextFormat = format;
         tf.text = chars;
 
-		if (fontCustomID == "")
-		{
-			fontCustomID = fontFamily;
-		}
+        if (fontCustomID == "")
+        {
+            fontCustomID = fontFamily;
+        }
         bitmapFontFromTextField(tf, charMarginX, fontCustomID);
     }
 
@@ -589,16 +595,16 @@ public class DynamicAtlas
         var itm:TextureItem;
         var itemsLen:int;
 
-		if (!_canvas)
-		{
-			_canvas = new Sprite();
-		}
+        if (!_canvas)
+        {
+            _canvas = new Sprite();
+        }
 
         // Add the blank space char if not present;
-		if (charCol.indexOf(" ") == -1)
-		{
-			charCol.push(" ");
-		}
+        if (charCol.indexOf(" ") == -1)
+        {
+            charCol.push(" ");
+        }
 
         for (var i:int = charCol.length - 1; i > -1; i--)
         {

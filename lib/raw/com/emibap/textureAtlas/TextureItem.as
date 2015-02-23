@@ -12,6 +12,8 @@ package com.emibap.textureAtlas{
 		private var _frameName:String = "";
 		private var _frameX:int = 0;
 		private var _frameY:int = 0;
+		private var _pivotX:int = 0;
+		private var _pivotY:int = 0;
 		private var _frameWidth:int = 0;
 		private var _frameHeight:int = 0;
 		
@@ -27,7 +29,7 @@ package com.emibap.textureAtlas{
 			_frameHeight = frameHeight;
 			_frameX = frameX;
 			_frameY = frameY;
-			
+
 			var bm:Bitmap = new Bitmap(graphic, "auto", false);
 			addChild(bm);
 		}
@@ -62,6 +64,26 @@ package com.emibap.textureAtlas{
 		public function get frameHeight():int 
 		{
 			return _frameHeight;
+		}
+
+		public function get pivotX():int
+		{
+			return _pivotX;
+		}
+
+		public function set pivotX(value:int):void
+		{
+			_pivotX = value;
+		}
+
+		public function get pivotY():int
+		{
+			return _pivotY;
+		}
+
+		public function set pivotY(value:int):void
+		{
+			_pivotY = value;
 		}
 	}
 }

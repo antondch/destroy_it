@@ -138,7 +138,18 @@ public class AssetsService extends EventDispatcher
             var Ground1x1NamesClass:Class = loader.contentLoaderInfo.applicationDomain.getDefinition(clazz3.value) as Class;
             staticDisplayClasses.push(Ground1x1NamesClass);
         }
-
+        var mcClasses:Vector.<Class> = new Vector.<Class>();
+//        for each(var clazz4:Explode1x1NamesEnum in Enumeration.getElementsList(Explode1x1NamesEnum))
+//        {
+//            var Explode1x1NamesClass:Class = loader.contentLoaderInfo.applicationDomain.getDefinition(clazz4.value) as Class;
+//            mcClasses.push(Explode1x1NamesClass);
+//        }
+        for each(var clazz5:Explode2x2NamesEnum in Enumeration.getElementsList(Explode2x2NamesEnum))
+        {
+            var Explode2x2NamesClass:Class = loader.contentLoaderInfo.applicationDomain.getDefinition(clazz5.value) as Class;
+            mcClasses.push(Explode2x2NamesClass);
+        }
+        ATLASES["mc"] = DynamicAtlas.fromClassVector(mcClasses);
 
         //*************************************************************************
         //Create tiles texture atlas:
@@ -189,6 +200,23 @@ public class AssetsService extends EventDispatcher
             }
         }
         return texture;
+    }
+    public function getTextures(prefix:String):Vector.<Texture>
+    {
+        var result:Vector.<Texture> = TEXTURES[prefix];
+        if (!result)
+        {
+            for each(var atlas:TextureAtlas in ATLASES)
+            {
+                result = atlas.getTextures(prefix);
+                if(result.length>0)
+                {
+                    TEXTURES[prefix]=result;
+                    break;
+                }
+            }
+        }
+        return result;
     }
 
     private function loader_ioErrorHandler(event:IOErrorEvent):void

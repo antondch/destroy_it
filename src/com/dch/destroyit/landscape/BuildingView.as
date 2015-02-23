@@ -4,11 +4,18 @@
 package com.dch.destroyit.landscape
 {
 import com.dch.destroyit.assets.AssetsService;
+import com.dch.destroyit.assets.Explode2x2NamesEnum;
 import com.dch.destroyit.assets.LineTypes;
 import com.dch.destroyit.assets.TileTypesEnum;
+import com.dch.destroyit.config.CeilTypes;
 import com.dch.destroyit.config.LandscapeConfig;
 import com.dch.destroyit.isoCore.IsoStarlingImage;
+import com.dch.destroyit.isoCore.IsoStarlingMovieClip;
 import com.dch.destroyit.isoCore.IsoStarlingSprite;
+
+import starling.core.Starling;
+import starling.display.Sprite;
+import starling.textures.Texture;
 
 public class BuildingView extends IsoStarlingSprite
 {
@@ -18,6 +25,7 @@ public class BuildingView extends IsoStarlingSprite
     private var cellSize:Number;
     private var groundTypeName:String;
     private var model:BuildingModel;
+    private var greenContainer:Sprite;
 
     public function BuildingView(model:BuildingModel, tileSize:Number, groundTypeName:String)
     {
@@ -35,7 +43,8 @@ public class BuildingView extends IsoStarlingSprite
     {
         var widthInTiles:int = model.width;
         var lengthInTiles:int = model.length;
-
+        greenContainer = new Sprite();
+        addChild(greenContainer);
             var greenTileImageName:String = TileTypesEnum.CLEAR.value + "_" + LandscapeConfig.BUILDING_INNER_COLOR;
             for (var row:int = 0; row < widthInTiles; row++)
             {
@@ -44,31 +53,46 @@ public class BuildingView extends IsoStarlingSprite
                     if(column==0)
                     {
                         var horizontalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.HORIZONTAL),row*cellSize,0,0,cellSize,0);
-                        addChild(horizontalLineImage);
+                        greenContainer.addChild(horizontalLineImage);
                     }
 
                     var greenTileImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(greenTileImageName),row*cellSize+LandscapeConfig.BUILDING_BORDER_THICKNESS/2,0,column*cellSize+LandscapeConfig.BUILDING_BORDER_THICKNESS/2,cellSize,cellSize);
-                    addChild(greenTileImage);
+                    greenContainer.addChild(greenTileImage);
                     if(column==lengthInTiles-1)
                     {
                         var horizontalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.HORIZONTAL),row*cellSize,0,cellSize*lengthInTiles,cellSize,0);
-                        addChild(horizontalLineImage);
+                        greenContainer.addChild(horizontalLineImage);
                     }
                     if(row==0)
                     {
                         var verticalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.VERTICAL),0,0,column*cellSize,0,cellSize);
-                        addChild(verticalLineImage);
+                        greenContainer.addChild(verticalLineImage);
                     }
                     if(row==widthInTiles-1)
                     {
                         var verticalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.VERTICAL),widthInTiles*cellSize,0,column*cellSize,0,cellSize);
-                        addChild(verticalLineImage);
+                        greenContainer.addChild(verticalLineImage);
                     }
+                    if(model.matrix[row][column]==CeilTypes.EXPLODE_2X2)
+                    {
 
+                        trace(this,"x:"+row,"y:"+column);
+                        var textures:Vector.<Texture> = AssetsService.sharedAssets.getTextures(Explode2x2NamesEnum.DUST_2X2_NAME.value);
+                        var explode2x2MC:IsoStarlingMovieClip = new IsoStarlingMovieClip(textures,31,row*cellSize,0,column*cellSize,2*cellSize,2*cellSize);
+                        explode2x2MC.pivotX=explode2x2MC.width/2-cellSize/4;
+                        explode2x2MC.pivotY=explode2x2MC.height/2-cellSize/2;
+                        addChild(explode2x2MC);
+                        explode2x2MC.play();
+//                        explode2x2MC.stop();
+                        Starling.juggler.add(explode2x2MC);
+                    }
 
                 }
             }
+//        this.flatten(true);
         }
+
+
 
 //        var currentGreenBatch:QuadBatch = greenQuadBatch.clone();
 //        currentGreenBatch.addQuadBatch(greenQuadBatch);
