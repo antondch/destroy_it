@@ -27,11 +27,12 @@ public class IsoUtils
 //        return new Point(x, y);
 //    }
     private static const Y_CORRECT:Number = Math.cos(-Math.PI / 6) * Math.SQRT2;
+    private static const ROTATE_FACTOR:Number = 0.6;
 
     public static function isoToScreen(xpp:Number, ypp:Number, zpp:Number):Point
     {
         var screenX:Number = xpp - zpp;
-        var screenY:Number = ypp * Y_CORRECT + (xpp + zpp) * 0.6;
+        var screenY:Number = ypp * Y_CORRECT + (xpp + zpp) * ROTATE_FACTOR;
         return new Point(screenX, screenY);
     }
 
@@ -52,9 +53,9 @@ public class IsoUtils
 
     public static function screenToIso(x:Number, y:Number):IsoPoint
     {
-        var isoX:Number = y + x * 0.5;
+        var isoX:Number = y + x * ROTATE_FACTOR;
         var isoY:Number = 0;
-        var isoZ:Number = y - x * 0.5;
+        var isoZ:Number = y - x * ROTATE_FACTOR;
 
         return new IsoPoint(isoX, isoY, isoZ);
     }

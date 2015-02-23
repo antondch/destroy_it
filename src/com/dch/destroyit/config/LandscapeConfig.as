@@ -10,7 +10,6 @@ public class LandscapeConfig
     public static const CEIL_SIZE:int = 25;
     public static const BUILDINGS_COUNT:int = 10;
 
-
     public static const LANDSCAPE_WIDTH_IN_CEIL:int = 90;
     public static const LANDSCAPE_LENGTH_IN_CEIL:int = 90;
 

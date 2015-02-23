@@ -3,16 +3,20 @@
  */
 package com.dch.destroyit.landscape
 {
+import starling.events.Event;
+import starling.events.EventDispatcher;
+
 /**
  * Buildings model with position on scene, size and matrix of decay types.
  */
-public class BuildingModel
+public class BuildingModel extends EventDispatcher
 {
     private var _matrix:Vector.<Vector.<uint>>;
     private var _width:int;
     private var _length:int;
     private var _x:int;
     private var _z:int;
+    public static const EXPLODE:String = "explode";
 
     public function BuildingModel(x:int, z:int, width:int, length:int):void
     {
@@ -21,6 +25,11 @@ public class BuildingModel
         _width = width;
         _length = length;
         fillMatrix(width, length);
+    }
+
+    public function explode():void
+    {
+        dispatchEvent(new Event(EXPLODE));
     }
 
     private function fillMatrix(width:int, length:int):void
