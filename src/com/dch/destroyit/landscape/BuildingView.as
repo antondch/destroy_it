@@ -17,6 +17,8 @@ import com.dch.destroyit.isoCore.IsoUtils;
 
 import flash.utils.Dictionary;
 
+import flashx.textLayout.debug.assert;
+
 import starling.core.Starling;
 import starling.display.Image;
 import starling.display.Sprite;
@@ -50,12 +52,14 @@ public class BuildingView extends IsoStarlingSprite
         var widthInTiles:int = model.width;
         var lengthInTiles:int = model.length;
         greenContainer = new Sprite();
+
         addChild(greenContainer);
             var greenTileImageName:String = TileTypesEnum.CLEAR.value + "_" + LandscapeConfig.BUILDING_INNER_COLOR;
             for (var row:int = 0; row < widthInTiles; row++)
             {
                 for (var column:int = 0; column < lengthInTiles; column++)
                 {
+
                     if(column==0)
                     {
                         var horizontalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.HORIZONTAL),row*cellSize,0,0,cellSize,0);
@@ -92,9 +96,9 @@ public class BuildingView extends IsoStarlingSprite
                         explode2x2MC.stop();
 //                        Starling.juggler.add(explode2x2MC);
                         var garbageImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(Crater2x2NamesEnum.CRATER_2X2_NAME.value),row*cellSize-cellSize/2,0,column*cellSize,2*cellSize,2*cellSize);
-//                        garbageImage.pivotX=0;
-                        garbageImage.pivotY=0;
                         addChild(garbageImage);
+//                        garbageImage.pivotX=0;
+//                        garbageImage.pivotY=0;
                     }
 
                 }

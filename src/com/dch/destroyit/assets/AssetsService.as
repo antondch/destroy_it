@@ -114,29 +114,29 @@ public class AssetsService extends EventDispatcher
     private function generateAtlas(event:Event):void
     {
         //Create objects texture atlas from swf:
-        var staticDisplayClasses:Vector.<Class> = new Vector.<Class>();
+        var staticDictionary:Dictionary = new Dictionary(true);
 
         for each(var clazz:Crater1x1NamesEnum in Enumeration.getElementsList(Crater1x1NamesEnum))
         {
             var Crater1X1Class:Class = loader.contentLoaderInfo.applicationDomain.getDefinition(clazz.value) as Class;
-            staticDisplayClasses.push(Crater1X1Class);
+            staticDictionary[clazz.value] = new Crater1X1Class();
         }
 
         for each(var clazz1:Crater2x2NamesEnum in Enumeration.getElementsList(Crater2x2NamesEnum))
         {
             var Crater2X2Class:Class = loader.contentLoaderInfo.applicationDomain.getDefinition(clazz1.value) as Class;
-            staticDisplayClasses.push(Crater2X2Class);
+            staticDictionary[clazz1.value] = new Crater2X2Class();
         }
 
         for each(var clazz2:Garbage1x1NamesEnum in Enumeration.getElementsList(Garbage1x1NamesEnum))
         {
             var Garbage1x1NamesClass:Class = loader.contentLoaderInfo.applicationDomain.getDefinition(clazz2.value) as Class;
-            staticDisplayClasses.push(Garbage1x1NamesClass);
+            staticDictionary[clazz2.value] = new Garbage1x1NamesClass();
         }
         for each(var clazz3:Ground1x1NamesEnum in Enumeration.getElementsList(Ground1x1NamesEnum))
         {
             var Ground1x1NamesClass:Class = loader.contentLoaderInfo.applicationDomain.getDefinition(clazz3.value) as Class;
-            staticDisplayClasses.push(Ground1x1NamesClass);
+            staticDictionary[clazz3.value] = new Ground1x1NamesClass();
         }
         var mcClasses:Vector.<Class> = new Vector.<Class>();
 //        for each(var clazz4:Explode1x1NamesEnum in Enumeration.getElementsList(Explode1x1NamesEnum))
@@ -149,31 +149,27 @@ public class AssetsService extends EventDispatcher
             var Explode2x2NamesClass:Class = loader.contentLoaderInfo.applicationDomain.getDefinition(clazz5.value) as Class;
             mcClasses.push(Explode2x2NamesClass);
         }
-        ATLASES["mc"] = DynamicAtlas.fromClassVector(mcClasses);
+        ATLASES["mc2x2"] = DynamicAtlas.fromClassVector(mcClasses);
 
         //*************************************************************************
         //Create tiles texture atlas:
         var tilesColor:Vector.<Enumeration> = Enumeration.getElementsList(TilesColorEnum);
-        var tilesDictionary:Dictionary = new Dictionary(true);
+
         for each (var color:TilesColorEnum in tilesColor)
         {
                 //FIXME: remove external dependence
                 var tile:Sprite = drawCleanTile(LandscapeConfig.CEIL_SIZE, color.value);
                 var key:String = TileTypesEnum.CLEAR.value + "_" + color.value;
-                tilesDictionary[key] = tile;
+                staticDictionary[key] = tile;
         }
         //create tile lines:
         var horizontalLineKey:String = LineTypes.HORIZONTAL;
-        tilesDictionary[horizontalLineKey]= drawLine(LandscapeConfig.BUILDING_BORDER_THICKNESS,LandscapeConfig.BUILDING_BORDER_COLOR,new Point(0,0), new Point(LandscapeConfig.CEIL_SIZE,0));
+        staticDictionary[horizontalLineKey]= drawLine(LandscapeConfig.BUILDING_BORDER_THICKNESS,LandscapeConfig.BUILDING_BORDER_COLOR,new Point(0,0), new Point(LandscapeConfig.CEIL_SIZE,0));
 
         var verticalLineKey:String = LineTypes.VERTICAL;
-        tilesDictionary[verticalLineKey]= drawLine(LandscapeConfig.BUILDING_BORDER_THICKNESS,LandscapeConfig.BUILDING_BORDER_COLOR,new Point(0,0),new Point(0,LandscapeConfig.CEIL_SIZE));
+        staticDictionary[verticalLineKey]= drawLine(LandscapeConfig.BUILDING_BORDER_THICKNESS,LandscapeConfig.BUILDING_BORDER_COLOR,new Point(0,0),new Point(0,LandscapeConfig.CEIL_SIZE));
 
-
-        var atlas:TextureAtlas = DynamicAtlas.fromClassVector(staticDisplayClasses);
-        var tilesAtlas:TextureAtlas = DynamicAtlas.fromDictionaryWithNamesInKeys(tilesDictionary);
-
-        ATLASES[swfName] = atlas;
+        var tilesAtlas:TextureAtlas = DynamicAtlas.fromDictionaryWithNamesInKeys(staticDictionary);
         ATLASES[AssetsConfig.TILES_ATLAS_NAME] = tilesAtlas;
 
         _isComplete = true;

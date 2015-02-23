@@ -336,7 +336,7 @@ public class DynamicAtlas
         return fromMovieClipContainer(container, scaleFactor, margin, preserveColor, checkBounds);
     }
 
-    static public function fromDictionaryWithNamesInKeys(assets:Dictionary, scaleFactor:Number = 1, margin:uint = 0, preserveColor:Boolean = true, checkBounds:Boolean = true):TextureAtlas
+    static public function fromDictionaryWithNamesInKeys(assets:Dictionary, scaleFactor:Number = 1, margin:uint = 0, preserveColor:Boolean = true, checkBounds:Boolean = false):TextureAtlas
     {
         var container:MovieClip = new MovieClip();
         for (var key:* in assets)
