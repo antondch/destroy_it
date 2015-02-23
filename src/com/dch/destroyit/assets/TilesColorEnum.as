@@ -8,6 +8,7 @@ import com.dch.destroyit.enums.UintEnumeration;
 public class TilesColorEnum extends UintEnumeration
 {
     public static const GREEN:TilesColorEnum = new TilesColorEnum(Color.GREEN);
+    public static const DARK_GREEN:TilesColorEnum = new TilesColorEnum(Color.DARK_GREEN);
     public static const RED:TilesColorEnum = new TilesColorEnum(Color.RED);
 
     public function TilesColorEnum(value:uint):void
