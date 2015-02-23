@@ -3,14 +3,14 @@
  */
 package com.dch.destroyit.landscape
 {
-import com.dch.destroyit.assets.AssetsService;
 import com.dch.destroyit.assets.Ground1x1NamesEnum;
-import com.dch.destroyit.assets.TilesColorEnum;
-import com.dch.destroyit.config.AssetsConfig;
 import com.dch.destroyit.config.LandscapeConfig;
+import com.dch.destroyit.isoCore.IsoStarlingSprite;
 import com.dch.destroyit.mvc.IViewController;
 
 import flash.geom.Point;
+
+import starling.core.Starling;
 
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
@@ -87,6 +87,8 @@ public class LandscapeController implements IViewController
         for each(var building:BuildingModel in landscapeModel.buildings)
         {
             var isoBuilding:BuildingView = new BuildingView(building, LandscapeConfig.CEIL_SIZE, Ground1x1NamesEnum.GROUND_1X1_NAME.value);
+            var explodeLayer:IsoStarlingSprite = new IsoStarlingSprite(isoBuilding.isoBounds.origin.x,isoBuilding.isoBounds.origin.y,isoBuilding.isoBounds.origin.z,isoBuilding.isoBounds.size.width,isoBuilding.isoBounds.size.length,0);
+            Starling.current.root.stage.addChild(explodeLayer);
             var buildingController:BuildingController = new BuildingController(building, isoBuilding);
             view.add2Scene(isoBuilding);
         }

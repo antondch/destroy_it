@@ -3,17 +3,36 @@
  */
 package com.dch.destroyit.landscape
 {
-import com.dch.destroyit.landscape.BuildingView;
+import starling.events.Touch;
+import starling.events.TouchEvent;
+import starling.events.TouchPhase;
 
 public class BuildingController
 {
     private var buildingModel:BuildingModel;
-    private var buildingView:BuildingView;
+    private var _view:BuildingView;
 
     public function BuildingController(buildingModel:BuildingModel,buildingView:BuildingView)
     {
         this.buildingModel = buildingModel;
-        this.buildingView = buildingView;
+        this._view = buildingView;
+        addExplodeHandler();
+    }
+
+    private function addExplodeHandler():void
+    {
+        _view.addEventListener(TouchEvent.TOUCH, view_touchHandler);
+    }
+
+    private function view_touchHandler(event:TouchEvent):void
+    {
+        var touch:Touch = event.touches[0];
+
+            if(touch.phase== TouchPhase.ENDED)
+            {
+                _view.explodeBuilding();
+            }
+
     }
 }
 }

@@ -28,7 +28,6 @@ public class RootController implements IViewController
         landscapeView.y = 100;
         landscapeView.x = 600;
 
-
         landscapeController = new LandscapeController(landscapeView);
         landscapeController.showOnView(view as DisplayObjectContainer)
     }

@@ -4,6 +4,7 @@
 package com.dch.destroyit.landscape
 {
 import com.dch.destroyit.assets.AssetsService;
+import com.dch.destroyit.assets.Crater1x1NamesEnum;
 import com.dch.destroyit.assets.Crater2x2NamesEnum;
 import com.dch.destroyit.assets.Explode2x2NamesEnum;
 import com.dch.destroyit.assets.LineTypes;
@@ -13,15 +14,18 @@ import com.dch.destroyit.config.LandscapeConfig;
 import com.dch.destroyit.isoCore.IsoStarlingImage;
 import com.dch.destroyit.isoCore.IsoStarlingMovieClip;
 import com.dch.destroyit.isoCore.IsoStarlingSprite;
-import com.dch.destroyit.isoCore.IsoUtils;
 
-import flash.utils.Dictionary;
-
-import flashx.textLayout.debug.assert;
+import starling.core.Starling;
 
 import starling.core.Starling;
 import starling.display.Image;
+import starling.display.MovieClip;
+import starling.display.MovieClip;
+
+import starling.display.MovieClip;
+
 import starling.display.Sprite;
+import starling.events.Event;
 import starling.textures.Texture;
 
 public class BuildingView extends IsoStarlingSprite
@@ -32,8 +36,9 @@ public class BuildingView extends IsoStarlingSprite
     private var cellSize:Number;
     private var groundTypeName:String;
     private var model:BuildingModel;
-    private var greenContainer:Sprite;
-    private var explodes:Dictionary = new Dictionary(true);
+    private var _greenContainer:Sprite;
+    private var _explodeLayer:IsoStarlingSprite;
+    private var explodes:Array = [];
 
     public function BuildingView(model:BuildingModel, tileSize:Number, groundTypeName:String)
     {
@@ -51,9 +56,9 @@ public class BuildingView extends IsoStarlingSprite
     {
         var widthInTiles:int = model.width;
         var lengthInTiles:int = model.length;
-        greenContainer = new Sprite();
+        _greenContainer = new Sprite();
 
-        addChild(greenContainer);
+        addChild(_greenContainer);
             var greenTileImageName:String = TileTypesEnum.CLEAR.value + "_" + LandscapeConfig.BUILDING_INNER_COLOR;
             for (var row:int = 0; row < widthInTiles; row++)
             {
@@ -63,48 +68,75 @@ public class BuildingView extends IsoStarlingSprite
                     if(column==0)
                     {
                         var horizontalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.HORIZONTAL),row*cellSize,0,0,cellSize,0);
-                        greenContainer.addChild(horizontalLineImage);
+                        _greenContainer.addChild(horizontalLineImage);
                     }
 
                     var greenTileImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(greenTileImageName),row*cellSize+LandscapeConfig.BUILDING_BORDER_THICKNESS/2,0,column*cellSize+LandscapeConfig.BUILDING_BORDER_THICKNESS/2,cellSize,cellSize);
-                    greenContainer.addChild(greenTileImage);
+                    _greenContainer.addChild(greenTileImage);
                     if(column==lengthInTiles-1)
                     {
                         var horizontalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.HORIZONTAL),row*cellSize,0,cellSize*lengthInTiles,cellSize,0);
-                        greenContainer.addChild(horizontalLineImage);
+                        _greenContainer.addChild(horizontalLineImage);
                     }
                     if(row==0)
                     {
                         var verticalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.VERTICAL),0,0,column*cellSize,0,cellSize);
-                        greenContainer.addChild(verticalLineImage);
+                        _greenContainer.addChild(verticalLineImage);
                     }
                     if(row==widthInTiles-1)
                     {
                         var verticalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.VERTICAL),widthInTiles*cellSize,0,column*cellSize,0,cellSize);
-                        greenContainer.addChild(verticalLineImage);
+                        _greenContainer.addChild(verticalLineImage);
                     }
-                    if(model.matrix[row][column]==CeilTypes.EXPLODE_2X2)
+                    if(model.matrix[row][column]==CeilTypes.EXPLODE_1X1)
+                    {
+                        var garbageImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(Crater1x1NamesEnum.CRATER_1X1_NAME.value),row*cellSize-14,0,column*cellSize,cellSize,cellSize);
+                        garbageImage.visible = false;
+                        addChild(garbageImage);
+                    }
+
+                        if(model.matrix[row][column]==CeilTypes.EXPLODE_2X2)
                     {
 
                         trace(this,"x:"+row,"y:"+column);
+                        var garbageImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(Crater2x2NamesEnum.CRATER_2X2_NAME.value),row*cellSize-cellSize/2,0,column*cellSize,2*cellSize,2*cellSize);
+                        garbageImage.visible = false;
+                        addChild(garbageImage);
+                        
                         var textures:Vector.<Texture> = AssetsService.sharedAssets.getTextures(Explode2x2NamesEnum.DUST_2X2_NAME.value);
                         var explode2x2MC:IsoStarlingMovieClip = new IsoStarlingMovieClip(textures,31,row*cellSize,0,column*cellSize,2*cellSize,2*cellSize);
                         explode2x2MC.pivotX=explode2x2MC.width/2-cellSize/4;
                         explode2x2MC.pivotY=explode2x2MC.height/2-cellSize/2;
-//                        addChild(explode2x2MC);
-//                        explode2x2MC.play();
                         explode2x2MC.stop();
-//                        Starling.juggler.add(explode2x2MC);
-                        var garbageImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(Crater2x2NamesEnum.CRATER_2X2_NAME.value),row*cellSize-cellSize/2,0,column*cellSize,2*cellSize,2*cellSize);
-                        addChild(garbageImage);
-//                        garbageImage.pivotX=0;
-//                        garbageImage.pivotY=0;
-                    }
+                        explode2x2MC.visible = false;
+                        addChild(explode2x2MC);
 
+                        explodes.push({explode:explode2x2MC,garbage:garbageImage});
+                    }
                 }
             }
-//        this.flatten(true);
         }
+
+    internal function explodeBuilding(event:Event=null):void
+    {
+        if(event)
+        {
+            var currentExplode:Object = explodes.shift();
+            MovieClip(currentExplode.explode).stop();
+            Starling.juggler.remove(currentExplode.explode);
+            removeChild(MovieClip(currentExplode.explode));
+        }
+        if(explodes.length)
+        {
+            var explode:MovieClip = explodes[0].explode;
+            Starling.juggler.add(explode);
+            explode.play();
+            explode.visible = true;
+            Image(explodes[0].garbage).visible = true;
+            explode.addEventListener(Event.COMPLETE, explodeBuilding);
+        }
+
+    }
 
 
 
@@ -144,7 +176,9 @@ public class BuildingView extends IsoStarlingSprite
 //            groundQuadBatch.y = height/2+pivotY;
 //            addChild(groundQuadBatch);
 //        }
-    }
+
+
+}
 
 
 
