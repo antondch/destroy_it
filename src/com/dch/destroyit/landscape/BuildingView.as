@@ -4,6 +4,7 @@
 package com.dch.destroyit.landscape
 {
 import com.dch.destroyit.assets.AssetsService;
+import com.dch.destroyit.assets.Crater2x2NamesEnum;
 import com.dch.destroyit.assets.Explode2x2NamesEnum;
 import com.dch.destroyit.assets.LineTypes;
 import com.dch.destroyit.assets.TileTypesEnum;
@@ -12,8 +13,12 @@ import com.dch.destroyit.config.LandscapeConfig;
 import com.dch.destroyit.isoCore.IsoStarlingImage;
 import com.dch.destroyit.isoCore.IsoStarlingMovieClip;
 import com.dch.destroyit.isoCore.IsoStarlingSprite;
+import com.dch.destroyit.isoCore.IsoUtils;
+
+import flash.utils.Dictionary;
 
 import starling.core.Starling;
+import starling.display.Image;
 import starling.display.Sprite;
 import starling.textures.Texture;
 
@@ -26,6 +31,7 @@ public class BuildingView extends IsoStarlingSprite
     private var groundTypeName:String;
     private var model:BuildingModel;
     private var greenContainer:Sprite;
+    private var explodes:Dictionary = new Dictionary(true);
 
     public function BuildingView(model:BuildingModel, tileSize:Number, groundTypeName:String)
     {
@@ -81,10 +87,14 @@ public class BuildingView extends IsoStarlingSprite
                         var explode2x2MC:IsoStarlingMovieClip = new IsoStarlingMovieClip(textures,31,row*cellSize,0,column*cellSize,2*cellSize,2*cellSize);
                         explode2x2MC.pivotX=explode2x2MC.width/2-cellSize/4;
                         explode2x2MC.pivotY=explode2x2MC.height/2-cellSize/2;
-                        addChild(explode2x2MC);
-                        explode2x2MC.play();
-//                        explode2x2MC.stop();
-                        Starling.juggler.add(explode2x2MC);
+//                        addChild(explode2x2MC);
+//                        explode2x2MC.play();
+                        explode2x2MC.stop();
+//                        Starling.juggler.add(explode2x2MC);
+                        var garbageImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(Crater2x2NamesEnum.CRATER_2X2_NAME.value),row*cellSize-cellSize/2,0,column*cellSize,2*cellSize,2*cellSize);
+//                        garbageImage.pivotX=0;
+                        garbageImage.pivotY=0;
+                        addChild(garbageImage);
                     }
 
                 }
