@@ -18,7 +18,7 @@ import starling.events.TouchPhase;
 
 public class LandscapeController implements IViewController
 {
-    private var view:LandscapeView;
+    private var view:StaticLayer;
     private var _isPanning:Boolean = false;
     private var _allowExplode:Boolean = true;
     private var mousePanBeginPoint:Point = new Point(0, 0);
@@ -26,14 +26,14 @@ public class LandscapeController implements IViewController
     private var explode1x1Layer:Explode1x1Layer;
     private var explode2x2Layer:Explode2x2Layer;
 
-    public function LandscapeController(view:LandscapeView)
+    public function LandscapeController(view:StaticLayer)
     {
         this.view = view;
         createExplodeLayers();
         registerTouchEvents();
         createLandscapeModel(LandscapeConfig.BUILDINGS_COUNT, LandscapeConfig.LANDSCAPE_WIDTH_IN_CEIL, LandscapeConfig.LANDSCAPE_LENGTH_IN_CEIL, LandscapeConfig.BUILDING_SIDE_MIN_SIZE_IN_CEIL,
                 LandscapeConfig.BUILDING_SIDE_MAX_SIZE_IN_CEIL, LandscapeConfig.BUILDING_SIDE_SIZE_DIFFERENCE_IN_CEIL, LandscapeConfig.FREE_DISTANCE_IN_CEIL);
-        createBuildings(LandscapeConfig.CEIL_SIZE);
+        createBuildings();
     }
 
     private function createExplodeLayers():void
@@ -102,13 +102,13 @@ public class LandscapeController implements IViewController
         }
     }
 
-    private function createBuildings(tileSize:Number):void
+    private function createBuildings():void
     {
         for each(var building:BuildingModel in landscapeModel.buildings)
         {
 
 
-            var isoBuilding:BuildingView = new BuildingView(building, LandscapeConfig.CEIL_SIZE, Ground1x1NamesEnum.GROUND_1X1_NAME.value,explode1x1Layer,explode2x2Layer);
+            var isoBuilding:BuildingView = new BuildingView(building,view,explode1x1Layer,explode2x2Layer);
 
             var buildingController:BuildingController = new BuildingController(building, isoBuilding);
             view.add2Scene(isoBuilding);

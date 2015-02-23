@@ -7,10 +7,8 @@ import com.dch.destroyit.assets.Color;
 
 public class LandscapeConfig
 {
-
-
     public static const CEIL_SIZE:int = 25;
-    public static const BUILDINGS_COUNT:int = 1;
+    public static const BUILDINGS_COUNT:int = 10;
 
 
     public static const LANDSCAPE_WIDTH_IN_CEIL:int = 90;
@@ -21,7 +19,7 @@ public class LandscapeConfig
     public static const LANDSCAPE_START_POINT_Z:Number = 300;
 
     public static const FREE_DISTANCE_IN_CEIL:int = 1;
-    public static const BUILDING_SIDE_MAX_SIZE_IN_CEIL:int = 8;
+    public static const BUILDING_SIDE_MAX_SIZE_IN_CEIL:int = 1;
     public static const BUILDING_SIDE_MIN_SIZE_IN_CEIL:int = 8;
     public static const BUILDING_SIDE_SIZE_DIFFERENCE_IN_CEIL:int = 2;
 

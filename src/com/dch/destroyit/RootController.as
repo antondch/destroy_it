@@ -5,7 +5,7 @@ package com.dch.destroyit
 {
 import com.dch.destroyit.config.LandscapeConfig;
 import com.dch.destroyit.landscape.LandscapeController;
-import com.dch.destroyit.landscape.LandscapeView;
+import com.dch.destroyit.landscape.StaticLayer;
 import com.dch.destroyit.mvc.IViewController;
 
 import starling.display.DisplayObject;
@@ -24,7 +24,7 @@ public class RootController implements IViewController
 
     private function createLandscape(x:Number, y:Number, z:Number, width:Number, length:Number):void
     {
-        var landscapeView:LandscapeView = new LandscapeView(x, y, z, width, length);
+        var landscapeView:StaticLayer = new StaticLayer(x, y, z, width, length);
         landscapeView.y = 100;
         landscapeView.x = 600;
 
