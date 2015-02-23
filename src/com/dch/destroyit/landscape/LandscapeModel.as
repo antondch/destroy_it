@@ -12,6 +12,7 @@ import flash.utils.Dictionary;
 
 public class LandscapeModel extends EventDispatcher
 {
+    private var _cells:Array = [];
     private var _buildings:Vector.<BuildingModel>;
     private var _sizes:Dictionary;
 
@@ -90,7 +91,14 @@ public class LandscapeModel extends EventDispatcher
 
             //create empty building
             var building:BuildingModel = new BuildingModel(currentBuildingX, currentBuildingZ, widthInTiles, lengthInTiles);
-
+            for(var x:int = building.x;x<building.width+building.x;x++)
+            {
+                _cells[x] = [];
+                for(var z:int = building.z;z<building.length+building.z;z++)
+                {
+                    _cells[x][z] = building;
+                }
+            }
             //fill building matrix
             for (var row:int = 0; row < widthInTiles; row++)
             {
@@ -133,8 +141,20 @@ public class LandscapeModel extends EventDispatcher
             }
             currentBuildingX = building.width + building.x + freeDistance;
             _buildings[i] = building;
+            //add building to cells map:
+
         }
         trace(this, "buildings generated");
+    }
+
+    public function getBuildingFromCell(x:int, z:int):BuildingModel
+    {
+        var result:BuildingModel;
+        if(_cells[x]&&_cells[x][z])
+        {
+            result=_cells[x][z];
+        }
+        return result;
     }
 
     public function get buildings():Vector.<BuildingModel>

@@ -5,6 +5,8 @@ package com.dch.destroyit.landscape
 {
 import com.dch.destroyit.assets.Ground1x1NamesEnum;
 import com.dch.destroyit.config.LandscapeConfig;
+import com.dch.destroyit.isoCore.IsoPoint;
+import com.dch.destroyit.isoCore.IsoUtils;
 import com.dch.destroyit.mvc.IViewController;
 
 import flash.geom.Point;
@@ -18,7 +20,7 @@ import starling.events.TouchPhase;
 
 public class LandscapeController implements IViewController
 {
-    private var view:StaticLayer;
+    private var staticLayer:StaticLayer;
     private var _isPanning:Boolean = false;
     private var _allowExplode:Boolean = true;
     private var mousePanBeginPoint:Point = new Point(0, 0);
@@ -28,7 +30,7 @@ public class LandscapeController implements IViewController
 
     public function LandscapeController(view:StaticLayer)
     {
-        this.view = view;
+        this.staticLayer = view;
         createExplodeLayers();
         registerTouchEvents();
         createLandscapeModel(LandscapeConfig.BUILDINGS_COUNT, LandscapeConfig.LANDSCAPE_WIDTH_IN_CEIL, LandscapeConfig.LANDSCAPE_LENGTH_IN_CEIL, LandscapeConfig.BUILDING_SIDE_MIN_SIZE_IN_CEIL,
@@ -38,13 +40,13 @@ public class LandscapeController implements IViewController
 
     private function createExplodeLayers():void
     {
-        explode1x1Layer = new Explode1x1Layer(view.isoBounds.origin.x,view.isoBounds.origin.y,view.isoBounds.origin.z,view.isoBounds.size.width,view.isoBounds.size.length);
-        explode1x1Layer.x= view.x;
-        explode1x1Layer.y= view.y;
+        explode1x1Layer = new Explode1x1Layer(staticLayer.isoBounds.origin.x, staticLayer.isoBounds.origin.y, staticLayer.isoBounds.origin.z, staticLayer.isoBounds.size.width, staticLayer.isoBounds.size.length);
+        explode1x1Layer.x = staticLayer.x;
+        explode1x1Layer.y = staticLayer.y;
 
-         explode2x2Layer = new Explode2x2Layer(view.isoBounds.origin.x,view.isoBounds.origin.y,view.isoBounds.origin.z,view.isoBounds.size.width,view.isoBounds.size.length);
-        explode2x2Layer.x= view.x;
-        explode2x2Layer.y= view.y;
+        explode2x2Layer = new Explode2x2Layer(staticLayer.isoBounds.origin.x, staticLayer.isoBounds.origin.y, staticLayer.isoBounds.origin.z, staticLayer.isoBounds.size.width, staticLayer.isoBounds.size.length);
+        explode2x2Layer.x = staticLayer.x;
+        explode2x2Layer.y = staticLayer.y;
 
         //FIXME: remove direct access to stage
         Starling.current.root.stage.addChild(explode1x1Layer);
@@ -59,7 +61,7 @@ public class LandscapeController implements IViewController
 
     private function registerTouchEvents():void
     {
-        view.addEventListener(TouchEvent.TOUCH, view_touchHandler);
+        staticLayer.addEventListener(TouchEvent.TOUCH, view_touchHandler);
     }
 
     private function view_touchHandler(event:TouchEvent):void
@@ -70,20 +72,20 @@ public class LandscapeController implements IViewController
             case TouchPhase.BEGAN:
             {
                 _isPanning = true;
-                mousePanBeginPoint = touch.getLocation(view.stage);
+                mousePanBeginPoint = touch.getLocation(staticLayer.stage);
                 break;
             }
             case TouchPhase.MOVED:
             {
                 if (_isPanning)
                 {
-                    var mouseCurrent:Point = touch.getLocation(view.stage);
-                    view.x -= mousePanBeginPoint.x - mouseCurrent.x;
-                    view.y -= mousePanBeginPoint.y - mouseCurrent.y;
-                    explode1x1Layer.x= view.x;
-                    explode1x1Layer.y= view.y;
-                    explode2x2Layer.x= view.x;
-                    explode2x2Layer.y= view.y;
+                    var mouseCurrent:Point = touch.getLocation(staticLayer.stage);
+                    staticLayer.x -= mousePanBeginPoint.x - mouseCurrent.x;
+                    staticLayer.y -= mousePanBeginPoint.y - mouseCurrent.y;
+                    explode1x1Layer.x = staticLayer.x;
+                    explode1x1Layer.y = staticLayer.y;
+                    explode2x2Layer.x = staticLayer.x;
+                    explode2x2Layer.y = staticLayer.y;
                     mousePanBeginPoint = mouseCurrent;
                     _allowExplode = false;
                 }
@@ -93,6 +95,17 @@ public class LandscapeController implements IViewController
             {
                 if (_allowExplode)
                 {
+                    var mouseCurrent:Point = touch.getLocation(staticLayer.stage);
+                    var cell:IsoPoint = IsoUtils.screenToIso((mouseCurrent.x - staticLayer.x) / LandscapeConfig.CEIL_SIZE, (mouseCurrent.y - staticLayer.y) / LandscapeConfig.CEIL_SIZE);
+                    cell.x = Math.floor(cell.x);
+                    cell.z = Math.floor(cell.z);
+                    var building:BuildingModel = landscapeModel.getBuildingFromCell(cell.x, cell.z);
+                    if (building)
+                    {
+                        building.explode();
+                        trace("buildingX:"+building.x,"buildingZ:"+building.z);
+                    }
+                    trace(this, "clicked on cell x:" + cell.x + " z:" + cell.z)
                     trace(this, "BOOOM");
                 }
                 _isPanning = false;
@@ -106,25 +119,21 @@ public class LandscapeController implements IViewController
     {
         for each(var building:BuildingModel in landscapeModel.buildings)
         {
-
-
-            var isoBuilding:BuildingView = new BuildingView(building,view,explode1x1Layer,explode2x2Layer);
-
-            var buildingController:BuildingController = new BuildingController(building, isoBuilding);
-            view.add2Scene(isoBuilding);
+            var isoBuilding:BuildingController = new BuildingController(building, staticLayer, explode1x1Layer, explode2x2Layer);
+            staticLayer.add2Scene(isoBuilding);
         }
     }
 
     public function showOnView(rootView:DisplayObjectContainer):DisplayObject
     {
-        return rootView.addChild(view);
+        return rootView.addChild(staticLayer);
     }
 
     public function removeView():void
     {
-        if (view.parent)
+        if (staticLayer.parent)
         {
-            view.parent.removeChild(view);
+            staticLayer.parent.removeChild(staticLayer);
         }
     }
 }
