@@ -102,21 +102,27 @@ public class LandscapeModel extends EventDispatcher
                         continue;
                     }
 
-                    //is border?
+                    //is not border?
                     if (row > 0 && row < widthInTiles - 2 && column > 0 && column < lengthInTiles - 2)
                     {
                         //roll dice 0-99 and take cell from filled chances vector
                         var notEmptyCeilIndex:int = Math.round(Math.random() * 99);
                         var ceilType:uint = ceilTypesCache[notEmptyCeilIndex];
-                        building.matrix[row][column] = ceilType;
+
                         //is 2x2?
                         if (ceilType & CeilTypes.SIZE_2X2_MASC)
                         {
+                            //not enough space for  2x2?
+                            if ((building.matrix[row + 1][column]!=CeilTypes.EMPTY)||(building.matrix[row][column + 1]!=CeilTypes.EMPTY)||(building.matrix[row + 1][column + 1]!=CeilTypes.EMPTY))
+                            {
+                                continue;
+                            }
+                            building.matrix[row][column] = ceilType;
                             building.matrix[row + 1][column] = ceilType + CeilTypes.CEIL_AREA_MASC;
                             building.matrix[row][column + 1] = ceilType + CeilTypes.CEIL_AREA_MASC;
                             building.matrix[row + 1][column + 1] = ceilType + CeilTypes.CEIL_AREA_MASC;
                         }
-                    } else //not border
+                    } else //is border
                     {
                         //roll dice 0-99 and take cell from filled chances vector
                         var emptyCeilIndex:int = Math.round(Math.random() * 99);
