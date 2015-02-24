@@ -7,20 +7,16 @@ import com.dch.destroyit.config.CeilTypes;
 import com.dch.destroyit.config.CeilTypesCreatingChance;
 
 import flash.events.EventDispatcher;
-import flash.geom.Point;
-import flash.utils.Dictionary;
 
 public class LandscapeModel extends EventDispatcher
 {
     private var _cells:Array = [];
     private var _buildings:Vector.<BuildingModel>;
-    private var _sizes:Dictionary;
 
 
     public function generateBuildings(buildingsCount:int, landscapeWidth:Number, landscapeLength:Number, minFaceSize:Number, maxFaceSize:Number, maxSideDifference:int, freeDistance:Number, count:int):void
     {
         _buildings = new Vector.<BuildingModel>(count, true);
-        _sizes = new Dictionary();
 
         //fill not border types in percent
         var ceilTypesCache:Vector.<uint> = new Vector.<uint>();
@@ -73,12 +69,6 @@ public class LandscapeModel extends EventDispatcher
                 rowLengthInTiles = 0;
             }
 
-            //cache building size
-            var key:String = String(widthInTiles) + "x" + String(lengthInTiles);
-            if (!_sizes[key])
-            {
-                _sizes[key] = new Point(widthInTiles, lengthInTiles);
-            }
 
             //create empty building
             var building:BuildingModel = new BuildingModel(currentBuildingX, currentBuildingZ, widthInTiles, lengthInTiles);
@@ -185,9 +175,5 @@ public class LandscapeModel extends EventDispatcher
         return _buildings;
     }
 
-    public function get sizes():Dictionary
-    {
-        return _sizes;
-    }
 }
 }
