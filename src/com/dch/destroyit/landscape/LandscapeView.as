@@ -20,7 +20,7 @@ public class LandscapeView extends IsoStarlingScene
     private var bgQuadBatch:QuadBatch = new QuadBatch();
     private var greenLayer:QuadBatch = new QuadBatch();
     private var infoLayer:Sprite = new Sprite();
-    private var groundLayer:Sprite = new Sprite();
+    private var craterLayer:QuadBatch = new QuadBatch();
     private var explodeLayer:Sprite = new Sprite();
     private var qbatches:Vector.<QuadBatch> = new Vector.<QuadBatch>();
 
@@ -46,10 +46,10 @@ public class LandscapeView extends IsoStarlingScene
         addChild(greenLayer);
 //        addChild(infoLayer);
 //        infoLayer.touchable = false;
-//        addChild(groundLayer);
+        addChild(craterLayer);
 //        groundLayer.touchable = false;
-//        addChild(explodeLayer);
-//        explodeLayer.touchable = false;
+        addChild(explodeLayer);
+        explodeLayer.touchable = false;
     }
 
 
@@ -82,13 +82,11 @@ public class LandscapeView extends IsoStarlingScene
         infoLayer.addChild(image);
     }
 
-    public function add2GroundLayer(buildingX:int, buildingY:int, object:DisplayObject):void
+    public function add2CraterLayer(buildingX:int, buildingY:int, image:Image):void
     {
-        object.x += buildingX;
-        object.y += buildingY;
-        groundLayer.unflatten();
-        groundLayer.addChild(object);
-        groundLayer.flatten(true);
+        image.x += buildingX;
+        image.y += buildingY;
+        craterLayer.addImage(image);
     }
 
     public function add2ExplodeLayer(buildingX:int, buildingY:int, object:DisplayObject):void

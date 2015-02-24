@@ -8,6 +8,7 @@ import com.dch.destroyit.assets.Crater1x1NamesEnum;
 import com.dch.destroyit.assets.Crater2x2NamesEnum;
 import com.dch.destroyit.assets.Explode1x1NamesEnum;
 import com.dch.destroyit.assets.Explode2x2NamesEnum;
+import com.dch.destroyit.assets.Garbage1x1NamesEnum;
 import com.dch.destroyit.assets.Ground1x1NamesEnum;
 import com.dch.destroyit.assets.LineTypes;
 import com.dch.destroyit.assets.TileTypesEnum;
@@ -124,25 +125,29 @@ public class BuildingController extends IsoStarlingSprite
                 if (model.matrix[row][column] == CeilTypes.EXPLODE_1X1)
                 {
                     var craterImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(Crater1x1NamesEnum.CRATER_1X1_NAME.value), row * cellSize - 16, 0, column * cellSize, cellSize, cellSize);
-                    craterImage.visible = false;
-                    landscapeLayer.add2ExplodeLayer(x, y, craterImage);
+
                     var textures:Vector.<Texture> = AssetsService.sharedAssets.getTextures(Explode1x1NamesEnum.DUST_1X1_NAME.value);
                     var explode1x1MC:IsoStarlingMovieClip = new IsoStarlingMovieClip(textures, 25, row * cellSize, 0, column * cellSize, cellSize, cellSize);
                     explode1x1MC.pivotX = explode1x1MC.width / 2 - 15;
                     explode1x1MC.pivotY = explode1x1MC.height / 2 + 2;
                     explode1x1MC.stop();
                     explode1x1MC.visible = false;
-                    explodes.push(explode1x1MC);
                     landscapeLayer.add2ExplodeLayer(x, y, explode1x1MC);
+                    explodes.push(explode1x1MC);
                     cratersWithExplodeKey[explode1x1MC] = craterImage;
+                }
+
+                if (model.matrix[row][column] == CeilTypes.GARBAGE_1X1)
+                {
+                    trace(this,"garbageX:"+row,"garbageZ:"+column);
+                    var garbageImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(Garbage1x1NamesEnum.GARBAGE_1X1_NAME.value), row * cellSize, 0, column * cellSize, cellSize, cellSize);
+                    landscapeLayer.add2CraterLayer(x, y, garbageImage);
                 }
 
                 if (model.matrix[row][column] == CeilTypes.EXPLODE_2X2)
                 {
 
                     var craterImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(Crater2x2NamesEnum.CRATER_2X2_NAME.value), row * cellSize - cellSize / 2, 0, column * cellSize, 2 * cellSize, 2 * cellSize);
-                    craterImage.visible = false;
-                    landscapeLayer.add2ExplodeLayer(x, y, craterImage);
                     var textures:Vector.<Texture> = AssetsService.sharedAssets.getTextures(Explode2x2NamesEnum.DUST_2X2_NAME.value);
                     var explode2x2MC:IsoStarlingMovieClip = new IsoStarlingMovieClip(textures, 25, row * cellSize, 0, column * cellSize, 2 * cellSize, 2 * cellSize);
                     explode2x2MC.pivotX = explode2x2MC.width / 2 - cellSize / 4;
@@ -210,7 +215,7 @@ public class BuildingController extends IsoStarlingSprite
             Starling.juggler.add(explode);
             explode.play();
             explode.visible = true;
-            Image(cratersWithExplodeKey[explode]).visible = true;
+            landscapeLayer.add2CraterLayer(x,y,Image(cratersWithExplodeKey[explode]));
             explode.addEventListener(Event.COMPLETE, removeExplode);
         } else
         {
@@ -223,7 +228,7 @@ public class BuildingController extends IsoStarlingSprite
     private function removeExplode(event:Event):void
     {
         var explode:IsoStarlingMovieClip = IsoStarlingMovieClip(event.target);
-        explode.parent.removeChild(explode);
+        explode.visible = false;
         explode.stop();
         Starling.juggler.remove(explode);
         delete cratersWithExplodeKey[explode];

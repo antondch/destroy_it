@@ -38,7 +38,7 @@ public class LandscapeModel extends EventDispatcher
         }
         for (var i:int = 0; i < CeilTypesCreatingChance.GARBAGE_2X2; i++)
         {
-            ceilTypesCache.push(CeilTypes.GARBAGE_2X2);
+            ceilTypesCache.push(CeilTypes.GARBAGE_1X1);
         }
         //fill border types in percent
         var borderCeilTypesCache:Vector.<uint> = new Vector.<uint>();
