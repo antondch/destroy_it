@@ -91,10 +91,13 @@ public class LandscapeModel extends EventDispatcher
 
             //create empty building
             var building:BuildingModel = new BuildingModel(currentBuildingX, currentBuildingZ, widthInTiles, lengthInTiles);
-            for(var x:int = building.x;x<building.width+building.x;x++)
+            for (var x:int = building.x; x < building.width + building.x; x++)
             {
-                _cells[x] = [];
-                for(var z:int = building.z;z<building.length+building.z;z++)
+                if (!_cells[x])
+                {
+                    _cells[x] = [];
+                }
+                for (var z:int = building.z; z < building.length + building.z; z++)
                 {
                     _cells[x][z] = building;
                 }
@@ -121,7 +124,7 @@ public class LandscapeModel extends EventDispatcher
                         if (ceilType & CeilTypes.SIZE_2X2_MASC)
                         {
                             //not enough space for  2x2?
-                            if ((building.matrix[row + 1][column]!=CeilTypes.EMPTY)||(building.matrix[row][column + 1]!=CeilTypes.EMPTY)||(building.matrix[row + 1][column + 1]!=CeilTypes.EMPTY))
+                            if ((building.matrix[row + 1][column] != CeilTypes.EMPTY) || (building.matrix[row][column + 1] != CeilTypes.EMPTY) || (building.matrix[row + 1][column + 1] != CeilTypes.EMPTY))
                             {
                                 continue;
                             }
@@ -150,9 +153,9 @@ public class LandscapeModel extends EventDispatcher
     public function getBuildingFromCell(x:int, z:int):BuildingModel
     {
         var result:BuildingModel;
-        if(_cells[x]&&_cells[x][z])
+        if (_cells[x] && _cells[x][z])
         {
-            result=_cells[x][z];
+            result = _cells[x][z];
         }
         return result;
     }

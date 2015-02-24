@@ -102,7 +102,7 @@ public class BuildingController extends IsoStarlingSprite
                     var craterImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(Crater1x1NamesEnum.CRATER_1X1_NAME.value), row * cellSize - 16, 0, column * cellSize, cellSize, cellSize);
 
                     var textures:Vector.<Texture> = AssetsService.sharedAssets.getTextures(Explode1x1NamesEnum.DUST_1X1_NAME.value);
-                    var explode1x1MC:IsoStarlingMovieClip = new IsoStarlingMovieClip(textures, 31, row * cellSize, 0, column * cellSize, cellSize, cellSize);
+                    var explode1x1MC:IsoStarlingMovieClip = new IsoStarlingMovieClip(textures, 30, row * cellSize, 0, column * cellSize, cellSize, cellSize);
                     explode1x1MC.pivotX = explode1x1MC.width / 2 - 15;
                     explode1x1MC.pivotY = explode1x1MC.height / 2 + 2;
                     explode1x1MC.stop();
@@ -118,12 +118,12 @@ public class BuildingController extends IsoStarlingSprite
                     var craterImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(Crater2x2NamesEnum.CRATER_2X2_NAME.value), row * cellSize - cellSize / 2, 0, column * cellSize, 2 * cellSize, 2 * cellSize);
 
                     var textures:Vector.<Texture> = AssetsService.sharedAssets.getTextures(Explode2x2NamesEnum.DUST_2X2_NAME.value);
-                    var explode2x2MC:IsoStarlingMovieClip = new IsoStarlingMovieClip(textures, 31, row * cellSize, 0, column * cellSize, 2 * cellSize, 2 * cellSize);
+                    var explode2x2MC:IsoStarlingMovieClip = new IsoStarlingMovieClip(textures, 30, row * cellSize, 0, column * cellSize, 2 * cellSize, 2 * cellSize);
                     explode2x2MC.pivotX = explode2x2MC.width / 2 - cellSize / 4;
                     explode2x2MC.pivotY = explode2x2MC.height / 2 - cellSize / 2;
                     explode2x2MC.stop();
                     explode2x2MC.visible = false;
-                    explodes2x2Layer.addExplode(x, y, explode2x2MC);
+                    explodes1x1Layer.addExplode(x, y, explode2x2MC);
 
                     explodes.push(explode2x2MC);
                     cratersWithExplodeKey[explode2x2MC] = craterImage;

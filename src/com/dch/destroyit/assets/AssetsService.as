@@ -148,10 +148,10 @@ public class AssetsService extends EventDispatcher
         for each(var clazz5:Explode2x2NamesEnum in Enumeration.getElementsList(Explode2x2NamesEnum))
         {
             var Explode2x2NamesClass:Class = loader.contentLoaderInfo.applicationDomain.getDefinition(clazz5.value) as Class;
-            mc2x2Classes.push(Explode2x2NamesClass);
+            mc1x1Classes.push(Explode2x2NamesClass);
         }
         ATLASES["mc1x1"] = DynamicAtlas.fromClassVector(mc1x1Classes);
-        ATLASES["mc2x2"] = DynamicAtlas.fromClassVector(mc2x2Classes);
+//        ATLASES["mc2x2"] = DynamicAtlas.fromClassVector(mc2x2Classes);
 
         //*************************************************************************
         //Create tiles texture atlas:
