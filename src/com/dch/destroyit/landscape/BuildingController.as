@@ -122,7 +122,7 @@ public class BuildingController extends IsoStarlingSprite
                     var verticalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.VERTICAL), widthInTiles * cellSize, 0, column * cellSize, 0, cellSize);
                     greenQB.addImage(verticalLineImage);
                 }
-                if (model.matrix[row][column] == CeilTypes.EXPLODE_1X1)
+                if (model.matrix[row][column] & CeilTypes.EXPLODE_1X1)
                 {
                     var craterImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(Crater1x1NamesEnum.CRATER_1X1_NAME.value), row * cellSize, 0, column * cellSize, cellSize, cellSize);
                     craterImage.pivotX = 40;
@@ -142,7 +142,7 @@ public class BuildingController extends IsoStarlingSprite
                     cratersWithExplodeKey[explode1x1MC] = craterImage;
                 }
 
-                if (model.matrix[row][column] == CeilTypes.GARBAGE_1X1)
+                if (model.matrix[row][column] & CeilTypes.GARBAGE_1X1)
                 {
                     var garbageImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(Garbage1x1NamesEnum.GARBAGE_1X1_NAME.value), row * cellSize, 0, column * cellSize, cellSize, cellSize);
                     garbageImage.pivotX = 40;

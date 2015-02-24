@@ -30,16 +30,13 @@ public class LandscapeModel extends EventDispatcher
         }
         for (var i:int = 0; i < CeilTypesCreatingChance.EXPLODE1X1; i++)
         {
-            ceilTypesCache.push(CeilTypes.EXPLODE_1X1);
+            ceilTypesCache.push(CeilTypes.EXPLODE_1X1+CeilTypes.GARBAGE_1X1);
         }
         for (var i:int = 0; i < CeilTypesCreatingChance.EXPLODE_2X2; i++)
         {
             ceilTypesCache.push(CeilTypes.EXPLODE_2X2);
         }
-        for (var i:int = 0; i < CeilTypesCreatingChance.GARBAGE_2X2; i++)
-        {
-            ceilTypesCache.push(CeilTypes.GARBAGE_1X1);
-        }
+
         //fill border types in percent
         var borderCeilTypesCache:Vector.<uint> = new Vector.<uint>();
         for (var i:int = 0; i < CeilTypesCreatingChance.EMPTY_IN_BORDER; i++)
@@ -48,7 +45,7 @@ public class LandscapeModel extends EventDispatcher
         }
         for (var i:int = 0; i < CeilTypesCreatingChance.EXPLODE1X1_IN_BORDER; i++)
         {
-            borderCeilTypesCache.push(CeilTypes.EXPLODE_1X1);
+            borderCeilTypesCache.push(CeilTypes.EXPLODE_1X1+CeilTypes.GARBAGE_1X1);
         }
 
         /*cellTypes:
