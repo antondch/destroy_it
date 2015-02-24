@@ -12,12 +12,12 @@ import com.dch.destroyit.isoCore.IsoStarlingScene;
 
 import starling.display.DisplayObject;
 import starling.display.Image;
-import starling.display.QuadBatch;
 import starling.display.Sprite;
 
 public class LandscapeView extends IsoStarlingScene
 {
-    private var quadBatch:QuadBatch  = new QuadBatch();
+    private var greenLayer:Sprite  = new Sprite();
+    private var infoLayer:Sprite  = new Sprite();
     private var groundLayer:Sprite = new Sprite();
     private var explodeLayer:Sprite = new Sprite();
 
@@ -35,23 +35,31 @@ public class LandscapeView extends IsoStarlingScene
             for (var column:int = 0; column < isoBounds.size.length; column++)
             {
                 var greenTileImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(textureName), row * LandscapeConfig.CEIL_SIZE + LandscapeConfig.BUILDING_BORDER_THICKNESS / 2, 0, column * LandscapeConfig.CEIL_SIZE + LandscapeConfig.BUILDING_BORDER_THICKNESS / 2, LandscapeConfig.CEIL_SIZE, LandscapeConfig.CEIL_SIZE);
-                addImage2StaticLayer(0,0,greenTileImage);
+                add2FirstLayer(0,0,greenTileImage);
             }
         }
-        addChild(quadBatch);
+        addChild(greenLayer);
+        addChild(infoLayer);
+        infoLayer.touchable = false;
         addChild(groundLayer);
+        groundLayer.touchable = false;
         addChild(explodeLayer);
+        explodeLayer.touchable = false;
     }
 
-    /**
-     * add static images to quad batch. All textures must be placed in one atlas!!!
-     * @param image
-     */
-    public function addImage2StaticLayer(buildingX:int,buildingY:int,image:Image):void
+
+    public function add2FirstLayer(buildingX:int,buildingY:int,image:DisplayObject):void
     {
         image.x+=buildingX;
         image.y+=buildingY;
-        quadBatch.addImage(image);
+        greenLayer.addChild(image);
+    }
+
+   public function add2infoLayer(buildingX:int,buildingY:int,image:DisplayObject):void
+    {
+        image.x+=buildingX;
+        image.y+=buildingY;
+        infoLayer.addChild(image);
     }
 
     public function add2GroundLayer(buildingX:int,buildingY:int,object:DisplayObject):void

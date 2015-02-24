@@ -66,7 +66,7 @@ public class LandscapeController implements IViewController
                     landscapeLayer.y -= dy;
                     mousePanBeginPoint = mouseCurrent;
                     //if not tremor:
-                    if (dx < 15 && dy < 15)
+                    if (dx < 50 && dy < 50)
                     {
                         _allowExplode = false;
                     }
@@ -75,21 +75,21 @@ public class LandscapeController implements IViewController
             }
             case TouchPhase.ENDED:
             {
-                if (_allowExplode)
-                {
-                    var mouseCurrent:Point = touch.getLocation(landscapeLayer.stage);
-                    var cell:IsoPoint = IsoUtils.screenToIso((mouseCurrent.x - landscapeLayer.x) / LandscapeConfig.CEIL_SIZE, (mouseCurrent.y - landscapeLayer.y) / LandscapeConfig.CEIL_SIZE);
-                    cell.x = Math.floor(cell.x);
-                    cell.z = Math.floor(cell.z);
-                    var building:BuildingModel = landscapeModel.getBuildingFromCell(cell.x, cell.z);
-                    if (building)
-                    {
-                        building.explode();
-                        trace("buildingX:" + building.x, "buildingZ:" + building.z);
-                    }
-                    trace(this, "clicked on cell x:" + cell.x + " z:" + cell.z)
-                    trace(this, "BOOOM");
-                }
+//                if (_allowExplode)
+//                {
+//                    var mouseCurrent:Point = touch.getLocation(landscapeLayer.stage);
+//                    var cell:IsoPoint = IsoUtils.screenToIso((mouseCurrent.x - landscapeLayer.x) / LandscapeConfig.CEIL_SIZE, (mouseCurrent.y - landscapeLayer.y) / LandscapeConfig.CEIL_SIZE);
+//                    cell.x = Math.floor(cell.x);
+//                    cell.z = Math.floor(cell.z);
+//                    var building:BuildingModel = landscapeModel.getBuildingFromCell(cell.x, cell.z);
+//                    if (building)
+//                    {
+//                        building.explode();
+//                        trace("buildingX:" + building.x, "buildingZ:" + building.z);
+//                    }
+//                    trace(this, "clicked on cell x:" + cell.x + " z:" + cell.z)
+//                    trace(this, "BOOOM");
+//                }
                 _isPanning = false;
                 _allowExplode = true;
             }

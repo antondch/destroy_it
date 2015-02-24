@@ -11,6 +11,7 @@ import com.dch.destroyit.assets.Explode2x2NamesEnum;
 import com.dch.destroyit.assets.Ground1x1NamesEnum;
 import com.dch.destroyit.assets.LineTypes;
 import com.dch.destroyit.assets.TileTypesEnum;
+import com.dch.destroyit.assets.TilesColorEnum;
 import com.dch.destroyit.config.CeilTypes;
 import com.dch.destroyit.config.LandscapeConfig;
 import com.dch.destroyit.isoCore.IsoStarlingImage;
@@ -28,6 +29,9 @@ import starling.display.Image;
 import starling.display.MovieClip;
 import starling.display.Sprite;
 import starling.events.Event;
+import starling.events.Touch;
+import starling.events.TouchEvent;
+import starling.events.TouchPhase;
 import starling.textures.Texture;
 
 public class BuildingController extends IsoStarlingSprite
@@ -43,6 +47,8 @@ public class BuildingController extends IsoStarlingSprite
     private var explodeTimer:Timer;
     private var landscapeLayer:LandscapeView;
     private var groundSprite:Sprite = new Sprite();
+    private var greenSprite:Sprite = new Sprite();
+    private var redSprite:Sprite = new Sprite();
 
     public function BuildingController(model:BuildingModel, staticLayer:LandscapeView)
     {
@@ -55,20 +61,30 @@ public class BuildingController extends IsoStarlingSprite
         this.borderColor = borderColor;
         this.borderThickness = borderThickness;
         this.landscapeLayer = staticLayer;
-        addExplodeHandler();
+        registerTouchEvents();
         draw();
     }
 
-    private function addExplodeHandler():void
+    private function registerTouchEvents():void
     {
-        model.addEventListener(BuildingModel.EXPLODE, model_explodeHandler);
+        greenSprite.addEventListener(TouchEvent.TOUCH, view_touchHandler);
     }
 
-    private function draw():void
+    private function view_touchHandler(event:TouchEvent):void
+    {
+        var touch:Touch = event.touches[0];
+        if(touch.phase == TouchPhase.ENDED)
+        {
+            explodeBuilding();
+        }
+    }
+
+        private function draw():void
     {
         var widthInTiles:int = model.width;
         var lengthInTiles:int = model.length;
-        var greenTileImageName:String = TileTypesEnum.CLEAR.value + "_" + LandscapeConfig.BUILDING_INNER_COLOR;
+        var greenTileImageName:String = TileTypesEnum.CLEAR.value + "_" + TilesColorEnum.GREEN.value;
+        var redTileImageName:String = TileTypesEnum.CLEAR.value + "_" + TilesColorEnum.RED.value;
         for (var row:int = 0; row < widthInTiles; row++)
         {
             for (var column:int = 0; column < lengthInTiles; column++)
@@ -77,25 +93,28 @@ public class BuildingController extends IsoStarlingSprite
                 if (column == 0)
                 {
                     var horizontalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.HORIZONTAL), row * cellSize, 0, 0, cellSize, 0);
-                    landscapeLayer.addImage2StaticLayer(x, y, horizontalLineImage);
+                    greenSprite.addChild(horizontalLineImage);
                 }
 
                 var greenTileImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(greenTileImageName), row * cellSize + LandscapeConfig.BUILDING_BORDER_THICKNESS / 2, 0, column * cellSize + LandscapeConfig.BUILDING_BORDER_THICKNESS / 2, cellSize, cellSize);
-                landscapeLayer.addImage2StaticLayer(x, y, greenTileImage);
+                greenSprite.addChild(greenTileImage);
+                var redTileImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(redTileImageName), row * cellSize + LandscapeConfig.BUILDING_BORDER_THICKNESS / 2, 0, column * cellSize + LandscapeConfig.BUILDING_BORDER_THICKNESS / 2, cellSize, cellSize);
+                redSprite.addChild(redTileImage);
+
                 if (column == lengthInTiles - 1)
                 {
                     var horizontalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.HORIZONTAL), row * cellSize, 0, cellSize * lengthInTiles, cellSize, 0);
-                    landscapeLayer.addImage2StaticLayer(x, y, horizontalLineImage);
+                    greenSprite.addChild(horizontalLineImage);
                 }
                 if (row == 0)
                 {
                     var verticalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.VERTICAL), 0, 0, column * cellSize, 0, cellSize);
-                    landscapeLayer.addImage2StaticLayer(x, y, verticalLineImage);
+                    greenSprite.addChild(verticalLineImage);
                 }
                 if (row == widthInTiles - 1)
                 {
                     var verticalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.VERTICAL), widthInTiles * cellSize, 0, column * cellSize, 0, cellSize);
-                    landscapeLayer.addImage2StaticLayer(x, y, verticalLineImage);
+                    greenSprite.addChild(verticalLineImage);
                 }
                 if (model.matrix[row][column] == CeilTypes.EXPLODE_1X1)
                 {
@@ -141,6 +160,9 @@ public class BuildingController extends IsoStarlingSprite
                 groundSprite.addChild(groundTile);
             }
         }
+        landscapeLayer.add2FirstLayer(x,y,greenSprite);
+        redSprite.visible = false;
+        landscapeLayer.add2infoLayer(x,y,redSprite);
         groundSprite.visible = false;
         landscapeLayer.add2GroundLayer(x,y,groundSprite);
 
@@ -170,6 +192,7 @@ public class BuildingController extends IsoStarlingSprite
         if (explodes.length)
         {
             groundSprite.visible = true;
+            greenSprite.visible = false;
             var explode:MovieClip = explodes.shift();
             Starling.juggler.add(explode);
             explode.play();
