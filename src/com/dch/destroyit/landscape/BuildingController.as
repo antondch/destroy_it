@@ -154,6 +154,7 @@ public class BuildingController extends IsoStarlingSprite
                 {
 
                     var craterImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(Crater2x2NamesEnum.CRATER_2X2_NAME.value), row * cellSize - cellSize / 2, 0, column * cellSize, 2 * cellSize, 2 * cellSize);
+                    landscapeLayer.add2CraterLayer(x,y,craterImage);//test
                     var textures:Vector.<Texture> = AssetsService.sharedAssets.getTextures(Explode2x2NamesEnum.DUST_2X2_NAME.value);
                     var explode2x2MC:IsoStarlingMovieClip = new IsoStarlingMovieClip(textures, 25, row * cellSize, 0, column * cellSize, 2 * cellSize, 2 * cellSize);
                     explode2x2MC.pivotX = explode2x2MC.width / 2 - cellSize / 4;

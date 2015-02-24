@@ -48,12 +48,6 @@ public class LandscapeModel extends EventDispatcher
             borderCeilTypesCache.push(CeilTypes.EXPLODE_1X1);
         }
 
-        /*cellTypes:
-         *0-normal
-         * 1-explode1x1
-         * 2-explode2x2
-         * 3-garbage2x2
-         */
         var widthInTiles:int = 0;
         var lengthInTiles:int = 0;
         var rowLengthInTiles:int = 0;
@@ -88,7 +82,7 @@ public class LandscapeModel extends EventDispatcher
 
             //create empty building
             var building:BuildingModel = new BuildingModel(currentBuildingX, currentBuildingZ, widthInTiles, lengthInTiles);
-            var _isExploded:Boolean = false
+            var _isExploded:Boolean = false;
             for (var x:int = building.x; x < building.width + building.x; x++)
             {
                 if (!_cells[x])
@@ -114,17 +108,13 @@ public class LandscapeModel extends EventDispatcher
                         }
 
                         //is not border?
-                        if (row > 0 && row < widthInTiles - 1 && column > 0 && column < lengthInTiles - 1)
+                        if (row > 0 && row < widthInTiles - 2 && column > 0 && column < lengthInTiles - 2)
                         {
                             //roll dice 0-99 and take cell from filled chances vector
                             var notEmptyCeilIndex:int = Math.round(Math.random() * 99);
                             var ceilType:uint = ceilTypesCache[notEmptyCeilIndex];
-                            if (ceilType == CeilTypes.EMPTY)
-                            {
-                                building.matrix[row][column] = ceilType;
-                                continue;
-                            }
-                            if (ceilType & CeilTypes.EXPLODE_1X1)
+
+                            if (ceilType == CeilTypes.EXPLODE_1X1)
                             {
                                 _isExploded = true;
                                 var garbageDice:int = Math.round(Math.random() * 99);
@@ -136,7 +126,7 @@ public class LandscapeModel extends EventDispatcher
                             }
 
                             //is 2x2?
-                            if (ceilType & CeilTypes.SIZE_2X2_MASC)
+                            if (ceilType == CeilTypes.EXPLODE_2X2)
                             {
                                 //not enough space for  2x2?
                                 if ((building.matrix[row + 1][column] != CeilTypes.EMPTY) || (building.matrix[row][column + 1] != CeilTypes.EMPTY) || (building.matrix[row + 1][column + 1] != CeilTypes.EMPTY))
@@ -159,7 +149,7 @@ public class LandscapeModel extends EventDispatcher
                             var emptyCeilIndex:int = Math.round(Math.random() * 99);
                             var ceilType:uint = borderCeilTypesCache[emptyCeilIndex];
                             var garbageDice:int = Math.round(Math.random() * 99);
-                            if (ceilType & CeilTypes.EXPLODE_1X1)
+                            if (ceilType == CeilTypes.EXPLODE_1X1)
                             {
                                 _isExploded = true;
                                 if (row > 0 && column > 0 && garbageDice < CeilTypesCreatingChance.GARBAGE_1X1_BOARD)
