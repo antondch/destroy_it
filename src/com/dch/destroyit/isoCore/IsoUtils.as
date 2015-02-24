@@ -26,16 +26,26 @@ public class IsoUtils
 //        var z:Number = zp * cosTheta + yp * sinTheta;
 //        return new Point(x, y);
 //    }
-    private static const Y_CORRECT:Number = Math.cos(-Math.PI / 6) * Math.SQRT2;
-    private static const ROTATE_FACTOR:Number = 0.6;
+    private static const RATIO:Number = 2;
+    public static const axialProjection:Number = 1// Math.cos(Math.atan(0.5));
+
+    private static var cosTheta:Number = Math.cos(30 * Math.PI / 180);
+    private static var sinTheta:Number = Math.sin(30 * Math.PI / 180);
 
     public static function isoToScreen(xpp:Number, ypp:Number, zpp:Number):Point
     {
-        var screenX:Number = xpp - zpp;
-        var screenY:Number = ypp * Y_CORRECT + (xpp + zpp) * ROTATE_FACTOR;
+        var screenX:Number = (xpp - zpp) * cosTheta;
+        var screenY:Number =  (xpp + zpp) * sinTheta - ypp;
         return new Point(screenX, screenY);
     }
 
+    public static function screenToIso(x:Number, y:Number):IsoPoint
+    {
+        var isoX:Number = x / (2 * cosTheta) + y;
+        var isoZ:Number = y - x / (2 * cosTheta);
+        var isoY:Number = 0;
+        return new IsoPoint(isoX, isoY, isoZ);
+    }
 
     public static function getScreenBounds(xpp:Number, ypp:Number, zpp:Number, width:Number, length:Number, height:Number):Rectangle
     {
@@ -51,14 +61,7 @@ public class IsoUtils
         return result;
     }
 
-    public static function screenToIso(x:Number, y:Number):IsoPoint
-    {
-        var isoX:Number = y + x * ROTATE_FACTOR;
-        var isoY:Number = 0;
-        var isoZ:Number = y - x * ROTATE_FACTOR;
 
-        return new IsoPoint(isoX, isoY, isoZ);
-    }
 
 
 }

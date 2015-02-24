@@ -99,7 +99,7 @@ public class BuildingController extends IsoStarlingSprite
                 }
                 if (model.matrix[row][column] == CeilTypes.EXPLODE_1X1)
                 {
-                    var craterImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(Crater1x1NamesEnum.CRATER_1X1_NAME.value), row * cellSize - 14, 0, column * cellSize, cellSize, cellSize);
+                    var craterImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(Crater1x1NamesEnum.CRATER_1X1_NAME.value), row * cellSize - 16, 0, column * cellSize, cellSize, cellSize);
 
                     var textures:Vector.<Texture> = AssetsService.sharedAssets.getTextures(Explode1x1NamesEnum.DUST_1X1_NAME.value);
                     var explode1x1MC:IsoStarlingMovieClip = new IsoStarlingMovieClip(textures, 31, row * cellSize, 0, column * cellSize, cellSize, cellSize);
