@@ -38,11 +38,9 @@ public class BuildingController extends IsoStarlingSprite
     private var cratersWithExplodeKey:Dictionary = new Dictionary(true);
     private var explodes:Vector.<IsoStarlingMovieClip> = new Vector.<IsoStarlingMovieClip>();
     private var explodeTimer:Timer;
-    private var staticLayer:StaticLayer;
-    private var explodes1x1Layer:Explode1x1Layer;
-    private var explodes2x2Layer:Explode2x2Layer;
+    private var landscapeLayer:StaticLayer;
 
-    public function BuildingController(model:BuildingModel,staticLayer:StaticLayer, explodes1x1Layer:Explode1x1Layer, explodes2x2Layer:Explode2x2Layer)
+    public function BuildingController(model:BuildingModel,staticLayer:StaticLayer)
     {
         this.model = model;
         this.cellSize = LandscapeConfig.CEIL_SIZE;
@@ -52,9 +50,7 @@ public class BuildingController extends IsoStarlingSprite
         this.color = color;
         this.borderColor = borderColor;
         this.borderThickness = borderThickness;
-        this.staticLayer = staticLayer;
-        this.explodes1x1Layer = explodes1x1Layer;
-        this.explodes2x2Layer = explodes2x2Layer;
+        this.landscapeLayer = staticLayer;
         addExplodeHandler();
         draw();
     }
@@ -77,25 +73,25 @@ public class BuildingController extends IsoStarlingSprite
                 if (column == 0)
                 {
                     var horizontalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.HORIZONTAL), row * cellSize, 0, 0, cellSize, 0);
-                    staticLayer.addImage(x,y,horizontalLineImage);
+                    landscapeLayer.add2Batch(x,y,horizontalLineImage);
                 }
 
                 var greenTileImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(greenTileImageName), row * cellSize + LandscapeConfig.BUILDING_BORDER_THICKNESS / 2, 0, column * cellSize + LandscapeConfig.BUILDING_BORDER_THICKNESS / 2, cellSize, cellSize);
-                staticLayer.addImage(x,y,greenTileImage);
+                landscapeLayer.add2Batch(x,y,greenTileImage);
                 if (column == lengthInTiles - 1)
                 {
                     var horizontalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.HORIZONTAL), row * cellSize, 0, cellSize * lengthInTiles, cellSize, 0);
-                    staticLayer.addImage(x,y,horizontalLineImage);
+                    landscapeLayer.add2Batch(x,y,horizontalLineImage);
                 }
                 if (row == 0)
                 {
                     var verticalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.VERTICAL), 0, 0, column * cellSize, 0, cellSize);
-                    staticLayer.addImage(x,y,verticalLineImage);
+                    landscapeLayer.add2Batch(x,y,verticalLineImage);
                 }
                 if (row == widthInTiles - 1)
                 {
                     var verticalLineImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(LineTypes.VERTICAL), widthInTiles * cellSize, 0, column * cellSize, 0, cellSize);
-                    staticLayer.addImage(x,y,verticalLineImage);
+                    landscapeLayer.add2Batch(x,y,verticalLineImage);
                 }
                 if (model.matrix[row][column] == CeilTypes.EXPLODE_1X1)
                 {
@@ -107,8 +103,10 @@ public class BuildingController extends IsoStarlingSprite
                     explode1x1MC.pivotY = explode1x1MC.height / 2 + 2;
                     explode1x1MC.stop();
                     explode1x1MC.visible = false;
-                    explodes1x1Layer.addExplode(x, y, explode1x1MC);
                     explodes.push(explode1x1MC);
+                    explode1x1MC.x+=x;
+                    explode1x1MC.y+=y;
+                    landscapeLayer.addChild(explode1x1MC);
                     cratersWithExplodeKey[explode1x1MC] = craterImage;
                 }
 
@@ -123,8 +121,9 @@ public class BuildingController extends IsoStarlingSprite
                     explode2x2MC.pivotY = explode2x2MC.height / 2 - cellSize / 2;
                     explode2x2MC.stop();
                     explode2x2MC.visible = false;
-                    explodes1x1Layer.addExplode(x, y, explode2x2MC);
-
+                    explode2x2MC.x+=x;
+                    explode2x2MC.y+=y;
+                    landscapeLayer.addChild(explode2x2MC);
                     explodes.push(explode2x2MC);
                     cratersWithExplodeKey[explode2x2MC] = craterImage;
                 }
@@ -159,7 +158,7 @@ public class BuildingController extends IsoStarlingSprite
             Starling.juggler.add(explode);
             explode.play();
             explode.visible = true;
-            staticLayer.addImage(x,y,Image(cratersWithExplodeKey[explode]));
+            landscapeLayer.add2Batch(x,y,Image(cratersWithExplodeKey[explode]));
             explode.addEventListener(Event.COMPLETE, removeExplode);
         } else
         {

@@ -19,7 +19,7 @@ import starling.events.TouchPhase;
 
 public class LandscapeController implements IViewController
 {
-    private var staticLayer:StaticLayer;
+    private var landscapeLayer:StaticLayer;
     private var _isPanning:Boolean = false;
     private var _allowExplode:Boolean = true;
     private var mousePanBeginPoint:Point = new Point(0, 0);
@@ -29,7 +29,7 @@ public class LandscapeController implements IViewController
 
     public function LandscapeController(view:StaticLayer)
     {
-        this.staticLayer = view;
+        this.landscapeLayer = view;
         createExplodeLayers();
         registerTouchEvents();
         createLandscapeModel(LandscapeConfig.BUILDINGS_COUNT, LandscapeConfig.LANDSCAPE_WIDTH_IN_CEIL, LandscapeConfig.LANDSCAPE_LENGTH_IN_CEIL, LandscapeConfig.BUILDING_SIDE_MIN_SIZE_IN_CEIL,
@@ -39,13 +39,13 @@ public class LandscapeController implements IViewController
 
     private function createExplodeLayers():void
     {
-        explode1x1Layer = new Explode1x1Layer(staticLayer.isoBounds.origin.x, staticLayer.isoBounds.origin.y, staticLayer.isoBounds.origin.z, staticLayer.isoBounds.size.width, staticLayer.isoBounds.size.length);
-        explode1x1Layer.x = staticLayer.x;
-        explode1x1Layer.y = staticLayer.y;
+        explode1x1Layer = new Explode1x1Layer(landscapeLayer.isoBounds.origin.x, landscapeLayer.isoBounds.origin.y, landscapeLayer.isoBounds.origin.z, landscapeLayer.isoBounds.size.width, landscapeLayer.isoBounds.size.length);
+        explode1x1Layer.x = landscapeLayer.x;
+        explode1x1Layer.y = landscapeLayer.y;
 
-        explode2x2Layer = new Explode2x2Layer(staticLayer.isoBounds.origin.x, staticLayer.isoBounds.origin.y, staticLayer.isoBounds.origin.z, staticLayer.isoBounds.size.width, staticLayer.isoBounds.size.length);
-        explode2x2Layer.x = staticLayer.x;
-        explode2x2Layer.y = staticLayer.y;
+        explode2x2Layer = new Explode2x2Layer(landscapeLayer.isoBounds.origin.x, landscapeLayer.isoBounds.origin.y, landscapeLayer.isoBounds.origin.z, landscapeLayer.isoBounds.size.width, landscapeLayer.isoBounds.size.length);
+        explode2x2Layer.x = landscapeLayer.x;
+        explode2x2Layer.y = landscapeLayer.y;
 
         //FIXME: remove direct access to stage
         Starling.current.root.stage.addChild(explode1x1Layer);
@@ -60,7 +60,7 @@ public class LandscapeController implements IViewController
 
     private function registerTouchEvents():void
     {
-        staticLayer.addEventListener(TouchEvent.TOUCH, view_touchHandler);
+        landscapeLayer.addEventListener(TouchEvent.TOUCH, view_touchHandler);
     }
 
     private function view_touchHandler(event:TouchEvent):void
@@ -71,22 +71,27 @@ public class LandscapeController implements IViewController
             case TouchPhase.BEGAN:
             {
                 _isPanning = true;
-                mousePanBeginPoint = touch.getLocation(staticLayer.stage);
+                mousePanBeginPoint = touch.getLocation(landscapeLayer.stage);
                 break;
             }
             case TouchPhase.MOVED:
             {
                 if (_isPanning)
                 {
-                    var mouseCurrent:Point = touch.getLocation(staticLayer.stage);
-                    staticLayer.x -= mousePanBeginPoint.x - mouseCurrent.x;
-                    staticLayer.y -= mousePanBeginPoint.y - mouseCurrent.y;
-                    explode1x1Layer.x = staticLayer.x;
-                    explode1x1Layer.y = staticLayer.y;
-                    explode2x2Layer.x = staticLayer.x;
-                    explode2x2Layer.y = staticLayer.y;
+                    var mouseCurrent:Point = touch.getLocation(landscapeLayer.stage);
+                    var dx:int = mousePanBeginPoint.x - mouseCurrent.x;
+                    var dy:int = mousePanBeginPoint.y - mouseCurrent.y;
+                    landscapeLayer.x -= dx;
+                    landscapeLayer.y -= dy;
+                    explode1x1Layer.x = landscapeLayer.x;
+                    explode1x1Layer.y = landscapeLayer.y;
+                    explode2x2Layer.x = landscapeLayer.x;
+                    explode2x2Layer.y = landscapeLayer.y;
                     mousePanBeginPoint = mouseCurrent;
-                    _allowExplode = false;
+                    if (dx < 5 && dy < 5)
+                    {
+                        _allowExplode = false;
+                    }
                 }
                 break;
             }
@@ -94,15 +99,15 @@ public class LandscapeController implements IViewController
             {
                 if (_allowExplode)
                 {
-                    var mouseCurrent:Point = touch.getLocation(staticLayer.stage);
-                    var cell:IsoPoint = IsoUtils.screenToIso((mouseCurrent.x - staticLayer.x) / LandscapeConfig.CEIL_SIZE, (mouseCurrent.y - staticLayer.y) / LandscapeConfig.CEIL_SIZE);
+                    var mouseCurrent:Point = touch.getLocation(landscapeLayer.stage);
+                    var cell:IsoPoint = IsoUtils.screenToIso((mouseCurrent.x - landscapeLayer.x) / LandscapeConfig.CEIL_SIZE, (mouseCurrent.y - landscapeLayer.y) / LandscapeConfig.CEIL_SIZE);
                     cell.x = Math.floor(cell.x);
                     cell.z = Math.floor(cell.z);
                     var building:BuildingModel = landscapeModel.getBuildingFromCell(cell.x, cell.z);
                     if (building)
                     {
                         building.explode();
-                        trace("buildingX:"+building.x,"buildingZ:"+building.z);
+                        trace("buildingX:" + building.x, "buildingZ:" + building.z);
                     }
                     trace(this, "clicked on cell x:" + cell.x + " z:" + cell.z)
                     trace(this, "BOOOM");
@@ -118,21 +123,21 @@ public class LandscapeController implements IViewController
     {
         for each(var building:BuildingModel in landscapeModel.buildings)
         {
-            var isoBuilding:BuildingController = new BuildingController(building, staticLayer, explode1x1Layer, explode2x2Layer);
-            staticLayer.add2Scene(isoBuilding);
+            var isoBuilding:BuildingController = new BuildingController(building, landscapeLayer);
+            landscapeLayer.add2Scene(isoBuilding);
         }
     }
 
     public function showOnView(rootView:DisplayObjectContainer):DisplayObject
     {
-        return rootView.addChild(staticLayer);
+        return rootView.addChild(landscapeLayer);
     }
 
     public function removeView():void
     {
-        if (staticLayer.parent)
+        if (landscapeLayer.parent)
         {
-            staticLayer.parent.removeChild(staticLayer);
+            landscapeLayer.parent.removeChild(landscapeLayer);
         }
     }
 }

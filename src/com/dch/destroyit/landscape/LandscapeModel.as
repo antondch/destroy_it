@@ -60,8 +60,8 @@ public class LandscapeModel extends EventDispatcher
         var widthInTiles:int = 0;
         var lengthInTiles:int = 0;
         var rowLengthInTiles:int = 0;
-        var currentBuildingX:int = 0;
-        var currentBuildingZ:int = 0;
+        var currentBuildingX:int = 1;
+        var currentBuildingZ:int = 1;
         for (var i:int = 0; i < buildingsCount; i++)
         {
             //generate building width & length
@@ -75,9 +75,9 @@ public class LandscapeModel extends EventDispatcher
             {
                 rowLengthInTiles = lengthInTiles;
             }
-            if (currentBuildingX + widthInTiles > landscapeWidth)
+            if (currentBuildingX + widthInTiles > landscapeWidth-1)
             {
-                currentBuildingX = 0;
+                currentBuildingX = 1;
                 currentBuildingZ += rowLengthInTiles + freeDistance;
                 rowLengthInTiles = 0;
             }

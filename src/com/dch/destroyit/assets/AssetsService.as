@@ -10,6 +10,7 @@ import com.dch.destroyit.isoCore.IsoUtils;
 import com.emibap.textureAtlas.DynamicAtlas;
 
 import flash.display.Loader;
+import flash.display.MovieClip;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.EventDispatcher;
@@ -143,14 +144,17 @@ public class AssetsService extends EventDispatcher
         for each(var clazz4:Explode1x1NamesEnum in Enumeration.getElementsList(Explode1x1NamesEnum))
         {
             var Explode1x1NamesClass:Class = loader.contentLoaderInfo.applicationDomain.getDefinition(clazz4.value) as Class;
-            mc1x1Classes.push(Explode1x1NamesClass);
+            staticDictionary[clazz4.value]  = new Explode1x1NamesClass();
+
+//            mc1x1Classes.push(Explode1x1NamesClass);
         }
         for each(var clazz5:Explode2x2NamesEnum in Enumeration.getElementsList(Explode2x2NamesEnum))
         {
             var Explode2x2NamesClass:Class = loader.contentLoaderInfo.applicationDomain.getDefinition(clazz5.value) as Class;
-            mc1x1Classes.push(Explode2x2NamesClass);
+            staticDictionary[clazz5.value]  = new Explode2x2NamesClass();
+//            mc1x1Classes.push(Explode2x2NamesClass);
         }
-        ATLASES["mc1x1"] = DynamicAtlas.fromClassVector(mc1x1Classes);
+//        ATLASES["mc1x1"] = DynamicAtlas.fromClassVector(mc1x1Classes);
 //        ATLASES["mc2x2"] = DynamicAtlas.fromClassVector(mc2x2Classes);
 
         //*************************************************************************

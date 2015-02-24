@@ -31,7 +31,7 @@ public class StaticLayer extends IsoStarlingScene
             for (var column:int = 0; column < isoBounds.size.length; column++)
             {
                 var greenTileImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(textureName), row * LandscapeConfig.CEIL_SIZE + LandscapeConfig.BUILDING_BORDER_THICKNESS / 2, 0, column * LandscapeConfig.CEIL_SIZE + LandscapeConfig.BUILDING_BORDER_THICKNESS / 2, LandscapeConfig.CEIL_SIZE, LandscapeConfig.CEIL_SIZE);
-                addImage(0,0,greenTileImage);
+                add2Batch(0,0,greenTileImage);
             }
         }
         addChild(quadBatch);
@@ -41,7 +41,7 @@ public class StaticLayer extends IsoStarlingScene
      * add static images to quad batch. All textures must be placed in one atlas!!!
      * @param image
      */
-    public function addImage(buildingX:int,buildingY:int,image:Image):void
+    public function add2Batch(buildingX:int,buildingY:int,image:Image):void
     {
         image.x+=buildingX;
         image.y+=buildingY;

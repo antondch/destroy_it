@@ -8,27 +8,6 @@ import flash.geom.Rectangle;
 
 public class IsoUtils
 {
-//    private static const theta:Number = 30 * Math.PI / 180;
-//    private static const alpha:Number = 45 * Math.PI / 180;
-//    private static const sinTheta:Number = Math.sin(theta);
-//    private static const cosTheta:Number = Math.cos(theta);
-//    private static const sinAlpha:Number = Math.sin(alpha);
-//    private static const cosAlpha:Number = Math.cos(alpha);
-//
-//
-//    public static function isoToScreen(xpp:Number, ypp:Number, zpp:Number):Point
-//    {
-//        var yp:Number = ypp;
-//        var xp:Number = xpp * cosAlpha + zpp * sinAlpha;
-//        var zp:Number = zpp * cosAlpha - xpp * sinAlpha;
-//        var x:Number = xp;
-//        var y:Number = yp * cosTheta - zp * sinTheta;
-//        var z:Number = zp * cosTheta + yp * sinTheta;
-//        return new Point(x, y);
-//    }
-    private static const RATIO:Number = 2;
-    public static const axialProjection:Number = 1// Math.cos(Math.atan(0.5));
-
     private static var cosTheta:Number = Math.cos(30 * Math.PI / 180);
     private static var sinTheta:Number = Math.sin(30 * Math.PI / 180);
 
