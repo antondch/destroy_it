@@ -11,16 +11,18 @@ import com.dch.destroyit.isoCore.IsoStarlingImage;
 import com.dch.destroyit.isoCore.IsoStarlingScene;
 
 import starling.display.DisplayObject;
+import starling.display.Image;
 import starling.display.QuadBatch;
 import starling.display.Sprite;
 
 public class LandscapeView extends IsoStarlingScene
 {
     private var bgQuadBatch:QuadBatch = new QuadBatch();
-    private var greenLayer:Sprite = new Sprite();
+    private var greenLayer:QuadBatch = new QuadBatch();
     private var infoLayer:Sprite = new Sprite();
     private var groundLayer:Sprite = new Sprite();
     private var explodeLayer:Sprite = new Sprite();
+    private var qbatches:Vector.<QuadBatch> = new Vector.<QuadBatch>();
 
     public function LandscapeView(isoX:Number, isoY:Number, isoZ:Number, isoWidth:Number, isoLength:Number, backgroundColor:TilesColorEnum):void
     {
@@ -51,13 +53,25 @@ public class LandscapeView extends IsoStarlingScene
     }
 
 
-    public function add2FirstLayer(buildingX:int, buildingY:int, image:DisplayObject):void
+    public function add2FirstQB(buildingX:int, buildingY:int, quadBatch:QuadBatch):void
     {
-        image.x += buildingX;
-        image.y += buildingY;
-        greenLayer.unflatten();
-        greenLayer.addChild(image);
-        greenLayer.flatten(true);
+        quadBatch.x += buildingX;
+        quadBatch.y += buildingY;
+        qbatches.push(quadBatch);
+//        greenLayer.unflatten();
+        greenLayer.addQuadBatch(quadBatch);
+//        greenLayer.flatten(true);
+    }
+
+   public function removeFromFirstQB(quadBatch:QuadBatch):void
+    {
+        var index:int = qbatches.indexOf(quadBatch);
+        qbatches.splice(index,1);
+        greenLayer.reset();
+        for each(var batch:QuadBatch in qbatches)
+        {
+            greenLayer.addQuadBatch(batch);
+        }
     }
 
     public function add2infoLayer(buildingX:int, buildingY:int, image:DisplayObject):void

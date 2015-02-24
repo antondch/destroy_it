@@ -21,7 +21,7 @@ public class LandscapeController implements IViewController
     private var landscapeLayer:LandscapeView;
     private var _isPanning:Boolean = false;
     private var _allowExplode:Boolean = true;
-    private var mousePanBeginPoint:Point = new Point(0, 0);
+    private var mousePanPrevPoint:Point = new Point(0, 0);
     private var landscapeModel:LandscapeModel;
 
     public function LandscapeController(view:LandscapeView)
@@ -44,6 +44,7 @@ public class LandscapeController implements IViewController
         landscapeLayer.addEventListener(TouchEvent.TOUCH, view_touchHandler);
     }
 
+    private var mousePanBeginPoint:Point = new Point();
     private function view_touchHandler(event:TouchEvent):void
     {
         var touch:Touch = event.touches[0];
@@ -52,7 +53,9 @@ public class LandscapeController implements IViewController
             case TouchPhase.BEGAN:
             {
                 _isPanning = true;
-                mousePanBeginPoint = touch.getLocation(landscapeLayer.stage);
+                mousePanPrevPoint = touch.getLocation(landscapeLayer.stage);
+                mousePanBeginPoint.x = mousePanPrevPoint.x;
+                mousePanBeginPoint.y = mousePanPrevPoint.y;
                 break;
             }
             case TouchPhase.MOVED:
@@ -60,36 +63,32 @@ public class LandscapeController implements IViewController
                 if (_isPanning)
                 {
                     var mouseCurrent:Point = touch.getLocation(landscapeLayer.stage);
-                    var dx:int = mousePanBeginPoint.x - mouseCurrent.x;
-                    var dy:int = mousePanBeginPoint.y - mouseCurrent.y;
+                    var dx:int = mousePanPrevPoint.x - mouseCurrent.x;
+                    var dy:int = mousePanPrevPoint.y - mouseCurrent.y;
                     landscapeLayer.x -= dx;
                     landscapeLayer.y -= dy;
-                    mousePanBeginPoint = mouseCurrent;
-                    //if not tremor:
-                    if (dx < 50 && dy < 50)
-                    {
-                        _allowExplode = false;
-                    }
+                    mousePanPrevPoint = mouseCurrent;
                 }
                 break;
             }
             case TouchPhase.ENDED:
             {
-//                if (_allowExplode)
-//                {
-//                    var mouseCurrent:Point = touch.getLocation(landscapeLayer.stage);
-//                    var cell:IsoPoint = IsoUtils.screenToIso((mouseCurrent.x - landscapeLayer.x) / LandscapeConfig.CEIL_SIZE, (mouseCurrent.y - landscapeLayer.y) / LandscapeConfig.CEIL_SIZE);
-//                    cell.x = Math.floor(cell.x);
-//                    cell.z = Math.floor(cell.z);
-//                    var building:BuildingModel = landscapeModel.getBuildingFromCell(cell.x, cell.z);
-//                    if (building)
-//                    {
-//                        building.explode();
-//                        trace("buildingX:" + building.x, "buildingZ:" + building.z);
-//                    }
-//                    trace(this, "clicked on cell x:" + cell.x + " z:" + cell.z)
-//                    trace(this, "BOOOM");
-//                }
+                //explode, if not panning:
+                var mouseCurrent:Point = touch.getLocation(landscapeLayer.stage);
+                if (Math.abs(mousePanBeginPoint.x-mouseCurrent.x) < 20 && Math.abs(mousePanBeginPoint.x-mouseCurrent.x) < 20)
+                {
+                    var cell:IsoPoint = IsoUtils.screenToIso((mouseCurrent.x - landscapeLayer.x) / LandscapeConfig.CEIL_SIZE, (mouseCurrent.y - landscapeLayer.y) / LandscapeConfig.CEIL_SIZE);
+                    cell.x = Math.floor(cell.x);
+                    cell.z = Math.floor(cell.z);
+                    var building:BuildingModel = landscapeModel.getBuildingFromCell(cell.x, cell.z);
+                    if (building)
+                    {
+                        building.explode();
+                        trace("buildingX:" + building.x, "buildingZ:" + building.z);
+                    }
+                    trace(this, "clicked on cell x:" + cell.x + " z:" + cell.z)
+                    trace(this, "BOOOM");
+                }
                 _isPanning = false;
                 _allowExplode = true;
             }
