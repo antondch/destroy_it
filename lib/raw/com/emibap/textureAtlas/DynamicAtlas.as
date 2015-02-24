@@ -101,7 +101,7 @@ import com.emibap.textureAtlas.TextureItem;
 
 public class DynamicAtlas
 {
-    static protected const DEFAULT_CANVAS_WIDTH:Number = 640;
+    static protected const DEFAULT_CANVAS_WIDTH:Number = 2048;
 
     static protected var _items:Array;
     static protected var _canvas:Sprite;
@@ -301,7 +301,7 @@ public class DynamicAtlas
         }
 
         var item:TextureItem = new TextureItem(_bData, name, label, realBounds.x, realBounds.y, realBounds.width, realBounds.height);
-        item.pivotX = item.graphic.width / 2;
+//        item.pivotX = item.graphic.width / 2;
 //        item.pivotY = item.frameHeight;
         _items.push(item);
         _canvas.addChild(item);

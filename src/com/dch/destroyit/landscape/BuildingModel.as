@@ -17,6 +17,7 @@ public class BuildingModel extends EventDispatcher
     private var _x:int;
     private var _z:int;
     public static const EXPLODE:String = "explode";
+    private var isExploded:Boolean = false;
 
     public function BuildingModel(x:int, z:int, width:int, length:int):void
     {
@@ -29,7 +30,11 @@ public class BuildingModel extends EventDispatcher
 
     public function explode():void
     {
-        dispatchEvent(new Event(EXPLODE));
+        if(!isExploded)
+        {
+            isExploded = true;
+            dispatchEvent(new Event(EXPLODE));
+        }
     }
 
     private function fillMatrix(width:int, length:int):void
