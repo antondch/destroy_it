@@ -160,10 +160,13 @@ public class BuildingController extends IsoStarlingSprite
                 groundSprite.addChild(groundTile);
             }
         }
+//        greenSprite.flatten(true);
         landscapeLayer.add2FirstLayer(x,y,greenSprite);
         redSprite.visible = false;
+//        redSprite.flatten(true);
         landscapeLayer.add2infoLayer(x,y,redSprite);
         groundSprite.visible = false;
+//        groundSprite.flatten(true);
         landscapeLayer.add2GroundLayer(x,y,groundSprite);
 
         explodes.sort(shuffleExplodesOrder);
