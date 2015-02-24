@@ -10,7 +10,6 @@ import com.dch.destroyit.mvc.IViewController;
 
 import flash.geom.Point;
 
-import starling.core.Starling;
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
 import starling.events.Touch;
@@ -19,37 +18,19 @@ import starling.events.TouchPhase;
 
 public class LandscapeController implements IViewController
 {
-    private var landscapeLayer:StaticLayer;
+    private var landscapeLayer:LandscapeView;
     private var _isPanning:Boolean = false;
     private var _allowExplode:Boolean = true;
     private var mousePanBeginPoint:Point = new Point(0, 0);
     private var landscapeModel:LandscapeModel;
-    private var explode1x1Layer:Explode1x1Layer;
-    private var explode2x2Layer:Explode2x2Layer;
 
-    public function LandscapeController(view:StaticLayer)
+    public function LandscapeController(view:LandscapeView)
     {
         this.landscapeLayer = view;
-        createExplodeLayers();
         registerTouchEvents();
         createLandscapeModel(LandscapeConfig.BUILDINGS_COUNT, LandscapeConfig.LANDSCAPE_WIDTH_IN_CEIL, LandscapeConfig.LANDSCAPE_LENGTH_IN_CEIL, LandscapeConfig.BUILDING_SIDE_MIN_SIZE_IN_CEIL,
                 LandscapeConfig.BUILDING_SIDE_MAX_SIZE_IN_CEIL, LandscapeConfig.BUILDING_SIDE_SIZE_DIFFERENCE_IN_CEIL, LandscapeConfig.FREE_DISTANCE_IN_CEIL);
         createBuildings();
-    }
-
-    private function createExplodeLayers():void
-    {
-        explode1x1Layer = new Explode1x1Layer(landscapeLayer.isoBounds.origin.x, landscapeLayer.isoBounds.origin.y, landscapeLayer.isoBounds.origin.z, landscapeLayer.isoBounds.size.width, landscapeLayer.isoBounds.size.length);
-        explode1x1Layer.x = landscapeLayer.x;
-        explode1x1Layer.y = landscapeLayer.y;
-
-        explode2x2Layer = new Explode2x2Layer(landscapeLayer.isoBounds.origin.x, landscapeLayer.isoBounds.origin.y, landscapeLayer.isoBounds.origin.z, landscapeLayer.isoBounds.size.width, landscapeLayer.isoBounds.size.length);
-        explode2x2Layer.x = landscapeLayer.x;
-        explode2x2Layer.y = landscapeLayer.y;
-
-        //FIXME: remove direct access to stage
-        Starling.current.root.stage.addChild(explode1x1Layer);
-        Starling.current.root.stage.addChild(explode2x2Layer);
     }
 
     private function createLandscapeModel(buildingsCount:int, landscapeWidth:Number, landscapeLength:Number, minFaceSize:Number, maxFaceSize:Number, maxSideDifference:int, freeDistance:Number):void
@@ -83,12 +64,9 @@ public class LandscapeController implements IViewController
                     var dy:int = mousePanBeginPoint.y - mouseCurrent.y;
                     landscapeLayer.x -= dx;
                     landscapeLayer.y -= dy;
-                    explode1x1Layer.x = landscapeLayer.x;
-                    explode1x1Layer.y = landscapeLayer.y;
-                    explode2x2Layer.x = landscapeLayer.x;
-                    explode2x2Layer.y = landscapeLayer.y;
                     mousePanBeginPoint = mouseCurrent;
-                    if (dx < 5 && dy < 5)
+                    //if not tremor:
+                    if (dx < 15 && dy < 15)
                     {
                         _allowExplode = false;
                     }
