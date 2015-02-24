@@ -128,7 +128,7 @@ public class BuildingController extends IsoStarlingSprite
                     craterImage.pivotX = 40;
                     craterImage.pivotY = 8;
 //                    landscapeLayer.add2CraterLayer(x,y,craterImage);//test
-                    trace(this,"garbageX:"+row,"garbageZ:"+column);
+                    trace(this, "garbageX:" + row, "garbageZ:" + column);
 
 
                     var textures:Vector.<Texture> = AssetsService.sharedAssets.getTextures(Explode1x1NamesEnum.DUST_1X1_NAME.value);
@@ -139,15 +139,21 @@ public class BuildingController extends IsoStarlingSprite
                     explode1x1MC.visible = false;
                     landscapeLayer.add2ExplodeLayer(x, y, explode1x1MC);
                     explodes.push(explode1x1MC);
-                    cratersWithExplodeKey[explode1x1MC] = craterImage;
-                }
 
-                if (model.matrix[row][column] & CeilTypes.GARBAGE_1X1)
-                {
-                    var garbageImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(Garbage1x1NamesEnum.GARBAGE_1X1_NAME.value), row * cellSize, 0, column * cellSize, cellSize, cellSize);
-                    garbageImage.pivotX = 40;
-                    garbageImage.pivotY = 23;
+
+                    if (model.matrix[row][column] & CeilTypes.GARBAGE_1X1)
+                    {
+
+                        var garbageImage:IsoStarlingImage = new IsoStarlingImage(AssetsService.sharedAssets.getTexture(Garbage1x1NamesEnum.GARBAGE_1X1_NAME.value), row * cellSize, 0, column * cellSize, cellSize, cellSize);
+                        garbageImage.pivotX = 40;
+                        garbageImage.pivotY = 23;
 //                    landscapeLayer.add2CraterLayer(x, y, garbageImage);
+                        cratersWithExplodeKey[explode1x1MC] = {crater: craterImage, garbage: garbageImage};
+                    }else
+                    {
+                        cratersWithExplodeKey[explode1x1MC] = {crater: craterImage, garbage: null};
+                    }
+
                 }
 
                 if (model.matrix[row][column] == CeilTypes.EXPLODE_2X2)
@@ -163,7 +169,7 @@ public class BuildingController extends IsoStarlingSprite
                     explode2x2MC.visible = false;
                     landscapeLayer.add2ExplodeLayer(x, y, explode2x2MC);
                     explodes.push(explode2x2MC);
-                    cratersWithExplodeKey[explode2x2MC] = craterImage;
+                    cratersWithExplodeKey[explode2x2MC] = {crater: craterImage, garbage: null};
                 }
                 //create ground
                 var ground1x1:Texture = AssetsService.sharedAssets.getTexture(groundTypeName);
@@ -222,7 +228,13 @@ public class BuildingController extends IsoStarlingSprite
             Starling.juggler.add(explode);
             explode.play();
             explode.visible = true;
-            landscapeLayer.add2CraterLayer(x,y,Image(cratersWithExplodeKey[explode]));
+            landscapeLayer.add2CraterLayer(x, y, Image(cratersWithExplodeKey[explode].crater));
+            var garbage:Image = Image(cratersWithExplodeKey[explode].garbage);
+            if (garbage)
+            {
+                trace(this,garbage);
+                landscapeLayer.add2CraterLayer(x, y,garbage);
+            }
             explode.addEventListener(Event.COMPLETE, removeExplode);
         } else
         {
